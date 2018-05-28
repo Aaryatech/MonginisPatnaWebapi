@@ -143,11 +143,11 @@ public class ItemServiceImpl implements ItemService{
 	}
 
 	@Override
-	public Info deleteItemSup(int itemId) {
+	public Info deleteItemSup(List<String> itemId) {
 
 		int isDel=itemSupRepository.deleteItemSup(itemId);
 		Info info=new Info();
-		if(isDel==1)
+		if(isDel>=1)
 		{
 			info.setError(false);
 			info.setMessage("ItemSup Deleted Successfully.");

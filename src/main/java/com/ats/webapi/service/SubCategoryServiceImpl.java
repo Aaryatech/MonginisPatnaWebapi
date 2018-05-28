@@ -96,7 +96,14 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
 	@Override
 	public CategoryList findSubCategoryByCatId(int catId) {
-		  List<MCategory> subCategoryList=categoryRepository.findSubCategoryByCatId(catId);
+		  List<MCategory> subCategoryList=categoryRepository.findByCatId(catId);
+		  
+		  for(int i=0;i<subCategoryList.size();i++)
+		  {
+			  List<SubCategory> subCatList=subCategoryRepository.findByCatIdAndDelStatus(catId, 0);
+			  subCategoryList.get(i).setSubCategoryList(subCatList);
+		      
+		  }
 		  CategoryList subCategoryListByCateId=new CategoryList();
 		  if(subCategoryList!=null)
 		  {

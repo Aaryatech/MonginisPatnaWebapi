@@ -28,11 +28,11 @@ public class Franchisee implements Serializable{
 	@Column(name="fr_code")
 	private String frCode;
 	
-	@Column(name="fr_opening_date")
+	@Column(name="fr_opening_date",nullable = true)
 	private Date frOpeningDate;
 
 	@Column(name="fr_rate")
-	private float frRate;
+	private int frRate;
 		
 	@Column(name="fr_image")
 	private String frImage;
@@ -156,16 +156,16 @@ public class Franchisee implements Serializable{
 	public Date getFrOpeningDate() {
 		return frOpeningDate;
 	}
-
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public void setFrOpeningDate(Date frOpeningDate) {
 		this.frOpeningDate = frOpeningDate;
 	}
    
-	public float getFrRate() {
+	public int getFrRate() {
 		return frRate;
 	}
 
-	public void setFrRate(float frRate) {
+	public void setFrRate(int frRate) {
 		this.frRate = frRate;
 	}
 
@@ -333,7 +333,7 @@ public class Franchisee implements Serializable{
 	public Date getOwnerBirthDate() {
 		return ownerBirthDate;
 	}
-
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public void setOwnerBirthDate(Date ownerBirthDate) {
 		this.ownerBirthDate = ownerBirthDate;
 	}
@@ -342,7 +342,7 @@ public class Franchisee implements Serializable{
 	public Date getFbaLicenseDate() {
 		return fbaLicenseDate;
 	}
-
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public void setFbaLicenseDate(Date fbaLicenseDate) {
 		this.fbaLicenseDate = fbaLicenseDate;
 	}
@@ -351,7 +351,7 @@ public class Franchisee implements Serializable{
 	public Date getFrAgreementDate() {
 		return frAgreementDate;
 	}
-
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public void setFrAgreementDate(Date frAgreementDate) {
 		this.frAgreementDate = frAgreementDate;
 	}
@@ -388,6 +388,7 @@ public class Franchisee implements Serializable{
 		this.frAddress = frAddress;
 	}
 
+   
 	public int getFrTarget() {
 		return frTarget;
 	}

@@ -22,7 +22,7 @@ public interface ItemService {
  	public List<Item> getAllItems();
 	public List<Item> findItemsByItemId(List<Integer> itemList);
 	public ItemSup saveItemSup(ItemSup itemSup);
-	public Info deleteItemSup(int itemId);
+	public Info deleteItemSup(List<String> itemId);
 	public ItemSupList getItemSupList();
 	public GetItemSup getItemSup(int id);
 	public int getUniqueItemCode();

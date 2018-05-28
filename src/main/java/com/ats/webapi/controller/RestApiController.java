@@ -1841,11 +1841,28 @@ public class RestApiController {
 		// DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		// java.util.Date date = sdf.parse(frOpeningDate);
 		// java.sql.Date sqlOpeningDate = new java.sql.Date(date.getTime());
-		java.sql.Date sqlOpeningDate = Common.convertToSqlDate(frOpeningDate);
-		java.sql.Date sqlFrAgreementDate = Common.convertToSqlDate(frAgreementDate);
-		java.sql.Date sqlOwnerBirthDate = Common.convertToSqlDate(ownerBirthDate);
-		java.sql.Date SQLfbaLicenseDate = Common.convertToSqlDate(fbaLicenseDate);
-
+		java.sql.Date sqlOpeningDate=null;java.sql.Date sqlFrAgreementDate=null;java.sql.Date sqlOwnerBirthDate=null;java.sql.Date SQLfbaLicenseDate=null;
+	try {
+		 sqlOpeningDate = Common.convertToSqlDate(frOpeningDate);
+	    }catch (Exception e) {
+		// TODO: handle exception
+	   }
+		
+		 try {
+		 sqlFrAgreementDate = Common.convertToSqlDate(frAgreementDate);
+		 }catch (Exception e) {
+				// TODO: handle exception
+			}
+		 try {
+		 sqlOwnerBirthDate = Common.convertToSqlDate(ownerBirthDate);
+		 }catch (Exception e) {
+				// TODO: handle exception
+			}
+		 try {
+		 SQLfbaLicenseDate = Common.convertToSqlDate(fbaLicenseDate);
+		 }catch (Exception e) {
+				// TODO: handle exception
+			}
 		Franchisee franchisee = new Franchisee();
 		// franchisee.setFrId(frId);
 		franchisee.setFrName(frName);
@@ -2291,15 +2308,44 @@ public class RestApiController {
 
 	// Delete Item
 	@RequestMapping(value = "/deleteItem", method = RequestMethod.POST)
-	public @ResponseBody String deleteItem(@RequestParam int id) {
+	public @ResponseBody ErrorMessage deleteItem(@RequestParam List<Integer> id) {
 
-		Item item = itemService.findItems(id);
-		item.setDelStatus(1);
-
-		ErrorMessage errorMessage = itemService.saveItem(item);
-
-		return JsonUtil.javaToJson(errorMessage);
+		ErrorMessage errorMessage=new ErrorMessage();
+		
+		int isUpdated = itemRepository.deleteItems(id);
+		if(isUpdated==1) {
+			
+			errorMessage.setError(false);
+			errorMessage.setMessage("Items Deleted Successfully");
+			}
+			else
+			{
+				errorMessage.setError(false);
+				errorMessage.setMessage("Items Deletion Failed");
+				
+			}
+			return errorMessage;
 	}
+	// Delete Item
+		@RequestMapping(value = "/inactivateItems", method = RequestMethod.POST)
+		public @ResponseBody ErrorMessage inactivateItems(@RequestParam List<Integer> id) {
+
+			ErrorMessage errorMessage=new ErrorMessage();
+			
+			int isUpdated = itemRepository.inactivateItems(id);
+			if(isUpdated>=1) {
+				
+				errorMessage.setError(false);
+				errorMessage.setMessage("Items Isused changed Successfully");
+				}
+				else
+				{
+					errorMessage.setError(false);
+					errorMessage.setMessage("Items Isused Changes Failed");
+					
+				}
+				return errorMessage;
+		}
 
 	// Delete Flavor
 	@RequestMapping(value = "/deleteFlavour", method = RequestMethod.POST)
@@ -2814,10 +2860,6 @@ public class RestApiController {
 	public @ResponseBody Franchisee findFranchisee(@RequestParam("frId") int frId) {
 		Franchisee franchisee = franchiseeService.findFranchisee(frId);
 
-		String openDate = franchisee.getFrOpeningDate().toString();
-		// String strDate=Common.convertToDMY(openDate);
-		// java.sql.Date sqlDate=Common.convertToSqlDate(strDate);
-		// franchisee.setFrOpeningDate(sqlDate);
 		return franchisee;
 	}
 
@@ -3220,27 +3262,38 @@ public class RestApiController {
 		ErrorMessage jsonResult = new ErrorMessage();
 		try {
 
-			System.out.println("inside update fr rest controller:1721 line");
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-			Date date = sdf.parse(frOpeningDate);
-			System.out.println("parsed Date line no 1728 : " + date);
-			java.sql.Date sqlOpeningDate = new java.sql.Date(date.getTime());
-			Date utilFrAgreementDate = sdf.parse(frAgreementDate);
-			Date utilOwnerBirthDate = sdf.parse(ownerBirthDate);
-			Date utilFbaLicenseDate = sdf.parse(fbaLicenseDate);
-			/*
-			 * java.sql.Date sqlFrAgreementDate=Common.convertToSqlDate(frAgreementDate);
-			 * java.sql.Date sqlOwnerBirthDate=Common.convertToSqlDate(ownerBirthDate);
-			 * java.sql.Date SQLfrLicenseDate=Common.convertToSqlDate(frLicenseDate);
-			 */
-			/*
-			 * System.out.println("fr opening as of form "+frOpeningDate); java.sql.Date
-			 * sqlDate=Common.convertToSqlDate(frOpeningDate);
-			 * 
-			 * 
-			 * System.out.println("sql date for update fr ****** "+sqlDate);
-			 */
-
+			
+			Date date=null;
+			try {
+			 date = sdf.parse(frOpeningDate);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			Date utilFrAgreementDate=null;
+		try {
+				utilFrAgreementDate= sdf.parse(frAgreementDate);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+			Date utilOwnerBirthDate=null;
+			try {
+				 utilOwnerBirthDate = sdf.parse(ownerBirthDate);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			Date utilFbaLicenseDate=null;
+			
+		try {
+			utilFbaLicenseDate = sdf.parse(fbaLicenseDate);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 			Franchisee franchisee = franchiseeService.findFranchisee(frId);
 
 			// franchisee.setFrId(frId);
@@ -3278,10 +3331,10 @@ public class RestApiController {
 			franchisee.setFrTarget(frTarget);
 			franchisee.setIsSameState(isSameState);
 
-			System.out.println("" + franchisee.toString());
+			System.out.println("FR Data" + franchisee.toString());
 			jsonResult = franchiseeService.saveFranchisee(franchisee);
 		} catch (Exception e) {
-			System.out.println("update scheduler rest exce " + e.getMessage());
+			System.out.println("update FR rest exce " + e.getMessage());
 		}
 
 		return jsonResult;

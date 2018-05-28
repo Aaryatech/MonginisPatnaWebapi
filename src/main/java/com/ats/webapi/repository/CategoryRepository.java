@@ -9,9 +9,10 @@ import com.ats.webapi.model.MCategory;
 
 public interface CategoryRepository extends JpaRepository<MCategory, Integer>{
 	
-	public List<MCategory> findByDelStatus(int catId);
+	public List<MCategory> findByDelStatus(int i);
 
-	public List<MCategory> findSubCategoryByCatId(int catId);
+	public List<MCategory> findByCatId(int catId);
+
 	
 	
 

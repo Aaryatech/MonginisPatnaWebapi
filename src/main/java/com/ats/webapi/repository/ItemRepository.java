@@ -3,9 +3,11 @@ package com.ats.webapi.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ats.webapi.model.Item;
 
@@ -42,5 +44,18 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	public List<Item> findByItemGrp1InAndDelStatusOrderByItemGrp2AscItemSortIdAsc(List<String> catIdList, int i);
 	
 	public List<Item>  findByItemGrp2OrderByItemGrp2(String subCatId);
+
+	public List<Item> findByIdIn(List<String> id);
+
+	@Transactional
+	@Modifying
+	@Query("UPDATE Item i SET i.delStatus=1  WHERE i.id IN (:idList)")
+	public int deleteItems(@Param("idList")List<Integer> id);
+
+
+	@Transactional
+	@Modifying
+	@Query("UPDATE Item i SET i.itemIsUsed=4  WHERE i.id IN (:idList)")
+	public int inactivateItems(@Param("idList")List<Integer> id);
 	
 } 

@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -25,12 +27,19 @@ public class SubCategory implements Serializable{
 	private int subCatId;
 	@Column(name="sub_cat_name")
 	private String subCatName;
-	/*@Column(name="cat_id")
-	private int catId;*/
+	@Column(name="cat_id")
+	private int catId;
 	@Column(name="del_status")
 	private int delStatus;	
-	
-	@ManyToOne(fetch=FetchType.LAZY)
+	//----remove to do onetomany association mapping-------
+	public int getCatId() {
+		return catId;
+	}
+	public void setCatId(int catId) {
+		this.catId = catId;
+	}
+	//----OneToMany--code-----------
+	/*@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name ="cat_id",nullable=false)
 	private MCategory catId;
 	
@@ -41,13 +50,7 @@ public class SubCategory implements Serializable{
 	}
 	public void setCatId(MCategory catId) {
 		this.catId = catId;
-	}
-	public int getDelStatus() {
-		return delStatus;
-	}
-	public void setDelStatus(int delStatus) {
-		this.delStatus = delStatus;
-	}
+	}*/
 	public int getSubCatId() {
 		return subCatId;
 	}
@@ -60,7 +63,18 @@ public class SubCategory implements Serializable{
 	public void setSubCatName(String subCatName) {
 		this.subCatName = subCatName;
 	}
-	
+	public int getDelStatus() {
+		return delStatus;
+	}
+	public void setDelStatus(int delStatus) {
+		this.delStatus = delStatus;
+	}
+	@Override
+	public String toString() {
+		return "SubCategory [subCatId=" + subCatId + ", subCatName=" + subCatName + ", catId=" + catId + ", delStatus="
+				+ delStatus + "]";
+	}
+    
 	
 	
 }

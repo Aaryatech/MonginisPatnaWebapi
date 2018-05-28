@@ -31,6 +31,7 @@ import com.ats.webapi.model.RegularSpCkOrders;
 import com.ats.webapi.model.SpCake;
 import com.ats.webapi.model.SpCakeSupplement;
 import com.ats.webapi.model.SubCategory;
+import com.ats.webapi.model.SubCategoryRes;
 import com.ats.webapi.model.tally.FranchiseeList;
 import com.ats.webapi.model.tray.TrayType;
 import com.ats.webapi.repository.FrListForSuppRepository;
@@ -40,6 +41,7 @@ import com.ats.webapi.repository.ItemRepository;
 import com.ats.webapi.repository.SpCakeListRepository;
 import com.ats.webapi.repository.SpCkDeleteOrderRepository;
 import com.ats.webapi.repository.SubCategoryRepository;
+import com.ats.webapi.repository.SubCategoryResRepository;
 import com.ats.webapi.service.FranchiseeService;
 import com.ats.webapi.service.ItemService;
 import com.ats.webapi.service.OrderService;
@@ -51,6 +53,10 @@ public class MasterController {
 
 	@Autowired
 	ItemService itemService;
+	
+	@Autowired
+	SubCategoryResRepository subCategoryResRepository;
+	
 	@Autowired
 	FranchiseeService franchiseeService;
 	
@@ -120,6 +126,71 @@ public class MasterController {
 
 		}
       //---------------------------------------------------------------------------
+		
+		// ----------------------------SAVE Sub Category---------------------------
+				@RequestMapping(value = { "/saveSubCategory" }, method = RequestMethod.POST)
+				public @ResponseBody Info saveSubCategory(@RequestBody SubCategoryRes subCategory) {
+
+					SubCategoryRes subCategoryRes = null;
+					Info info = new Info();
+					try {
+
+						subCategoryRes = subCategoryResRepository.save(subCategory);
+
+						if (subCategoryRes != null) {
+							info.setError(false);
+							info.setMessage("SubCategoryRes Saved Successfully.");
+						} else {
+							info.setError(true);
+							info.setMessage("SubCategoryRes Not Saved .");
+						}
+
+					} catch (Exception e) {
+
+						info.setError(true);
+						info.setMessage("SubCategoryRes Not Saved .");
+
+						e.printStackTrace();
+						System.out.println("Exception In MasterController /saveSubCategory" + e.getMessage());
+
+					}
+					return info;
+
+				}
+		      //---------------------------------------------------------------------------
+				// ------------------------Delete SubCategoryRes------------------------------------
+				@RequestMapping(value = { "/deleteSubCategory" }, method = RequestMethod.POST)
+				public @ResponseBody Info deleteSubCategory(@RequestParam("subCatId") int subCatId) {
+
+					int isDeleted = subCategoryResRepository.deleteSubCategory(subCatId);
+					Info infoRes=new Info();
+					if(isDeleted>=1)
+					{
+						infoRes.setError(false);
+						infoRes.setMessage("SubCategoryRes Deleted");
+					}
+					else
+					{
+						infoRes.setError(true);
+						infoRes.setMessage("SubCategoryRes Deletion Failed");
+					}
+					return infoRes;
+				}
+		        //------------------------------------------------------------------------
+				@RequestMapping(value = { "/getSubCategory" }, method = RequestMethod.POST)
+				public @ResponseBody SubCategoryRes getSubCategory(@RequestParam("subCatId") int subCatId) {
+
+					SubCategoryRes getSubCategoryRes = null;
+			    	try {
+						getSubCategoryRes = subCategoryResRepository.findBySubCatId(subCatId);
+
+					} catch (Exception e) {
+						getSubCategoryRes=new SubCategoryRes();
+				    	e.printStackTrace();
+					}
+					return getSubCategoryRes;
+
+				}
 		// ----------------------------SAVE SpCake Sup---------------------------
 				@RequestMapping(value = { "/saveSpCakeSup" }, method = RequestMethod.POST)
 				public @ResponseBody Info saveSpCakeSup(@RequestBody SpCakeSupplement spCakeSupplement) {
@@ -162,7 +233,7 @@ public class MasterController {
 					return info;
 
 				}
-		      //---------------------------------------------------------------------------
+		 //---------------------------------------------------------------------------
 		// ------------------------Delete SpCake Sup------------------------------------
 		@RequestMapping(value = { "/deleteSpCakeSup" }, method = RequestMethod.POST)
 		public @ResponseBody Info deleteSpCakeSup(@RequestParam("id") int id) {
@@ -173,7 +244,7 @@ public class MasterController {
         //------------------------------------------------------------------------
 		// ------------------------Delete ItemSup------------------------------------
 		@RequestMapping(value = { "/deleteItemSup" }, method = RequestMethod.POST)
-		public @ResponseBody Info deleteItemSup(@RequestParam("id") int itemId) {
+		public @ResponseBody Info deleteItemSup(@RequestParam("id") List<String>  itemId) {
 
 			Info info = itemService.deleteItemSup(itemId);
 			return info;

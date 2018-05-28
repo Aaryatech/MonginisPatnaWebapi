@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,8 +37,9 @@ public class MCategory implements Serializable{
 	@Column(name="del_status")
     private int delStatus;
 	
-	@OneToMany(mappedBy="catId",cascade=CascadeType.ALL)
-	private List<SubCategory> subCategory=new ArrayList<SubCategory>();
+	/*@OneToMany(mappedBy="catId",cascade=CascadeType.ALL)=new ArrayList<SubCategory>()*/
+	@Transient
+	private List<SubCategory> subCategoryList;
 	
 	public int getCatId() {
 		return catId;
@@ -64,18 +66,19 @@ public class MCategory implements Serializable{
 		this.delStatus = delStatus;
 	}
 
-	public List<SubCategory> getSubCategory() {
-		return subCategory;
+	
+	public List<SubCategory> getSubCategoryList() {
+		return subCategoryList;
 	}
-	public void setSubCategory(List<SubCategory> subCategory) {
-		this.subCategory = subCategory;
+	public void setSubCategoryList(List<SubCategory> subCategoryList) {
+		this.subCategoryList = subCategoryList;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	@Override
 	public String toString() {
-		return "Category [catId=" + catId + ", catName=" + catName + ", isSameDay=" + isSameDay + ", delStatus="
-				+ delStatus + ", subCategory=" + subCategory + "]";
+		return "MCategory [catId=" + catId + ", catName=" + catName + ", isSameDay=" + isSameDay + ", delStatus="
+				+ delStatus + ", subCategoryList=" + subCategoryList + "]";
 	}
-	
-	
-
 }
