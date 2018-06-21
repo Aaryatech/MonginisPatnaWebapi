@@ -1,5 +1,7 @@
 package com.ats.webapi.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,8 +20,9 @@ public interface SpCakeSupRepository extends JpaRepository<SpCakeSupplement, Int
 
 	@Modifying
 	@Transactional
-	@Query("Update SpCakeSupplement  SET del_status=1 WHERE sp_id=:id")
-	int deleteSpCakeSup(@Param("id") int id);
+	@Query("Update SpCakeSupplement  SET del_status=1 WHERE sp_id IN(:id)")
+	int deleteSpCakeSup(@Param("id") List<Integer> id);
+
 
 
 }

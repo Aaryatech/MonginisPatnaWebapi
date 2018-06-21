@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.CategoryList;
+import com.ats.webapi.model.ConfigureFranchisee;
 import com.ats.webapi.model.FrListForSupp;
 import com.ats.webapi.model.FrTarget;
 import com.ats.webapi.model.FrTargetList;
@@ -27,6 +32,8 @@ import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
 import com.ats.webapi.model.ItemSup;
 import com.ats.webapi.model.ItemSupList;
+import com.ats.webapi.model.PostFrItemStockDetail;
+import com.ats.webapi.model.PostFrItemStockHeader;
 import com.ats.webapi.model.RegularSpCkOrders;
 import com.ats.webapi.model.SpCake;
 import com.ats.webapi.model.SpCakeSupplement;
@@ -34,10 +41,14 @@ import com.ats.webapi.model.SubCategory;
 import com.ats.webapi.model.SubCategoryRes;
 import com.ats.webapi.model.tally.FranchiseeList;
 import com.ats.webapi.model.tray.TrayType;
+import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FrListForSuppRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.FranchiseeRepository;
 import com.ats.webapi.repository.ItemRepository;
+import com.ats.webapi.repository.ItemSupRepository;
+import com.ats.webapi.repository.PostFrOpStockDetailRepository;
+import com.ats.webapi.repository.PostFrOpStockHeaderRepository;
 import com.ats.webapi.repository.SpCakeListRepository;
 import com.ats.webapi.repository.SpCkDeleteOrderRepository;
 import com.ats.webapi.repository.SubCategoryRepository;
@@ -45,6 +56,7 @@ import com.ats.webapi.repository.SubCategoryResRepository;
 import com.ats.webapi.service.FranchiseeService;
 import com.ats.webapi.service.ItemService;
 import com.ats.webapi.service.OrderService;
+import com.ats.webapi.service.PostFrOpStockService;
 import com.ats.webapi.service.RegularSpCkOrderService;
 import com.ats.webapi.service.SpecialCakeService;
   
@@ -53,6 +65,9 @@ public class MasterController {
 
 	@Autowired
 	ItemService itemService;
+	
+	@Autowired
+	ItemSupRepository itemSuppRepository;
 	
 	@Autowired
 	SubCategoryResRepository subCategoryResRepository;
@@ -83,9 +98,21 @@ public class MasterController {
 	
 	@Autowired
 	FranchiseSupRepository franchiseSupRepository;
+	
 	@Autowired
 	private SubCategoryRepository subCategoryRepository;
 	
+	@Autowired
+	ConfigureFrRepository configureFrRepository;
+	
+
+	@Autowired
+	PostFrOpStockHeaderRepository postFrOpStockHeaderRepository;
+
+	
+	@Autowired
+	PostFrOpStockDetailRepository postFrOpStockDetailRepository;
+
 	// ----------------------------GET FrToken--------------------------------
 	@RequestMapping(value = { "/getFrToken" }, method = RequestMethod.POST)
 	public @ResponseBody String getFrToken(@RequestParam("frId") int frId) {
@@ -236,12 +263,48 @@ public class MasterController {
 		 //---------------------------------------------------------------------------
 		// ------------------------Delete SpCake Sup------------------------------------
 		@RequestMapping(value = { "/deleteSpCakeSup" }, method = RequestMethod.POST)
-		public @ResponseBody Info deleteSpCakeSup(@RequestParam("id") int id) {
+		public @ResponseBody Info deleteSpCakeSup(@RequestParam("id") List<Integer> id) {
 
 			Info info = spCakeService.deleteSpCakeSup(id);
 			return info;
 		}
         //------------------------------------------------------------------------
+		// ------------------------------------------------------------
+		@RequestMapping(value = { "/updateItemHsnAndPer" }, method = RequestMethod.POST)
+		public @ResponseBody Info updateItemHsnAndPer(@RequestParam("items") List<Integer> items,@RequestParam("itemHsncd")String itemHsncd,@RequestParam("itemTax1")double itemTax1,@RequestParam("itemTax2")double itemTax2,@RequestParam("itemTax3")double itemTax3) {
+			Info info=null;
+			try {
+				System.err.println(items+"hsn"+itemHsncd+"t1"+itemTax1+"t2"+itemTax2+"t3"+itemTax3);
+			if(!items.isEmpty()) {				System.err.println(items+"hsn"+itemHsncd+"t1"+itemTax1+"t2"+itemTax2+"t3"+itemTax3);
+ 				
+			for(Integer id:items) {
+					System.err.println(id+"hsn"+itemHsncd+"t1"+itemTax1+"t2"+itemTax2+"t3"+itemTax3);
+
+			     int isUpdate=itemRepository.updateItemHsnAndPerInItem(id,itemTax1,itemTax2,itemTax3);
+			     try { 
+					 int isUpdated = itemSuppRepository.updateItemHsnAndPerInSup(id,itemHsncd);
+				 }catch (Exception e) {
+						e.printStackTrace();
+					}
+				    
+				}
+				info=new Info();
+				info.setError(false);
+				info.setMessage("Updated");
+			}
+
+		
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				info=new Info();
+				info.setError(true);
+				info.setMessage("Updation Failed");
+			}
+			return info;
+		}
+        //------------------------------------------------------------------------
+		
 		// ------------------------Delete ItemSup------------------------------------
 		@RequestMapping(value = { "/deleteItemSup" }, method = RequestMethod.POST)
 		public @ResponseBody Info deleteItemSup(@RequestParam("id") List<String>  itemId) {
@@ -627,5 +690,64 @@ public class MasterController {
 					List<GetRegSpCakeOrders> regSpCakeOrder = regularSpCkOrderService.getRegSpCakeOrderHistory(spDeliveryDt, frId);
 					return regSpCakeOrder;
 				}
+				@RequestMapping(value = "/updateConfiguredItems", method = RequestMethod.POST)
+				public @ResponseBody Info updateConfiguredItems(@RequestParam List<String> frIdList,@RequestParam int menuId,@RequestParam List<String> itemIdList,@RequestParam int catId)
+				{
+					Info info=new Info();
+					try {
+						for(String frId:frIdList)
+						{
+							System.err.println("frId"+frId+"menuId"+menuId);
+						 ConfigureFranchisee configureFr=configureFrRepository.findByFrIdAndMenuIdAndDelStatus(Integer.parseInt(frId),menuId,0);
+						
+						 if(configureFr!=null) {
+						 String itemShow=configureFr.getItemShow();
+					
+						  for(String itemId:itemIdList)
+						  {
+							  if(!itemShow.contains(itemId))
+							  {
+						     	itemShow=itemShow+","+itemId;
+							  }
+						  }
+						  configureFr.setItemShow(itemShow);
+						  
+						  ConfigureFranchisee configureFranchiseeReport=configureFrRepository.save(configureFr);
+						 
+						  try {
+							  PostFrItemStockHeader stockHeader=postFrOpStockHeaderRepository.findByFrIdAndCatIdAndIsMonthClosed(Integer.parseInt(frId),catId,0);
+							  if(stockHeader!=null)
+							  {
+							  for(String itemId:itemIdList)
+							  {
+								  PostFrItemStockDetail stockDetailRes=postFrOpStockDetailRepository.findByOpeningStockHeaderIdAndItemId(stockHeader.getOpeningStockHeaderId(),Integer.parseInt(itemId));
+							    
+								  if(stockDetailRes==null)
+									  {
+									    PostFrItemStockDetail stockDetail=new PostFrItemStockDetail();
+							            stockDetail.setOpeningStockHeaderId(stockHeader.getOpeningStockHeaderId());
+							            stockDetail.setItemId(Integer.parseInt(itemId));		  
+							            postFrOpStockDetailRepository.save(stockDetail);
+									  }
+							  }
+							  }
+							  
+						  }catch (Exception e) {
+							e.printStackTrace();
+						}
+						 }
+						  
+						}
+						info.setError(false);
+						info.setMessage("CF Updated");
+					}catch (Exception e) {
+						e.printStackTrace();
+						info.setError(true);
+						info.setMessage("CF Updation Failed");
+					}
+					
+					return info;
+				}
+		           
 				
 }

@@ -15,4 +15,6 @@ public interface SpMessageRepository extends JpaRepository<SpMessage, Integer>
 	SpMessage findOne(int spMsgId);
 
 	List<SpMessage> findByDelStatusOrderBySpMsgTextAsc(int i);
+
+	List<SpMessage> findBySpMsgIdIn(List<Integer> spMsgId);
 }

@@ -21,4 +21,5 @@ public interface PostFrOpStockService {
 	
 	List<GetCurrentStockDetails> getStockBetweenMonth(int frId, int fromMonth, int toMonth, List<Integer>itemIdList);
 	
+	
 }

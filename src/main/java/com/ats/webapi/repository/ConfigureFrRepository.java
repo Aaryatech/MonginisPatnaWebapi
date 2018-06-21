@@ -34,4 +34,7 @@ public interface ConfigureFrRepository extends JpaRepository<ConfigureFranchisee
 	int updateFrConfAllFr(@Param("menuId") int menuId, @Param("fromTime") String fromTime,
 			@Param("toTime") String toTime);
 
+	
+	 ConfigureFranchisee findByFrIdAndMenuIdAndDelStatus(int frId, int menuId, int i);
+
 }

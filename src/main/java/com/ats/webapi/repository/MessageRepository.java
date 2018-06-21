@@ -24,6 +24,9 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 			,nativeQuery=true)
 	
 		List<Message> findMessage(@Param("cDate")java.util.Date cDate);
+
+        List<Message> findByMsgIdIn(List<Integer> id);
+
 	
 
 }

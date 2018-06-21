@@ -16,7 +16,8 @@ public interface SpecialCakeService {
 	public SearchSpCakeResponse searchSpecialCake(String spCode);
 	public List<String> searchSpecialCakeSpCodes(List<Integer>items,int frId,int menuId);
 	public SpCakeSupplement saveSpCakeSup(SpCakeSupplement spCakeSupplement);
-	public Info deleteSpCakeSup(int id);
+	public Info deleteSpCakeSup(List<Integer> id);
 	public GetSpCkSupplement getSpCakeSupp(int id);
 	public List<GetSpCkSupplement> getSpCakeSupList();
+	public List<SpecialCake> findSpecialCakes(List<Integer> spId);
 }

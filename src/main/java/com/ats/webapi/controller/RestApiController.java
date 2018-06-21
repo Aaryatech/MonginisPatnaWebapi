@@ -29,10 +29,14 @@ import com.ats.webapi.model.grngvn.PostCreditNoteHeader;
 import com.ats.webapi.model.grngvn.PostCreditNoteHeaderList;
 import com.ats.webapi.model.grngvn.TempGrnGvnBeanUp;
 import com.ats.webapi.model.remarks.GetAllRemarksList;
+import com.ats.webapi.repository.FlavourRepository;
 import com.ats.webapi.repository.GetBillDetailsRepository;
 import com.ats.webapi.repository.GetReorderByStockTypeRepository;
 import com.ats.webapi.repository.ItemRepository;
+import com.ats.webapi.repository.MessageRepository;
 import com.ats.webapi.repository.OrderLogRespository;
+import com.ats.webapi.repository.RouteRepository;
+import com.ats.webapi.repository.SpMessageRepository;
 import com.ats.webapi.repository.UpdatePBTimeRepo;
 import com.ats.webapi.repository.UpdateSeetingForPBRepo;
 import com.ats.webapi.repository.UserRepository;
@@ -320,6 +324,17 @@ public class RestApiController {
 	@Autowired
 	OrderLogRespository  logRespository;
 	
+	@Autowired
+	RouteRepository routeRepository;
+	
+	@Autowired
+	FlavourRepository flavourRepository;
+	
+	@Autowired
+	SpMessageRepository spMessageRepository;
+	
+	@Autowired
+	MessageRepository messageRepository;
 	
 	@RequestMapping(value = { "/changeAdminUserPass" }, method = RequestMethod.POST)
 	public @ResponseBody Info changeAdminUserPass(@RequestBody User user) {
@@ -2258,12 +2273,16 @@ public class RestApiController {
 
 	// Delete Route
 	@RequestMapping("/deleteRoute")
-	public @ResponseBody String deleteRoute(@RequestParam int routeId) {
-
+	public @ResponseBody String deleteRoute(@RequestParam List<Integer> routeId) {
+		
+		String jsonResult=null;
 		Info info = new Info();
-		Route route = routeService.findRoute(routeId);
-		route.setDelStatus(1);
-		String jsonResult = routeService.save(route);
+		List<Route> route = routeRepository.findByRouteIdIn(routeId);
+		for(int i=0;i<route.size();i++)
+		{
+		 route.get(i).setDelStatus(1);
+		 jsonResult = routeService.save(route.get(i));
+		}
 		try {
 			if (jsonResult == null) {
 				info.setError(true);
@@ -2283,13 +2302,18 @@ public class RestApiController {
 
 	// Delete Message
 	@RequestMapping("/deleteMessage")
-	public @ResponseBody String deleteMessage(@RequestParam int id) {
+	public @ResponseBody String deleteMessage(@RequestParam List<Integer> id) {
 
+		String jsonResult=""; 
 		Info info = new Info();
 		try {
-			Message message = messageService.findMessage(id);
-			message.setDelStatus(1);
-			String jsonResult = messageService.save(message);
+			List<Message> message = messageRepository.findByMsgIdIn(id);
+			for(int i=0;i<message.size();i++)
+			{
+				message.get(i).setDelStatus(1);
+				 jsonResult = messageService.save(message.get(i));
+			}
+			
 			if (jsonResult == null) {
 				info.setError(true);
 				info.setMessage("Message deletion failed");
@@ -2349,13 +2373,16 @@ public class RestApiController {
 
 	// Delete Flavor
 	@RequestMapping(value = "/deleteFlavour", method = RequestMethod.POST)
-	public @ResponseBody String deleteFlavour(@RequestParam int spfId) {
+	public @ResponseBody String deleteFlavour(@RequestParam List<Integer> spfId) {
 
-		Flavour flavour = flavourService.findFlavour(spfId);
-		flavour.setDelStatus(1);
+		ErrorMessage errorMessage = null;
+		List<Flavour> flavour = flavourRepository.findBySpfIdIn(spfId);
+		for(int i=0;i<flavour.size();i++)
+		{
+		flavour.get(i).setDelStatus(1);
 
-		ErrorMessage errorMessage = flavourService.save(flavour);
-
+		 errorMessage = flavourService.save(flavour.get(i));
+		}
 		return JsonUtil.javaToJson(errorMessage);
 	}
 
@@ -2381,13 +2408,18 @@ public class RestApiController {
 
 	// Delete Rates
 	@RequestMapping(value = "/deleteSpMessage", method = RequestMethod.POST)
-	public @ResponseBody ErrorMessage deleteSpMessage(@RequestParam int spMsgId) {
+	public @ResponseBody ErrorMessage deleteSpMessage(@RequestParam List<Integer> spMsgId) {
 
-		SpMessage spMessage = spMsgService.findSpMessage(spMsgId);
-		spMessage.setDelStatus(1);
-
-		String spMessages = spMsgService.save(spMessage);
 		ErrorMessage errorMessage = new ErrorMessage();
+		String spMessages="";
+		List<SpMessage> spMessage = spMessageRepository.findBySpMsgIdIn(spMsgId);
+		for(int i=0;i<spMessage.size();i++)
+		{
+			spMessage.get(i).setDelStatus(1);
+
+			 spMessages = spMsgService.save(spMessage.get(i));
+		}
+		
 		if (spMessages != "") {
 			errorMessage.setError(false);
 			errorMessage.setMessage("SpMessage deleted Successfully");
@@ -3168,14 +3200,16 @@ public class RestApiController {
 
 	// Delete Special Cake
 	@RequestMapping(value = "/deleteSpecialCake")
-	public @ResponseBody String deleteSpecialCake(@RequestParam int spId) {
-
+	public @ResponseBody String deleteSpecialCake(@RequestParam List<Integer> spId) {
+		String jsonResult=null;
 		Info info = new Info();
 		try {
-			SpecialCake specialCake = specialcakeService.findSpecialCake(spId);
-			specialCake.setDelStatus(1);
-			String jsonResult = specialcakeService.save(specialCake);
-
+			List<SpecialCake> specialCakeList = specialcakeService.findSpecialCakes(spId);
+			for(int i=0;i<specialCakeList.size();i++)
+			{
+				specialCakeList.get(i).setDelStatus(1);
+			     jsonResult = specialcakeService.save(specialCakeList.get(i));
+			}
 			if (jsonResult == null) {
 				info.setError(true);
 				info.setMessage("deletion of Special Cake failed");

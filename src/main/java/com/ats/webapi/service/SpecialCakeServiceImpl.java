@@ -142,7 +142,7 @@ public class SpecialCakeServiceImpl implements SpecialCakeService{
 	}
 
 	@Override
-	public Info deleteSpCakeSup(int id) {
+	public Info deleteSpCakeSup(List<Integer> id) {
 
 		int isDel=spCakeSupRepository.deleteSpCakeSup(id);
 		Info info=new Info();
@@ -178,6 +178,14 @@ public class SpecialCakeServiceImpl implements SpecialCakeService{
     	 e.printStackTrace();
 	}
      return spSuppList;
+	}
+
+	@Override
+	public List<SpecialCake> findSpecialCakes(List<Integer> spId) {
+		
+		List<SpecialCake> spList=specialcakeRepository.findBySpIdIn(spId);
+		
+		return spList;
 	}
 	
 

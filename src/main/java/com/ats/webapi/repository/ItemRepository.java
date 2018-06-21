@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
 
 @Repository
@@ -25,7 +26,8 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	public List<Item> findByDelStatusOrderByItemGrp2(int i);//changed to order by subcatId 21/Apr
 
-	@Query(value="select MAX(item_id)+1 from m_item",nativeQuery=true)
+	@Query(value="select MAX(CAST(SUBSTRING(item_id,1,LENGTH(item_id)-0) AS SIGNED))+1  from m_item\n" + 
+			"",nativeQuery=true)
 	public int findMaxId();
 
 	public List<Item> findByItemGrp1AndDelStatusOrderByItemGrp2AscItemSortIdAsc(String itemGrp1, int i);
@@ -57,5 +59,12 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Modifying
 	@Query("UPDATE Item i SET i.itemIsUsed=4  WHERE i.id IN (:idList)")
 	public int inactivateItems(@Param("idList")List<Integer> id);
+
+
+
+	@Transactional
+	@Modifying
+	@Query("UPDATE Item i SET itemTax1=:itemTax1,itemTax2=:itemTax2,itemTax3=:itemTax3  WHERE i.id=:id")
+	public int updateItemHsnAndPerInItem(@Param("id")Integer id,@Param("itemTax1")  double itemTax1,@Param("itemTax2")  double itemTax2,@Param("itemTax3")  double itemTax3);
 	
 } 

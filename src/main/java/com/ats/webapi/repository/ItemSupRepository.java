@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.ats.webapi.model.Info;
 import com.ats.webapi.model.ItemSup;
 
 @Repository
@@ -19,5 +20,12 @@ public interface ItemSupRepository extends JpaRepository<ItemSup, Integer>{
 	@Transactional
 	@Query("Update ItemSup  SET del_status=1 WHERE item_id IN(:itemId)")
 	int deleteItemSup(@Param("itemId")List<String> itemId);
+	
+
+	@Transactional
+	@Modifying
+	@Query("UPDATE ItemSup i SET i.itemHsncd=:itemHsncd  WHERE i.itemId=:id")
+	int updateItemHsnAndPerInSup(@Param("id")Integer id,@Param("itemHsncd") String itemHsncd);
+
 
 }

@@ -35,6 +35,8 @@ public interface PostFrOpStockDetailRepository extends JpaRepository<PostFrItemS
 					" m_fr_opening_stock_header.cat_id=:catId AND m_fr_opening_stock_header.is_month_closed= 0 )", nativeQuery = true)
 	PostFrItemStockDetail getCurrentOpeningStock(@Param("frId") int frId,@Param("itemId") int itemId ,@Param("catId") int catId);
 
+	PostFrItemStockDetail findByOpeningStockHeaderIdAndItemId(int openingStockHeaderId, int parseInt);
+
 	
 	
 }
