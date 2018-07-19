@@ -36,6 +36,7 @@ import com.ats.webapi.repository.ItemRepository;
 import com.ats.webapi.repository.MessageRepository;
 import com.ats.webapi.repository.OrderLogRespository;
 import com.ats.webapi.repository.RouteRepository;
+import com.ats.webapi.repository.SpCakeOrderHisRepository;
 import com.ats.webapi.repository.SpMessageRepository;
 import com.ats.webapi.repository.UpdatePBTimeRepo;
 import com.ats.webapi.repository.UpdateSeetingForPBRepo;
@@ -1539,7 +1540,16 @@ public class RestApiController {
 		return spCakeOrderList;
 
 	}
+	@Autowired
+	SpCakeOrderHisRepository spCakeOrderHisRepository;
+	@RequestMapping(value = { "/getSpCkOrderByOrderNo" }, method = RequestMethod.POST)
+	@ResponseBody
+	public SpCkOrderHis getSpCkOrderByOrderNo(@RequestParam("orderNo") int orderNo) {
 
+		SpCkOrderHis spCakeOrder = spCakeOrderHisRepository.findByOrderNo(orderNo);
+
+		return spCakeOrder;
+	}
 	// Search Special Cake Order History
 	@RequestMapping("/orderHistory")
 	public @ResponseBody ItemOrderList searchOrderHistory(@RequestParam int menuId, @RequestParam String deliveryDt,

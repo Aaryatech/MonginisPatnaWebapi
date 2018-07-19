@@ -1,6 +1,7 @@
 package com.ats.webapi.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -690,6 +691,14 @@ public class MasterController {
 					List<GetRegSpCakeOrders> regSpCakeOrder = regularSpCkOrderService.getRegSpCakeOrderHistory(spDeliveryDt, frId);
 					return regSpCakeOrder;
 				}
+				  public static boolean contains(int[] arr, int item) {
+				      for (int n : arr) {
+				         if (item == n) {
+				            return true;
+				         }
+				      }
+				      return false;
+				   }
 				@RequestMapping(value = "/updateConfiguredItems", method = RequestMethod.POST)
 				public @ResponseBody Info updateConfiguredItems(@RequestParam List<String> frIdList,@RequestParam int menuId,@RequestParam List<String> itemIdList,@RequestParam int catId)
 				{
@@ -697,17 +706,28 @@ public class MasterController {
 					try {
 						for(String frId:frIdList)
 						{
-							System.err.println("frId"+frId+"menuId"+menuId);
+							
 						 ConfigureFranchisee configureFr=configureFrRepository.findByFrIdAndMenuIdAndDelStatus(Integer.parseInt(frId),menuId,0);
 						
 						 if(configureFr!=null) {
 						 String itemShow=configureFr.getItemShow();
-					
+						 int[] intArray = null;
+						 try {
+						  intArray = Arrays.stream(itemShow.split(","))
+								    .mapToInt(Integer::parseInt)
+								    .toArray();
+						 }
+						 catch (Exception e) {
+							e.printStackTrace();
+						}
 						  for(String itemId:itemIdList)
 						  {
-							  if(!itemShow.contains(itemId))
+							  if(intArray.length!=0)
+							  {
+							  if(!contains(intArray, Integer.parseInt(itemId)))
 							  {
 						     	itemShow=itemShow+","+itemId;
+							  }
 							  }
 						  }
 						  configureFr.setItemShow(itemShow);
@@ -715,13 +735,17 @@ public class MasterController {
 						  ConfigureFranchisee configureFranchiseeReport=configureFrRepository.save(configureFr);
 						 
 						  try {
+
 							  PostFrItemStockHeader stockHeader=postFrOpStockHeaderRepository.findByFrIdAndCatIdAndIsMonthClosed(Integer.parseInt(frId),catId,0);
+
 							  if(stockHeader!=null)
-							  {
+							  {				  
+
 							  for(String itemId:itemIdList)
 							  {
+								 
 								  PostFrItemStockDetail stockDetailRes=postFrOpStockDetailRepository.findByOpeningStockHeaderIdAndItemId(stockHeader.getOpeningStockHeaderId(),Integer.parseInt(itemId));
-							    
+							  
 								  if(stockDetailRes==null)
 									  {
 									    PostFrItemStockDetail stockDetail=new PostFrItemStockDetail();
