@@ -12,5 +12,5 @@ public interface SubCategoryService {
 	public SubCatergoryList findAllSubCategories();
 	public List<SubCategory> getAllSubCategory();
 	public CategoryList findSubCategoryByCatId(int catId);
-
+	List<SubCategory>  findSubCatByCatId(int catId);
 }

@@ -134,4 +134,12 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 		return allSubCategory;
 	}
 
+//new patna
+	@Override
+	public List<SubCategory> findSubCatByCatId(int catId) {
+		
+		List<SubCategory> subList=subCategoryRepository.findByCatIdAndDelStatus(catId, 0);
+		return subList;
+	}
+
 }
