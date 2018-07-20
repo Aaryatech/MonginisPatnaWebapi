@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.commons.Common;
+import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.*;
 import com.ats.webapi.model.grngvn.GetGrnGvnForCreditNoteList;
 import com.ats.webapi.model.grngvn.GrnGvnHeader;
@@ -30,6 +31,8 @@ import com.ats.webapi.model.grngvn.PostCreditNoteHeaderList;
 import com.ats.webapi.model.grngvn.TempGrnGvnBeanUp;
 import com.ats.webapi.model.remarks.GetAllRemarksList;
 import com.ats.webapi.repository.FlavourRepository;
+import com.ats.webapi.repository.FranchiseSupRepository;
+import com.ats.webapi.repository.FranchiseeRepository;
 import com.ats.webapi.repository.GetBillDetailsRepository;
 import com.ats.webapi.repository.GetReorderByStockTypeRepository;
 import com.ats.webapi.repository.ItemRepository;
@@ -38,6 +41,7 @@ import com.ats.webapi.repository.OrderLogRespository;
 import com.ats.webapi.repository.RouteRepository;
 import com.ats.webapi.repository.SpCakeOrderHisRepository;
 import com.ats.webapi.repository.SpMessageRepository;
+import com.ats.webapi.repository.SpecialCakeRepository;
 import com.ats.webapi.repository.UpdatePBTimeRepo;
 import com.ats.webapi.repository.UpdateSeetingForPBRepo;
 import com.ats.webapi.repository.UserRepository;
@@ -336,6 +340,15 @@ public class RestApiController {
 	
 	@Autowired
 	MessageRepository messageRepository;
+	
+	@Autowired
+    FranchiseeRepository franchiseeRepository;
+
+	@Autowired
+	FranchiseSupRepository franchiseSupRepository;
+	
+	@Autowired
+	SpecialCakeRepository specialcakeRepository;
 	
 	@RequestMapping(value = { "/changeAdminUserPass" }, method = RequestMethod.POST)
 	public @ResponseBody Info changeAdminUserPass(@RequestBody User user) {
@@ -1709,7 +1722,7 @@ public class RestApiController {
 	// Save Item
 	@RequestMapping(value = { "/insertItem" }, method = RequestMethod.POST)
 	@ResponseBody
-	public String saveItem(@RequestParam("itemId") String itemId, @RequestParam("itemName") String itemName,
+	public Item saveItem(@RequestParam("itemId") String itemId, @RequestParam("itemName") String itemName,
 			@RequestParam("itemGrp1") String itemGrp1, @RequestParam("itemGrp2") String itemGrp2,
 			@RequestParam("itemGrp3") String itemGrp3, @RequestParam("itemRate1") double itemRate1,
 			@RequestParam("itemRate2") double itemRate2, @RequestParam("itemRate3") double itemRate3,
@@ -1743,9 +1756,19 @@ public class RestApiController {
 		item.setItemId(itemId);
 		item.setShelfLife(itemShelfLife);
 
-		ErrorMessage jsonResult = itemService.saveItem(item);
+		Item jsonResult = item= itemRepository.save(item);
+		 try {
+			    List<String> frTokens=franchiseSupRepository.findTokens();
 
-		return JsonUtil.javaToJson(jsonResult);
+			 for(String token:frTokens) {
+	          Firebase.sendPushNotifForCommunication(token,"Item Details Updated","Changes have been made in OPS at item level, SP level, in the rates. Kindly refer the OPS for exact changes made.","inbox");
+			 }
+	         }
+	         catch(Exception e2)
+	         {
+		       e2.printStackTrace();
+	         }
+		return jsonResult;
 	}
 
 	// Configure Franchisee
@@ -1850,7 +1873,7 @@ public class RestApiController {
 	// Save Franchisee
 	@RequestMapping(value = { "/saveFranchisee" }, method = RequestMethod.POST)
 	@ResponseBody
-	public ErrorMessage saveFranchisee(@RequestParam("frName") String frName, @RequestParam("frCode") String frCode,
+	public Franchisee saveFranchisee(@RequestParam("frName") String frName, @RequestParam("frCode") String frCode,
 			@RequestParam("frOpeningDate") String frOpeningDate, @RequestParam("frRate") int frRate,
 			@RequestParam("frImage") String frImage, @RequestParam("frRouteId") int frRouteId,
 			@RequestParam("frCity") String frCity, @RequestParam("frKg1") int frKg1, @RequestParam("frKg2") int frKg2,
@@ -1924,15 +1947,15 @@ public class RestApiController {
 		franchisee.setIsSameState(isSameState);
 
 		System.out.println("" + franchisee.toString());
-		ErrorMessage jsonResult = franchiseeService.saveFranchisee(franchisee);
+		Franchisee frResponse = franchiseeRepository.save(franchisee);
 
-		return jsonResult;
+		return frResponse;
 	}
 
 	// Special Cake Insert
 	@RequestMapping(value = { "/insertSpecialCake" }, method = RequestMethod.POST)
 	@ResponseBody
-	public String saveSpecialCake(@RequestParam("spCode") String spcode, @RequestParam("spName") String spname,
+	public SpecialCake saveSpecialCake(@RequestParam("spCode") String spcode, @RequestParam("spName") String spname,
 			@RequestParam("spType") int sptype, @RequestParam("spMinwt") String spminwt,
 			@RequestParam("spMaxwt") String spmaxwt, @RequestParam("spBookb4") String spbookb4,
 			@RequestParam("spImage") String spimage, @RequestParam("spTax1") double sptax1,
@@ -1947,7 +1970,7 @@ public class RestApiController {
 			@RequestParam("spRate2") int spRate2, @RequestParam("spRate3") int spRate3,
 			@RequestParam("isSlotUsed") int isSlotUsed) {
 
-		String jsonResult = "";
+		SpecialCake specialCakeRes=null;
 		try {
 			System.out.println("isSlotUsed");
 
@@ -1987,14 +2010,26 @@ public class RestApiController {
 
 			System.out.println("*********Special Cake:***************" + specialcake.toString());
 
-			jsonResult = specialcakeService.save(specialcake);
-			System.out.println("\n " + jsonResult);
+			 specialCakeRes=specialcakeRepository.save(specialcake);
+			
+			 try {
+				    List<String> frTokens=franchiseSupRepository.findTokens();
+
+				 for(String token:frTokens) {
+		          Firebase.sendPushNotifForCommunication(token,"Special Cake Details Updated","Changes have been made in OPS at item level, SP level, in the rates. Kindly refer the OPS for exact changes made.","inbox");
+				 }
+		         }
+		         catch(Exception e2)
+		         {
+			       e2.printStackTrace();
+		         }
+			
 		} catch (Exception e) {
 			System.out.println("inser cake error " + e.getMessage());
 
 			e.printStackTrace();
 		}
-		return jsonResult;
+		return specialCakeRes;
 
 	}
 
@@ -3137,7 +3172,7 @@ public class RestApiController {
 
 	// Update Special Cake
 	@RequestMapping("/updateSpecialCake")
-	public @ResponseBody String updateSpecialCake(@RequestParam int id, @RequestParam String spname,
+	public @ResponseBody SpecialCake updateSpecialCake(@RequestParam int id, @RequestParam String spname,
 			@RequestParam int sptype, @RequestParam String spminwt, @RequestParam String spmaxwt,
 			@RequestParam String spCode, @RequestParam String spbookb4, @RequestParam String spimage,
 			@RequestParam double sptax1, @RequestParam double sptax2, @RequestParam double sptax3,
@@ -3152,6 +3187,7 @@ public class RestApiController {
 
 		SpecialCake specialCake = specialcakeService.findSpecialCake(id);
 		Info info = new Info();
+		SpecialCake jsonResult=null;
 		try {
 
 			specialCake.setSpName(spname);
@@ -3187,7 +3223,7 @@ public class RestApiController {
 
 			System.out.println("*********Special Cake:***************" + specialCake.getIsSlotUsed());
 
-			String jsonResult = specialcakeService.save(specialCake);
+			 jsonResult = specialcakeRepository.save(specialCake);
 
 			if (jsonResult == null) {
 
@@ -3204,7 +3240,7 @@ public class RestApiController {
 			info.setMessage("" + e.getMessage());
 		}
 
-		return "" + JsonUtil.javaToJson(info);
+		return jsonResult;
 
 	}
 
