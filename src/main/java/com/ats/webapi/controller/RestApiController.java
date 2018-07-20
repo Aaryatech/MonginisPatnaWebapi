@@ -2638,7 +2638,14 @@ public class RestApiController {
 		return subCategoryList;
 
 	}
+	//getSubCat List by Cat Id Sachin 2018-07-19 Patna
+		@RequestMapping(value = "/getSubCateListByCatId", method = RequestMethod.POST)
+		public @ResponseBody List<SubCategory> getSubCateListByCatId(@RequestParam("catId") int catId) {
 
+			List<SubCategory> subCategoryList = subCategoryService.findSubCatByCatId(catId);
+			return subCategoryList;
+
+		}
 	// Get Flavour
 	@RequestMapping(value = "/getFlavour", method = RequestMethod.GET)
 	public @ResponseBody Flavour getFlavour(@RequestParam int spfId) {
