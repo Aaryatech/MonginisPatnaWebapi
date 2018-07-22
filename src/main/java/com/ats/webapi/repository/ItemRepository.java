@@ -19,7 +19,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	public Item findOne(int id);
 
-	public List<Item> findByItemGrp1AndDelStatusOrderByItemNameAsc(String itemGrp1,int i);
+	public List<Item> findByItemGrp1AndDelStatusOrderByItemGrp2Asc(String itemGrp1,int i);
 
 	@Query(value="select * from m_item where m_item.id IN (:itemList) AND m_item.del_status=0",nativeQuery=true)
 	public List<Item> findByDelStatusAndItemIdIn(@Param("itemList")List<Integer> itemList);

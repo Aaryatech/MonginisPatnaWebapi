@@ -79,6 +79,7 @@ public class OrderServiceImpl implements OrderService {
 						System.out.println("Order Deleted ? = " + result);
 					} else {
 						prevOrder.setOrderQty(o.getOrderQty());
+						prevOrder.setEditQty(o.getOrderQty());//21-July-change-for editQty
 						updatedOrder = orderRepository.save(prevOrder);
 						
 					}

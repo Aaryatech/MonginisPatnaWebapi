@@ -1,8 +1,11 @@
 package com.ats.webapi.controller;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +18,8 @@ import com.ats.webapi.model.BillWiseTaxReportList;
 import com.ats.webapi.model.ItemWiseDetailList;
 import com.ats.webapi.model.ItemWiseReportList;
 import com.ats.webapi.model.MonthWiseReportList;
+import com.ats.webapi.model.Orders;
+import com.ats.webapi.model.POrder;
 import com.ats.webapi.model.report.DispatchReport;
 import com.ats.webapi.model.report.GetCustBillTax;
 import com.ats.webapi.model.report.GetCustomerBill;
@@ -23,8 +28,13 @@ import com.ats.webapi.model.report.GetRepItemwiseSell;
 import com.ats.webapi.model.report.GetRepMenuwiseSell;
 import com.ats.webapi.model.report.GetRepMonthwiseSell;
 import com.ats.webapi.model.report.GetRepTaxSell;
+import com.ats.webapi.model.report.PDispatchReport;
+import com.ats.webapi.repository.DispatchOrderRepository;
+import com.ats.webapi.repository.PDispatchReportRepository;
 import com.ats.webapi.service.RepFrSellServise;
 import com.ats.webapi.service.ReportsService;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @RestController
 public class ReportsController {
@@ -36,6 +46,26 @@ public class ReportsController {
 	@Autowired
 	RepFrSellServise repFrSellServise;
 	
+	@Autowired
+	PDispatchReportRepository pDispatchReportRepository;
+	
+	@Autowired
+	DispatchOrderRepository dispatchOrderRepository;
+	
+	
+	@RequestMapping(value = { "/updateEditedQty" }, method = RequestMethod.POST)
+
+	public @ResponseBody List<POrder> updateEditedQty(@RequestBody List<POrder> orderList)
+			throws ParseException, JsonParseException, JsonMappingException, IOException {
+		List<POrder> ordersList=null;
+         try {
+        	 ordersList=dispatchOrderRepository.save(orderList);
+         }catch(Exception e)
+         {
+        	 e.printStackTrace();
+         }
+		return ordersList;
+	}
 	@RequestMapping(value = { "/showBillWisePurchaseReport" }, method = RequestMethod.POST)
 	public @ResponseBody BillWisePurchaseList showBillWisePurchase(@RequestParam("frId") int frId, @RequestParam("fromDate") String fromDate,
 				@RequestParam("toDate") String toDate) {
@@ -106,6 +136,16 @@ public class ReportsController {
 		return dispatchReportList;
 		
 	}
+	//---------------------------------PDispatch Item Report-----------------------------------------
+		@RequestMapping(value = "/getPDispatchItemReport", method = RequestMethod.POST)
+		public @ResponseBody List<PDispatchReport> getPDispatchItemReport(@RequestParam("productionDate") String productionDate,
+				 @RequestParam("frId") List<String> frId,@RequestParam("categories") List<String> categories) {
+			
+			String productionDateYMD = Common.convertToYMD(productionDate);
+			List<PDispatchReport> dispatchReportList=pDispatchReportRepository.getPDispatchItemReport(productionDateYMD, frId, categories);
+			return dispatchReportList;
+			
+		}
 	//------------------------------------------------------------------------------------------------
 	@RequestMapping(value = "/getRepMonthwiseSell", method = RequestMethod.POST)
 	public @ResponseBody List<GetRepMonthwiseSell> getRepMonthwiseSell(@RequestParam("fromDate") String fromDate,

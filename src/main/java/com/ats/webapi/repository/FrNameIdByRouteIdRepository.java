@@ -11,7 +11,7 @@ import com.ats.webapi.model.FrNameIdByRouteId;
 public interface FrNameIdByRouteIdRepository extends JpaRepository<FrNameIdByRouteId, Integer> {
 	
 	@Query(value=" SELECT fr_name,fr_id,  fr_route_id FROM m_franchisee WHERE "
-			+ "fr_route_id =:routeId "
+			+ "fr_route_id =:routeId  and del_status=0"
 			+ "",nativeQuery=true)
 	List<FrNameIdByRouteId> getFrNameIdByRouteId(@Param("routeId")int routeId);
 

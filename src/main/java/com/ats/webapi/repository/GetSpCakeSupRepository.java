@@ -34,4 +34,15 @@ public interface GetSpCakeSupRepository extends JpaRepository<GetSpCkSupplement,
 			"  s.cut_section from m_spcake_sup s,m_sp_cake sp where s.del_status=0 And s.sp_id=sp.sp_id And id=:id",nativeQuery=true)
 	GetSpCkSupplement findById(@Param("id")int id);
 
+	@Query(value="select\n" + 
+			"  s.id,sp.sp_code,\n" + 
+			"  s.sp_id,\n" + 
+			"  sp.sp_name,\n" + 
+			"  s.sp_hsncd,\n" + 
+			"  s.sp_uom,s.uom_id,s.sp_cess,\n" + 
+			"  s.is_tally_sync,\n" + 
+			"  s.del_status,\n" + 
+			"  s.cut_section from m_spcake_sup s,m_sp_cake sp where s.del_status=0 And s.sp_id=sp.sp_id And s.sp_id=:spId",nativeQuery=true)
+	GetSpCkSupplement getSpCakeSupplement(@Param("spId")int id);
+
 }

@@ -46,6 +46,7 @@ import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FrListForSuppRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.FranchiseeRepository;
+import com.ats.webapi.repository.GetSpCakeSupRepository;
 import com.ats.webapi.repository.ItemRepository;
 import com.ats.webapi.repository.ItemSupRepository;
 import com.ats.webapi.repository.PostFrOpStockDetailRepository;
@@ -110,6 +111,8 @@ public class MasterController {
 	@Autowired
 	PostFrOpStockHeaderRepository postFrOpStockHeaderRepository;
 
+	@Autowired
+	GetSpCakeSupRepository getSpCakeSupRepository;
 	
 	@Autowired
 	PostFrOpStockDetailRepository postFrOpStockDetailRepository;
@@ -384,6 +387,32 @@ public class MasterController {
 					GetSpCkSupplement getSpCkSupRes = null;
 					try {
 						getSpCkSupRes = spCakeService.getSpCakeSupp(id);
+
+						if (getSpCkSupRes != null) {
+							getSpCkSupRes.setError(false);
+							getSpCkSupRes.setMessage("GetSpCkSupplement Found Successfully");
+						} else {
+							getSpCkSupRes = new GetSpCkSupplement();
+							getSpCkSupRes.setError(true);
+							getSpCkSupRes.setMessage("GetSpCkSupplement Not Found");
+						}
+					} catch (Exception e) {
+						getSpCkSupRes = new GetSpCkSupplement();
+						getSpCkSupRes.setError(true);
+						getSpCkSupRes.setMessage("GetSpCkSupplement Not Found");
+						System.out.println("Exception In getSpCakeSupp:" + e.getMessage());
+					}
+
+					return getSpCkSupRes;
+
+				}
+				// ------------------------Getting One SpCakeSup by Id-----------------------
+				@RequestMapping(value = { "/getSpCakeSupplement" }, method = RequestMethod.POST)
+				public @ResponseBody GetSpCkSupplement getSpCakeSupplement(@RequestParam("id") int id) {
+
+					GetSpCkSupplement getSpCkSupRes = null;
+					try {
+						getSpCkSupRes = getSpCakeSupRepository.getSpCakeSupplement(id);
 
 						if (getSpCkSupRes != null) {
 							getSpCkSupRes.setError(false);
