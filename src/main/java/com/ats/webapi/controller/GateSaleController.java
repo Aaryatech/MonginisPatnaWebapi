@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.FrItemStockConfigureList;
+import com.ats.webapi.model.SellBillDetail;
 import com.ats.webapi.model.gatesale.GateEmployee;
+import com.ats.webapi.model.gatesale.GateSaleBillDetail;
 import com.ats.webapi.model.gatesale.GateSaleBillHeader;
 import com.ats.webapi.model.gatesale.GateSaleBillHeaderRes;
 import com.ats.webapi.model.gatesale.GateSaleBillHeaderResp;
@@ -30,6 +32,9 @@ import com.ats.webapi.model.gatesale.OtherItem;
 import com.ats.webapi.model.gatesale.OtherItemList;
 import com.ats.webapi.model.gatesale.OtherSupplier;
 import com.ats.webapi.model.gatesale.OtherSupplierList;
+import com.ats.webapi.repository.gatesale.GateSaleBillDetailRepository;
+import com.ats.webapi.repository.gatesale.GateSaleBillDetailResRepository;
+import com.ats.webapi.repository.gatesale.GateSaleBillHeaderRepository;
 import com.ats.webapi.service.FrItemStockConfigureService;
 import com.ats.webapi.service.gatesale.GateSaleService;
 
@@ -249,6 +254,75 @@ public class GateSaleController {
 			}
 			
 			return errorMessage;
+		}
+		
+		
+		//Insert Gate Sale Bill Patna By Admin(BackEnd)
+		@Autowired
+		GateSaleBillHeaderRepository gateSaleBillHeaderRepository;
+		
+		@Autowired
+		GateSaleBillDetailRepository gateSaleBillDetailRepository;
+		
+		@RequestMapping(value = { "/insertGateSaleBill" }, method = RequestMethod.POST)
+		public @ResponseBody ErrorMessage insertGateSaleBill(@RequestBody GateSaleBillHeader gateSaleBillHeader)
+		{
+			ErrorMessage errorMessage=new ErrorMessage();
+			
+			try {
+				
+				GateSaleBillHeader headRes=gateSaleBillHeaderRepository.saveAndFlush(gateSaleBillHeader);
+				
+				int billId=0;
+				
+				if(headRes!=null) {
+					
+				errorMessage.setError(false);
+				errorMessage.setMessage("Header Saved Successfull");
+				billId=headRes.getBillId();
+				
+				}else {
+					
+					errorMessage.setError(true);
+					errorMessage.setMessage("Header Not Saved Successfull");
+					
+				}
+				
+				List<GateSaleBillDetail> sBillDetailsList=gateSaleBillHeader.getGateSaleBillDetailList();
+				
+				for(int i=0;i<sBillDetailsList.size();i++) {
+					
+					if(billId!=0) {
+					
+						sBillDetailsList.get(i).setBillId(billId);
+					
+						GateSaleBillDetail detailRes=gateSaleBillDetailRepository.saveAndFlush(sBillDetailsList.get(i));
+					
+						if(detailRes!=null) {
+							
+							errorMessage.setError(false);
+							errorMessage.setMessage("Detail Saved Successfull");
+							
+						}
+						else {
+							
+							errorMessage.setError(true);
+							errorMessage.setMessage("Detail Not Saved Successfull");
+							
+						}
+					
+					}
+				}
+			}catch (Exception e) {
+				
+				System.err.println("Exception in saving GateSaleBillHeader Detail @GateSaleController " +e.getMessage());
+				
+				e.printStackTrace();
+	
+			}
+			
+			return errorMessage;
+			
 		}
 		     //--------------------------END--------------------------------------------------
 		     // ---------------------------Getting GateBillHeaderAndDetails By userId-------------------------
