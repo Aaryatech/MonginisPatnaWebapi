@@ -22,7 +22,7 @@ public interface GetOrderRepository extends JpaRepository<GetOrder, Integer>{
 			+ " t_order.is_edit, t_order.edit_qty,t_order.is_positive FROM m_franchisee ,m_category,"
 			+ "m_item,t_order WHERE t_order.production_date = :date AND t_order.is_edit=0 AND t_order.fr_id IN (:frId) AND "
 			+ "t_order.item_id = m_item.id AND t_order.menu_id IN (:menuId) AND t_order.fr_id = m_franchisee.fr_id AND "
-			+ "t_order.order_type = m_category.cat_id ORDER BY m_franchisee.fr_name, m_category.cat_name, m_item.item_name",nativeQuery=true)
+			+ "t_order.order_type = m_category.cat_id ORDER BY m_franchisee.fr_id, m_category.cat_id,m_item.item_grp2, m_item.item_name",nativeQuery=true)
 				List<GetOrder> findAllNative(@Param("frId")List<String>  frId,@Param("menuId") List<String> menuId,@Param("date")String date);
 
 	
@@ -33,7 +33,7 @@ public interface GetOrderRepository extends JpaRepository<GetOrder, Integer>{
 			+ " t_order.is_edit, t_order.edit_qty,t_order.is_positive FROM m_franchisee ,m_category,"
 			+ "m_item,t_order WHERE t_order.production_date = :date AND t_order.is_edit=0 AND "
 			+ "t_order.item_id = m_item.id AND t_order.menu_id IN (:menuId) AND t_order.fr_id = m_franchisee.fr_id AND "
-			+ "t_order.order_type = m_category.cat_id ORDER BY m_franchisee.fr_name, m_category.cat_name, m_item.item_name",nativeQuery=true)
+			+ "t_order.order_type = m_category.cat_id ORDER BY m_franchisee.fr_id, m_category.cat_id,m_item.item_grp2,m_item.item_name",nativeQuery=true)
 				List<GetOrder> findAllNativeAllFr(@Param("menuId")List<String> menuId,@Param("date")String date);
 
 }
