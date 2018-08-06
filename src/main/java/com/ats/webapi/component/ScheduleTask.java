@@ -21,7 +21,7 @@ public class ScheduleTask {
 
 	@Autowired
 	FranchiseSupRepository franchiseSupRepository;
-
+ 
 	@Autowired
 	FrAniversaryRepository frAniversaryRepository;
 	
