@@ -2681,7 +2681,7 @@ public class RestApiController {
 
 		List<Item> items = null;
 		try {
-			items = itemRepository.findByItemGrp1AndDelStatusOrderByItemGrp2AscItemNameAsc(itemGrp1, 0);
+			items = itemRepository.findByItemGrp1AndDelStatusOrderByItemGrp1AscItemGrp2AscItemNameAsc(itemGrp1, 0);
 		} catch (Exception e) {/*findByItemGrp1AndDelStatusOrderByItemGrp2AscItemSortIdAsc*/
 			items = new ArrayList<>();
 			e.printStackTrace();

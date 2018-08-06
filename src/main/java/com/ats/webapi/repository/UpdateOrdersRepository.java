@@ -15,7 +15,7 @@ public interface UpdateOrdersRepository extends JpaRepository<UpdateOrder, Integ
 
 	@Transactional
 	@Modifying
-	@Query("UPDATE UpdateOrder t SET t.orderQty =:orderQty  WHERE t.orderId=:orderId")
+	@Query("UPDATE UpdateOrder t SET t.orderQty=:orderQty,t.editQty=:orderQty   WHERE t.orderId=:orderId")
 	int updateOrderQty(@Param("orderId") int orderId,@Param("orderQty") int orderQty);
 
 	

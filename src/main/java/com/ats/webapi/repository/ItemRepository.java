@@ -30,7 +30,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 			"",nativeQuery=true)
 	public int findMaxId();
 
-	public List<Item> findByItemGrp1AndDelStatusOrderByItemGrp2AscItemNameAsc(String itemGrp1, int i);
+	public List<Item> findByItemGrp1AndDelStatusOrderByItemGrp1AscItemGrp2AscItemNameAsc(String itemGrp1, int i);
 
 	public List<Item> findByDelStatusOrderByItemGrp2AscItemSortIdAsc(int i);
 

@@ -24,7 +24,7 @@ public interface GetProdPlanDetailRepo  extends JpaRepository<GetProdPlanDetail,
 			"t_production_plan_detail.production_date,"
 			+ "m_item.item_name"
 			+ " FROM t_production_plan_detail, m_item WHERE t_production_plan_detail.production_header_id=:planHeaderId "
-			+ "AND m_item.id=t_production_plan_detail.item_id order by m_item.item_grp2 Asc,m_item.item_sort_id Asc\n" + 
+			+ "AND m_item.id=t_production_plan_detail.item_id order by m_item.item_grp1 Asc,m_item.item_grp2 Asc,m_item.item_name Asc\n" + 
 			"",nativeQuery=true)
 		
 	List<GetProdPlanDetail> getProdPlanDetailByHeaderId(@Param("planHeaderId") int planHeaderId);

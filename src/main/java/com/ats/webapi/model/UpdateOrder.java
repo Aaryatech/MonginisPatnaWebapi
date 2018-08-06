@@ -22,9 +22,20 @@ public class UpdateOrder {
 	@Column(name="order_qty")
 	private int orderQty;
 	
+	@Column(name="edit_qty")
+	private int editQty;
+	
 	@Column(name="is_edit")
 	private int isEdit;
 
+    
+	public int getEditQty() {
+		return editQty;
+	}
+
+	public void setEditQty(int editQty) {
+		this.editQty = editQty;
+	}
 
 	public int getOrderId() {
 		return orderId;
