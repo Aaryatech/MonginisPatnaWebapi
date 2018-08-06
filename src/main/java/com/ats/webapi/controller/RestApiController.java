@@ -31,6 +31,7 @@ import com.ats.webapi.model.grngvn.PostCreditNoteHeaderList;
 import com.ats.webapi.model.grngvn.TempGrnGvnBeanUp;
 import com.ats.webapi.model.remarks.GetAllRemarksList;
 import com.ats.webapi.repository.FlavourRepository;
+import com.ats.webapi.repository.FranchiseForDispatchRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.FranchiseeRepository;
 import com.ats.webapi.repository.GetBillDetailsRepository;
@@ -135,7 +136,9 @@ public class RestApiController {
 		return date;
 
 	}
-
+	@Autowired
+	FranchiseForDispatchRepository franchiseForDispatchRepository;
+	
 	@Autowired
 	private UserService userService;
 
@@ -1066,7 +1069,15 @@ public class RestApiController {
 		return frNameIdByRouteIdList;
 
 	}
+	
+	@RequestMapping(value = "/getFranchiseForDispatch", method = RequestMethod.POST)
+	public @ResponseBody List<FranchiseForDispatch> getFranchiseForDispatch(@RequestParam("routeId") int routeId) {
 
+		List<FranchiseForDispatch> frNameIdByRouteIdList = franchiseForDispatchRepository.getFranchiseForDispatch(routeId);
+
+		return frNameIdByRouteIdList;
+
+	}
 	@RequestMapping(value = "/getBillDetails", method = RequestMethod.POST)
 	public @ResponseBody GetBillDetailsList getBillDetails(@RequestParam("billNo") int billNo) {
 		System.out.println("inside rest");
@@ -1546,10 +1557,10 @@ public class RestApiController {
 
 	// Search Special Cake Order History
 	@RequestMapping("/SpCakeOrderHistory")
-	public @ResponseBody SpCkOrderHisList searchSpCakeOrderHistory(@RequestParam int menuId,
+	public @ResponseBody SpCkOrderHisList searchSpCakeOrderHistory(
 			@RequestParam String spDeliveryDt, String frCode) {
 
-		SpCkOrderHisList spCakeOrderList = spCakeOrdersService.searchOrderHistory(menuId, spDeliveryDt, frCode);
+		SpCkOrderHisList spCakeOrderList = spCakeOrdersService.searchOrderHistory( spDeliveryDt, frCode);
 		return spCakeOrderList;
 
 	}
@@ -1565,14 +1576,14 @@ public class RestApiController {
 	}
 	// Search Special Cake Order History
 	@RequestMapping("/orderHistory")
-	public @ResponseBody ItemOrderList searchOrderHistory(@RequestParam int menuId, @RequestParam String deliveryDt,
+	public @ResponseBody ItemOrderList searchOrderHistory(@RequestParam int catId, @RequestParam String deliveryDt,
 			@RequestParam int frId) throws ParseException {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		java.util.Date date = sdf.parse(deliveryDt);
 		java.sql.Date deliveryDate = new java.sql.Date(date.getTime());
 
-		ItemOrderList orderList = orderService.searchOrderHistory(menuId, deliveryDate, frId);
+		ItemOrderList orderList = orderService.searchOrderHistory(catId, deliveryDate, frId);
 
 		return orderList;
 
@@ -2670,8 +2681,8 @@ public class RestApiController {
 
 		List<Item> items = null;
 		try {
-			items = itemRepository.findByItemGrp1AndDelStatusOrderByItemGrp2AscItemSortIdAsc(itemGrp1, 0);
-		} catch (Exception e) {
+			items = itemRepository.findByItemGrp1AndDelStatusOrderByItemGrp2AscItemNameAsc(itemGrp1, 0);
+		} catch (Exception e) {/*findByItemGrp1AndDelStatusOrderByItemGrp2AscItemSortIdAsc*/
 			items = new ArrayList<>();
 			e.printStackTrace();
 

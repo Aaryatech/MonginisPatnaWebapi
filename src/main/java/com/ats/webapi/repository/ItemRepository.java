@@ -30,7 +30,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 			"",nativeQuery=true)
 	public int findMaxId();
 
-	public List<Item> findByItemGrp1AndDelStatusOrderByItemGrp2AscItemSortIdAsc(String itemGrp1, int i);
+	public List<Item> findByItemGrp1AndDelStatusOrderByItemGrp2AscItemNameAsc(String itemGrp1, int i);
 
 	public List<Item> findByDelStatusOrderByItemGrp2AscItemSortIdAsc(int i);
 
@@ -43,8 +43,8 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Query(value="select * from m_item where m_item.id IN (:itemList)",nativeQuery=true)
 	public List<Item> findAllItems(@Param("itemList")List<Integer> itemList);
 
-	public List<Item> findByItemGrp1InAndDelStatusOrderByItemGrp2AscItemSortIdAsc(List<String> catIdList, int i);
-	
+/*	public List<Item> findByItemGrp1InAndDelStatusOrderByItemGrp2AscItemSortIdAsc(List<String> catIdList, int i);
+*/	
 	public List<Item>  findByItemGrp2OrderByItemGrp2(String subCatId);
 
 	public List<Item> findByIdIn(List<String> id);
@@ -66,5 +66,9 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Modifying
 	@Query("UPDATE Item i SET itemTax1=:itemTax1,itemTax2=:itemTax2,itemTax3=:itemTax3  WHERE i.id=:id")
 	public int updateItemHsnAndPerInItem(@Param("id")Integer id,@Param("itemTax1")  double itemTax1,@Param("itemTax2")  double itemTax2,@Param("itemTax3")  double itemTax3);
+
+	public List<Item> findByDelStatusOrderByItemGrp1AscItemGrp2Asc(int i);
+
+	public List<Item> findByItemGrp1InAndDelStatusOrderByItemGrp2AscItemNameAsc(List<String> catIdList, int i);
 	
 } 

@@ -11,6 +11,6 @@ import com.ats.webapi.model.ItemOrderHis;
 
 
 public interface ItemOrderHisRepository extends JpaRepository<ItemOrderHis,Long> {
-	@Query(value="select o.*,m.menu_title,i.item_name from t_order o,m_fr_menu_show m,m_item i where o.menu_id=m.menu_id AND o.item_id=i.id AND o.menu_id=:menuId AND o.delivery_date=:deliveryDate AND o.fr_id=:frId",nativeQuery=true)
-	List<ItemOrderHis> findByMenuIdInAndDeliveryDate(@Param("menuId") int menuId,@Param("deliveryDate") Date deliveryDate,@Param("frId")int frId);
+	@Query(value="select o.*,m.menu_title,i.item_name from t_order o,m_fr_menu_show m,m_item i where o.menu_id=m.menu_id AND o.item_id=i.id AND o.order_type=:catId AND o.delivery_date=:deliveryDate AND o.fr_id=:frId",nativeQuery=true)
+	List<ItemOrderHis> findByMenuIdInAndDeliveryDate(@Param("catId") int catId,@Param("deliveryDate") Date deliveryDate,@Param("frId")int frId);
 }

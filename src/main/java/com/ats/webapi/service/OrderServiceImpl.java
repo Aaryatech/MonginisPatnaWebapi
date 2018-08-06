@@ -108,12 +108,12 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public ItemOrderList searchOrderHistory(int menuId, Date deliveryDate, int frId) {
+	public ItemOrderList searchOrderHistory(int catId, Date deliveryDate, int frId) {
 		List<ItemOrderHis> orderList = null;
 		ErrorMessage errorMessage;
 		ItemOrderList itemOrderList;
 		try {
-			orderList = itemOrderHisRepository.findByMenuIdInAndDeliveryDate(menuId, deliveryDate, frId);
+			orderList = itemOrderHisRepository.findByMenuIdInAndDeliveryDate(catId, deliveryDate, frId);
 
 			if (orderList == null) {
 				errorMessage = new ErrorMessage();

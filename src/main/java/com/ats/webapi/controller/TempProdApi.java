@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.commons.Common;
+import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.prod.GetProdDetailBySubCat;
 import com.ats.webapi.model.prod.GetProdDetailBySubCatList;
@@ -31,6 +32,7 @@ import com.ats.webapi.model.prod.mixing.GetTempMixItemDetail;
 import com.ats.webapi.model.prod.mixing.GetTempMixItemDetailList;
 import com.ats.webapi.model.prod.mixing.TempMixing;
 import com.ats.webapi.model.prod.mixing.TempMixingList;
+import com.ats.webapi.repository.PostProdPlanHeaderRepository;
 import com.ats.webapi.repository.getproddetailbysubcat.GetProdDetailBySubCatRepo;
 import com.ats.webapi.repository.prod.GetProdHeaderRepo;
 import com.ats.webapi.repository.prod.GetProdPlanDetailRepo;
@@ -55,6 +57,9 @@ public class TempProdApi {
 	
 	@Autowired
 	GetProdDetailBySubCatRepo getProdDetailBySubCatRepo;
+	
+	@Autowired
+	PostProdPlanHeaderRepository postProdPlanHeaderRepository;
 	
 	/*@Autowired
 	GetItemwiseProdPlanRepo getItemwiseProdPlanRepo;
@@ -81,7 +86,25 @@ public class TempProdApi {
 	@Autowired
 	GetSFMixingForBomRepo getSFMixingForBomRepo;
 	// used 1
-	
+	@RequestMapping(value = "/deleteProductionPlan", method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage deleteProductionPlan(@RequestParam int productionHeaderId) {
+
+		ErrorMessage errorMessage=new ErrorMessage();
+		
+		int isUpdated = postProdPlanHeaderRepository.deleteProductionPlan(productionHeaderId);
+		if(isUpdated==1) {
+			
+			errorMessage.setError(false);
+			errorMessage.setMessage("ProdPlanHeader Deleted Successfully");
+			}
+			else
+			{
+				errorMessage.setError(false);
+				errorMessage.setMessage("ProdPlanHeader Deletion Failed");
+				
+			}
+			return errorMessage;
+	}
 	@RequestMapping(value = { "/getTempMixItemDetail" }, method = RequestMethod.POST)
 	public @ResponseBody GetTempMixItemDetailList getTempMixItemDetailRepo(@RequestParam("prodHeaderId") int prodHeaderId) {
 		

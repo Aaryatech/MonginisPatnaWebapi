@@ -272,7 +272,7 @@ public class RawMaterialServiceImpl implements RawMaterialService{
 	}
 
 	@Override
-	public Info addRawMaterial(RawMaterialDetails rawMaterialMasterDetails) {
+	public RawMaterialDetails addRawMaterial(RawMaterialDetails rawMaterialMasterDetails) {
 		
 		RawMaterialDetails rawMaterialMaster=rawMaterialDetailsRepository.save(rawMaterialMasterDetails);
 		
@@ -284,12 +284,10 @@ public class RawMaterialServiceImpl implements RawMaterialService{
 		}
 		else
 		{
-			
 				info.setError(true);
 				info.setMessage("Failed add new Raw material ");
-			
 		}
-		return info;
+		return rawMaterialMaster;
 	}
 
 	@Override

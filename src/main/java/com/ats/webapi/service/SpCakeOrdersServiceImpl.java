@@ -72,12 +72,12 @@ public class SpCakeOrdersServiceImpl implements SpCakeOrdersService {
 	}
 
 	@Override
-	public SpCkOrderHisList searchOrderHistory(int menuId, String spDeliveryDt,String frCode) {
+	public SpCkOrderHisList searchOrderHistory(String spDeliveryDt,String frCode) {
 		List<SpCkOrderHis> spCakeOrders=null;
 		SpCkOrderHisList spCakeOrderHisList;
 		ErrorMessage errorMessage;
 		try {
-			spCakeOrders=spCakeOrderHisRepository.findByMenuIdInAndSpDeliveryDt(menuId, spDeliveryDt,frCode);
+			spCakeOrders=spCakeOrderHisRepository.findByMenuIdInAndSpDeliveryDt(spDeliveryDt,frCode);
 		
 			if(spCakeOrders==null)
 			{

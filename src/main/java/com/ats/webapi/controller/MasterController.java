@@ -670,8 +670,8 @@ public class MasterController {
 		           
 					List<Item> items=null;
 					try {
-					 items = itemRepository.findByItemGrp1InAndDelStatusOrderByItemGrp2AscItemSortIdAsc(catIdList,0);
-					}
+					 items = itemRepository.findByItemGrp1InAndDelStatusOrderByItemGrp2AscItemNameAsc(catIdList,0);
+					}/*findByItemGrp1InAndDelStatusOrderByItemGrp2AscItemSortIdAsc*/
 					catch(Exception e)
 					{
 						items=new ArrayList<>();
@@ -716,8 +716,8 @@ public class MasterController {
 				@RequestMapping(value = { "/getRegSpCakeOrderHistory" }, method = RequestMethod.POST)
 				@ResponseBody
 				public List<GetRegSpCakeOrders> getRegSpCakeOrderHistory(
-						@RequestParam String spDeliveryDt, int  frId) {
-					List<GetRegSpCakeOrders> regSpCakeOrder = regularSpCkOrderService.getRegSpCakeOrderHistory(spDeliveryDt, frId);
+						@RequestParam String spDeliveryDt,@RequestParam int  frId,@RequestParam int catId) {
+					List<GetRegSpCakeOrders> regSpCakeOrder = regularSpCkOrderService.getRegSpCakeOrderHistory(spDeliveryDt, frId,catId);
 					return regSpCakeOrder;
 				}
 				  public static boolean contains(int[] arr, int item) {

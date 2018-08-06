@@ -11,7 +11,7 @@ import com.ats.webapi.model.GetPoDetailedForPdf;
 public interface GetPoDetailedPdfRepository extends JpaRepository<GetPoDetailedForPdf, Integer>{
 	
 	
-	@Query(value="select \r\n" + 
+/*	@Query(value="select \r\n" + 
 			"p.po_detail_id,\r\n" + 
 			"p.rm_id,\r\n" + 
 			"p.rm_name, \r\n" + 
@@ -28,7 +28,11 @@ public interface GetPoDetailedPdfRepository extends JpaRepository<GetPoDetailedF
 			"where\r\n" + 
 			"p.po_id=:poId\r\n" + 
 			"and ru.uom_id=p.rm_uom_id\r\n" + 
-			"and rm.rm_id=p.rm_id",nativeQuery=true)
+			"and rm.rm_id=p.rm_id",nativeQuery=true)*/
+	
+	@Query(value="select p.po_detail_id,p.rm_id,p.rm_name, p.po_qty,p.po_rate,p.disc_per,p.po_taxable,ru.uom,tax.tax_desc as rm_clo_qty from \r\n" + 
+			"	t_purchase_order_detail p,m_rm_uom ru,m_rm rm,m_rm_tax tax where p.po_id=:poId and ru.uom_id=p.rm_uom_id\r\n" + 
+			"	and rm.tax_id=tax.tax_id and rm.rm_id=p.rm_id",nativeQuery=true)
 	List<GetPoDetailedForPdf> purchaseOrderDetaillist(@Param("poId")int poId);
 
 }

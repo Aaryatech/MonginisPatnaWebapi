@@ -14,7 +14,7 @@ public interface SpCakeOrdersService {
 	SpCakeOrderRes placeSpCakeOrder(SpCakeOrders spCakeOrders);
 	//public List<SpCakeOrders> findSpCakeOrder(List<Integer> frCode,Date prodDate);
 	public List<SpCakeOrders> findSpCakeOrder(List<Integer> frId,Date prodDate);// changed para Integer to String
-	SpCkOrderHisList searchOrderHistory(int menuId, String spDeliveryDt,String frCode);
+	SpCkOrderHisList searchOrderHistory( String spDeliveryDt,String frCode);
 	
 	int findCountOfSlotUsedByProduDate(String sqlSpProduDate);
 	

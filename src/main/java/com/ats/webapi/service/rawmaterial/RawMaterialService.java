@@ -38,7 +38,7 @@ public interface RawMaterialService {
 
 	ErrorMessage deleteRmItemSubCategory(int subCatId);
 	
-	Info addRawMaterial(RawMaterialDetails rawMaterialMasterDetails);
+	RawMaterialDetails addRawMaterial(RawMaterialDetails rawMaterialMasterDetails);
 
 	RawMaterialDetails getRawMaterialDetails(int rmId);
 	

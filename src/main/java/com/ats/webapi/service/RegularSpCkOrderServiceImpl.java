@@ -159,11 +159,11 @@ public class RegularSpCkOrderServiceImpl implements RegularSpCkOrderService{
 
 
 	@Override
-	public List<GetRegSpCakeOrders> getRegSpCakeOrderHistory(String spDeliveryDt, int frId) {
+	public List<GetRegSpCakeOrders> getRegSpCakeOrderHistory(String spDeliveryDt, int frId,int catId) {
 
 		List<GetRegSpCakeOrders> regularSpCkOrdersList=null;
 		try {
-			regularSpCkOrdersList=getRegSpCakeOrdersRepository.findRegularCakeOrderHistory(spDeliveryDt,frId);
+			regularSpCkOrdersList=getRegSpCakeOrdersRepository.findRegularCakeOrderHistory(spDeliveryDt,frId,catId);
 		
 		}catch (Exception e) {
 			regularSpCkOrdersList=new ArrayList<GetRegSpCakeOrders>();
