@@ -2693,22 +2693,23 @@ public class RestApiController {
 
 	
 	//12 April Sachin
-	// Get Items By Category order by sub cat and sort id
-		@RequestMapping(value = "/getItemsBySubCatId", method = RequestMethod.POST)
-		public @ResponseBody List<Item> getItemsBySubCatId(@RequestParam("subCatId") String subCatId) {
+		// Get Items By Category order by sub cat and sort id
+			@RequestMapping(value = "/getItemsBySubCatId", method = RequestMethod.POST)
+			public @ResponseBody List<Item> getItemsBySubCatId(@RequestParam("subCatId") String subCatId) {
 
-			List<Item> items = null;
-			try {
-				items = itemRepository.findByItemGrp2OrderByItemGrp2(subCatId);
-			} catch (Exception e) {
-				items = new ArrayList<>();
-				e.printStackTrace();
+				List<Item> items = new ArrayList<Item>();
+				try {
+					items = itemRepository.findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(subCatId,0);
+					System.err.println("Items by subcat id  and delStatus  " +items.toString() );
+				
+				} catch (Exception e) {
+					items = new ArrayList<>();
+					e.printStackTrace();
+
+				}
+				return items;
 
 			}
-			return items;
-
-		}
-
 	
 	
 	// Get Items By Item Id and Delete Status 0
