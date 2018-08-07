@@ -137,16 +137,23 @@ public class ProductionServiceImpl implements ProductionService{
 				
 				PostProductionPlanDetail postProductionPlanDetail=postProductionDetailList.get(j);
 			
+				if(postProductionPlanDetail.getPlanQty()>0)
+				{
+					System.err.println("***----inserted----***id_="+postProductionPlanDetail.getProductionDetailId());
+				    postProductionPlanDetail.setProductionHeaderId(headerId);
 				
-				postProductionPlanDetail.setProductionHeaderId(headerId);
+				    postProductionPlanDetail.setProductionBatch(postProdPlanHeader.getProductionBatch());
 				
-				postProductionPlanDetail.setProductionBatch(postProdPlanHeader.getProductionBatch());
+				    postProductionPlanDetail.setProductionDate(postProdPlanHeader.getProductionDate());
 				
-				postProductionPlanDetail.setProductionDate(postProdPlanHeader.getProductionDate());
-				
-				postProdPlanDetailRepository.save(postProductionPlanDetail);
-				
-			
+				    postProdPlanDetailRepository.save(postProductionPlanDetail);
+				}
+				else if(postProductionPlanDetail.getPlanQty()==0 && postProductionPlanDetail.getProductionDetailId()!=0)
+				{
+					System.err.println("***----deleted----***id_="+postProductionPlanDetail.getProductionDetailId());
+					postProdPlanDetailRepository.delete(postProductionPlanDetail.getProductionDetailId());
+					
+				}
 			}
 			
 		

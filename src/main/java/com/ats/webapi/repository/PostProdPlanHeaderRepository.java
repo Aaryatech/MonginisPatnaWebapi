@@ -48,4 +48,7 @@ public interface PostProdPlanHeaderRepository extends JpaRepository<PostProdPlan
 	@Modifying
 	@Query(" UPDATE PostProdPlanHeader SET del_status=1 WHERE production_header_id=:productionHeaderId")
 	int deleteProductionPlan(@Param("productionHeaderId")int productionHeaderId);
+
+	@Query(value="select * from t_production_plan_header where production_date=:productionDate and cat_id=:catId and production_status In(1) and del_status=0",nativeQuery=true)
+	PostProdPlanHeader findByProductionDateAndCatId(@Param("productionDate")String productionDate,@Param("catId") int catId);
 }

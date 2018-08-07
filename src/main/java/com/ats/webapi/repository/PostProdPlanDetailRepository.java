@@ -17,6 +17,8 @@ public interface PostProdPlanDetailRepository extends JpaRepository<PostProducti
 	
 	@Query(value = "select * from t_production_plan_detail Where production_header_id=:planHeaderId", nativeQuery = true)
 	List<PostProductionPlanDetail> getlistbyproductiondetaildlist(@Param("planHeaderId") int planHeaderId);
+
+	List<PostProductionPlanDetail> findByProductionHeaderId(int productionHeaderId);
 	
 
 }

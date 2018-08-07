@@ -119,7 +119,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestController
 public class RestApiController {
 
-	public String incrementDate(String date, int day) {
+	public static String incrementDate(String date, int day) {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		Calendar c = Calendar.getInstance();

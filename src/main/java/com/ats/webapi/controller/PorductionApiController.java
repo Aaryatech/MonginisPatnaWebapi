@@ -1,9 +1,10 @@
 package com.ats.webapi.controller;
 
-
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,10 @@ import com.ats.webapi.model.report.GetRepFrDatewiseSell;
 import com.ats.webapi.model.report.GetRepItemwiseSell;
 import com.ats.webapi.model.report.GetRepMonthwiseSell;
 import com.ats.webapi.model.report.GetRepTaxSell;
+import com.ats.webapi.repository.PostPoductionHeaderRepository;
 import com.ats.webapi.repository.PostProdPlanDetailRepository;
 import com.ats.webapi.repository.PostProdPlanHeaderRepository;
+import com.ats.webapi.repository.PostProductionDetailRepository;
 import com.ats.webapi.repository.VarianceRepository;
 import com.ats.webapi.repository.prod.GetItemForBarcodeRepo;
 import com.ats.webapi.service.GetBillHeaderService;
@@ -54,225 +57,223 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public class PorductionApiController {
 
 	@Autowired
+	PostPoductionHeaderRepository postPoductionHeaderRepository;
+
+	@Autowired
+	PostProductionDetailRepository postProductionDetailRepository;
+
+	@Autowired
 	private GetOrderItemQtyService getOrderItemQtyService;
-	
+
 	@Autowired
 	private ProductionService productionService;
-	
+
 	@Autowired
 	PostProdPlanDetailRepository postProdPlanDetailRepository;
-	
+
 	@Autowired
 	PostProdPlanHeaderRepository postProdPlanHeaderRepository;
-	
+
 	@Autowired
 	RepFrSellServise repFrSellServise;
-	
+
 	@Autowired
 	VarianceRepository varianceRepository;
-	
+
 	@Autowired
 	OrderService orderService;
-	
+
 	@Autowired
-	GetItemForBarcodeRepo  getItemForBarcodeRepo;
-	
+	GetItemForBarcodeRepo getItemForBarcodeRepo;
 
-	/*@RequestMapping(value = { "/getOrderItemQty" }, method = RequestMethod.POST)
-	@ResponseBody
-	public GetOrderItemQty getOrderItemQty(@RequestParam int itemId,
-			@RequestParam String orderDate, @RequestParam int menuId) {
-		GetOrderItemQty getOrderItemQty=new GetOrderItemQty();
-		try {
-			
-			System.out.println("date str :" + orderDate);
+	/*
+	 * @RequestMapping(value = { "/getOrderItemQty" }, method = RequestMethod.POST)
+	 * 
+	 * @ResponseBody public GetOrderItemQty getOrderItemQty(@RequestParam int
+	 * itemId,
+	 * 
+	 * @RequestParam String orderDate, @RequestParam int menuId) { GetOrderItemQty
+	 * getOrderItemQty=new GetOrderItemQty(); try {
+	 * 
+	 * System.out.println("date str :" + orderDate);
+	 * 
+	 * String strDate = Common.convertToYMD(orderDate);
+	 * System.out.println("Converted date " + strDate);
+	 * 
+	 * 
+	 * getOrderItemQty = getOrderItemQtyService.getOrderQty(itemId, strDate,
+	 * menuId);
+	 * 
+	 * 
+	 * } catch (Exception e) { e.printStackTrace();
+	 * System.out.println("exception in order list rest controller" +
+	 * e.getMessage()); } return getOrderItemQty;
+	 * 
+	 * }
+	 * 
+	 * @RequestMapping(value = { "/getOrderQtyRegSpCake" }, method =
+	 * RequestMethod.POST)
+	 * 
+	 * @ResponseBody public GetRegSpCakeOrderQty getOrderQtyRegSpCake(@RequestParam
+	 * int itemId,
+	 * 
+	 * @RequestParam String orderDate, @RequestParam int menuId) {
+	 * GetRegSpCakeOrderQty getRegSpCakeOreder=new GetRegSpCakeOrderQty(); try {
+	 * 
+	 * System.out.println("date str :" + orderDate);
+	 * 
+	 * String strDate = Common.convertToYMD(orderDate);
+	 * System.out.println("Converted date " + strDate);
+	 * 
+	 * 
+	 * getRegSpCakeOreder = getOrderItemQtyService.getRegSpCakeOrderQty(itemId,
+	 * strDate, menuId);
+	 * 
+	 * 
+	 * } catch (Exception e) { e.printStackTrace();
+	 * System.out.println("exception in order list rest controller" +
+	 * e.getMessage()); } return getRegSpCakeOreder;
+	 * 
+	 * }
+	 */
 
-			String strDate = Common.convertToYMD(orderDate);
-			System.out.println("Converted date " + strDate);
-
-		
-			 getOrderItemQty = getOrderItemQtyService.getOrderQty(itemId, strDate, menuId);
-
-
-		} catch (Exception e) {
-e.printStackTrace();
-			System.out.println("exception in order list rest controller" + e.getMessage());
-		}
-		return getOrderItemQty;
-
-	}
-	
-	@RequestMapping(value = { "/getOrderQtyRegSpCake" }, method = RequestMethod.POST)
-	@ResponseBody
-	public GetRegSpCakeOrderQty getOrderQtyRegSpCake(@RequestParam int itemId,
-			@RequestParam String orderDate, @RequestParam int menuId) {
-		GetRegSpCakeOrderQty getRegSpCakeOreder=new GetRegSpCakeOrderQty();
-		try {
-			
-			System.out.println("date str :" + orderDate);
-
-			String strDate = Common.convertToYMD(orderDate);
-			System.out.println("Converted date " + strDate);
-
-		
-			getRegSpCakeOreder = getOrderItemQtyService.getRegSpCakeOrderQty(itemId, strDate, menuId);
-
-
-		} catch (Exception e) {
-				e.printStackTrace();
-			System.out.println("exception in order list rest controller" + e.getMessage());
-		}
-		return getRegSpCakeOreder;
-
-	}*/
-	
-	
 	@RequestMapping(value = { "/getItemForBarcode" }, method = RequestMethod.POST)
 	@ResponseBody
 	public List<ProdItemBarcode> getItemForBarcode(@RequestParam String date, @RequestParam int catId) {
-		
-		List<ProdItemBarcode> itemList=new ArrayList<>();
+
+		List<ProdItemBarcode> itemList = new ArrayList<>();
 		try {
-			
-			itemList=getItemForBarcodeRepo.getItemForBarcode(date, catId);
-			
+
+			itemList = getItemForBarcodeRepo.getItemForBarcode(date, catId);
+
 		} catch (Exception e) {
-				e.printStackTrace();
+			e.printStackTrace();
 			System.out.println("exception in order list rest controller" + e.getMessage());
 		}
 		return itemList;
 
 	}
-	
-	
+
 	@RequestMapping(value = { "/getOrderQtyRegSpCakeAllItems" }, method = RequestMethod.POST)
 	@ResponseBody
 	public List<GetRegSpCakeOrderQty> getOrderQtyRegSpCakeAllItems(@RequestParam List<String> menuId,
 			@RequestParam String productionDate) {
-		List<GetRegSpCakeOrderQty> getRegSpCakeOrederList=new ArrayList<GetRegSpCakeOrderQty>();
+		List<GetRegSpCakeOrderQty> getRegSpCakeOrederList = new ArrayList<GetRegSpCakeOrderQty>();
 		try {
-			
+
 			System.out.println("date str :" + productionDate);
 
 			String strDate = Common.convertToYMD(productionDate);
 			System.out.println("Converted date " + strDate);
 
-		
 			getRegSpCakeOrederList = getOrderItemQtyService.getRegSpCakeOrderQty(strDate, menuId);
 
-
 		} catch (Exception e) {
-				e.printStackTrace();
+			e.printStackTrace();
 			System.out.println("exception in order list rest controller" + e.getMessage());
 		}
 		return getRegSpCakeOrederList;
 
 	}
+
 	@RequestMapping(value = { "/getTimeSlot" }, method = RequestMethod.POST)
 	@ResponseBody
-	public PostProdPlanHeader getTimeSlot(@RequestParam int catId,@RequestParam String productionDate) {
-		PostProdPlanHeader maxTimeSlot =null;
+	public PostProdPlanHeader getTimeSlot(@RequestParam int catId, @RequestParam String productionDate) {
+		PostProdPlanHeader maxTimeSlot = null;
 		try {
-			
+
 			System.out.println("date str :" + productionDate);
 
 			String strDate = Common.convertToYMD(productionDate);
 			System.out.println("Converted date " + strDate);
 
-		
-			 maxTimeSlot = productionService.getMaxTimeSlot(strDate, catId);
-
+			maxTimeSlot = productionService.getMaxTimeSlot(strDate, catId);
 
 		} catch (Exception e) {
-				e.printStackTrace();
+			e.printStackTrace();
 			System.out.println("exception in  /getTimeSlot rest controller" + e.getMessage());
 		}
 		return maxTimeSlot;
 
 	}
-	
+
 	@RequestMapping(value = { "/getOrderAllItemQty" }, method = RequestMethod.POST)
 	@ResponseBody
 	public List<GetOrderItemQty> getOrderAllItemQty(@RequestParam List<String> menuId,
 			@RequestParam String productionDate) {
-		List<GetOrderItemQty> getOrderItemQtyList=new ArrayList<GetOrderItemQty>();
+		List<GetOrderItemQty> getOrderItemQtyList = new ArrayList<GetOrderItemQty>();
 		try {
-			
+
 			System.out.println("date str :" + productionDate);
 
 			String strDate = Common.convertToYMD(productionDate);
 			System.out.println("Converted date " + strDate);
 
-		
 			getOrderItemQtyList = getOrderItemQtyService.getOrderQty(strDate, menuId);
 
-
 		} catch (Exception e) {
-			
-              e.printStackTrace();
-			  System.out.println("exception in order list rest controller" + e.getMessage());
+
+			e.printStackTrace();
+			System.out.println("exception in order list rest controller" + e.getMessage());
 		}
 		return getOrderItemQtyList;
 
 	}
+
 	@RequestMapping(value = { "/getProduItemQty" }, method = RequestMethod.POST)
 	@ResponseBody
-	public List<GetProductionItemQty> getProdItemQty(@RequestParam int catId,@RequestParam String productionDate) {
-		
-		List<GetProductionItemQty> getProdItemQtyList=new ArrayList<GetProductionItemQty>();
+	public List<GetProductionItemQty> getProdItemQty(@RequestParam int catId, @RequestParam String productionDate) {
+
+		List<GetProductionItemQty> getProdItemQtyList = new ArrayList<GetProductionItemQty>();
 		try {
-			
+
 			System.out.println("date str :" + productionDate);
 
 			String strDate = Common.convertToYMD(productionDate);
 			System.out.println("Converted date " + strDate);
 
-		
 			getProdItemQtyList = productionService.getProdQty(strDate, catId);
 			System.out.println("getProdItemQtyList prod " + getProdItemQtyList);
 
 		} catch (Exception e) {
-			
-              e.printStackTrace();
-			  System.out.println("Exception in Prod Qty list Rest controller" + e.getMessage());
+
+			e.printStackTrace();
+			System.out.println("Exception in Prod Qty list Rest controller" + e.getMessage());
 		}
 		return getProdItemQtyList;
 
 	}
-	
+
 	@RequestMapping(value = { "/getOrderuItemQty" }, method = RequestMethod.POST)
 	@ResponseBody
-	public List<GetProductionItemQty> getOrderuItemQty(@RequestParam int catId,@RequestParam String productionDate) {
-		
-		List<GetProductionItemQty> getProdItemQtyList=new ArrayList<GetProductionItemQty>();
+	public List<GetProductionItemQty> getOrderuItemQty(@RequestParam int catId, @RequestParam String productionDate) {
+
+		List<GetProductionItemQty> getProdItemQtyList = new ArrayList<GetProductionItemQty>();
 		try {
-			
+
 			System.out.println("date str :" + productionDate);
 			System.out.println("catId " + catId);
 			String strDate = Common.convertToYMD(productionDate);
 			System.out.println("Converted date " + strDate);
 
-		
 			getProdItemQtyList = productionService.getOrderuItemQty(strDate, catId);
 			System.out.println("getProdItemQtyList order " + getProdItemQtyList);
 
-
 		} catch (Exception e) {
-			
-              e.printStackTrace();
-			  System.out.println("Exception in Prod Qty list Rest controller" + e.getMessage());
+
+			e.printStackTrace();
+			System.out.println("Exception in Prod Qty list Rest controller" + e.getMessage());
 		}
 		return getProdItemQtyList;
 
 	}
-	
+
 	@RequestMapping(value = { "/postProduction" }, method = RequestMethod.POST)
 
 	public @ResponseBody Info postProduction(@RequestBody PostProductionHeader postProductionHeader)
 			throws ParseException, JsonParseException, JsonMappingException, IOException {
 
-		
-        System.out.println("postProductionHeaderBean:"+postProductionHeader.toString());
+		System.out.println("postProductionHeaderBean:" + postProductionHeader.toString());
 		List<PostProductionHeader> jsonBillHeader;
 
 		jsonBillHeader = productionService.saveProductionHeader(postProductionHeader);
@@ -296,21 +297,21 @@ e.printStackTrace();
 		return info;
 
 	}
+
 	@RequestMapping(value = { "/postProductionPlan" }, method = RequestMethod.POST)
 
 	public @ResponseBody Info postProductionPlan(@RequestBody PostProdPlanHeader postProdPlanHeader)
 			throws ParseException, JsonParseException, JsonMappingException, IOException {
 
-		
-        System.out.println("postProductionHeaderBean:"+postProdPlanHeader.toString());
-        PostProdPlanHeader jsonBillHeader = null;
-if(!postProdPlanHeader.getPostProductionPlanDetail().isEmpty()) {
-		jsonBillHeader = productionService.saveProductionPlanHeader(postProdPlanHeader);
-}
+		System.out.println("postProductionHeaderBean:" + postProdPlanHeader.toString());
+		PostProdPlanHeader jsonBillHeader = null;
+		if (!postProdPlanHeader.getPostProductionPlanDetail().isEmpty()) {
+			jsonBillHeader = productionService.saveProductionPlanHeader(postProdPlanHeader);
+		}
 
 		Info info = new Info();
 
-		if (jsonBillHeader!=null) {
+		if (jsonBillHeader != null) {
 
 			info.setError(false);
 			info.setMessage("post Fr Stock header inserted  Successfully");
@@ -327,21 +328,21 @@ if(!postProdPlanHeader.getPostProductionPlanDetail().isEmpty()) {
 		return info;
 
 	}
-	
+
 	@RequestMapping(value = { "/getProdOrderQty" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetProductionDetail> getProdOrderQty(@RequestParam("catId") List<String> catId,
-			@RequestParam("productionDate") String productionDate, @RequestParam("timeSlot") int timeSlot )
+			@RequestParam("productionDate") String productionDate, @RequestParam("timeSlot") int timeSlot)
 			throws ParseException, JsonParseException, JsonMappingException, IOException {
 
 		productionDate = Common.convertToYMD(productionDate);
 		List<GetProductionDetail> getProductionDetailList;
-        System.out.println(productionDate);
+		System.out.println(productionDate);
 		getProductionDetailList = productionService.getProdQty(catId, productionDate, timeSlot);
 		System.out.println("Data Common " + getProductionDetailList.toString());
 
 		Info info = new Info();
 
-		if (getProductionDetailList.toString()!=null) {
+		if (getProductionDetailList.toString() != null) {
 
 			info.setError(false);
 			info.setMessage("  Successfully");
@@ -358,105 +359,119 @@ if(!postProdPlanHeader.getPostProductionPlanDetail().isEmpty()) {
 		return getProductionDetailList;
 
 	}
+
 	@RequestMapping(value = { "/getMenuIdByCatId" }, method = RequestMethod.POST)
-	public @ResponseBody List<Integer> getMenuIdsByCatId(@RequestParam int catId)
-	{
-		
-		List<Integer> menuList=productionService.getMenuIdsByCatId(catId);
-		
+	public @ResponseBody List<Integer> getMenuIdsByCatId(@RequestParam int catId) {
+
+		List<Integer> menuList = productionService.getMenuIdsByCatId(catId);
+
 		return menuList;
-		
+
 	}
+
 	@RequestMapping(value = { "/updateProdQty" }, method = RequestMethod.POST)
-	public @ResponseBody Info updateProdQty(@RequestBody List<PostProductionPlanDetail> getProductionDetailList)
-	{
-		System.out.println("Item Detail:"+getProductionDetailList.toString());
-		
-		Info info=productionService.updateProdQty(getProductionDetailList);
-		
+	public @ResponseBody Info updateProdQty(@RequestBody List<PostProductionPlanDetail> getProductionDetailList) {
+		System.out.println("Item Detail:" + getProductionDetailList.toString());
+
+		Info info = productionService.updateProdQty(getProductionDetailList);
+
 		return info;
 	}
-	
-	//----------------------------------END------------------------------------- 
+
+	// ----------------------------------END-------------------------------------
 	@RequestMapping(value = { "/updateisMixingandBom" }, method = RequestMethod.POST)
-	public @ResponseBody int updateisMixing(@RequestParam("productionId") int productionId,@RequestParam("flag") int flag)
-	{
-		
-		int menuList=productionService.updateisMixing(productionId,flag);
-		
+	public @ResponseBody int updateisMixing(@RequestParam("productionId") int productionId,
+			@RequestParam("flag") int flag) {
+
+		int menuList = productionService.updateisMixing(productionId, flag);
+
 		return menuList;
-		
+
 	}
+
 	@RequestMapping(value = { "/updateProductionStatus" }, method = RequestMethod.POST)
-	public @ResponseBody int updateProductionStatus(@RequestParam("productionId") int productionId,@RequestParam("prodStatus") int prodStatus)
-	{
-		
-		int isUpdated=productionService.updateProductionStatus(productionId,prodStatus);
-		
+	public @ResponseBody int updateProductionStatus(@RequestParam("productionId") int productionId,
+			@RequestParam("prodStatus") int prodStatus) {
+
+		int isUpdated = productionService.updateProductionStatus(productionId, prodStatus);
+
 		return isUpdated;
-		
+
 	}
+
 	@RequestMapping(value = { "/PostProdPlanHeaderVariationlist" }, method = RequestMethod.GET)
-	public @ResponseBody List<PostProdPlanHeader> PostProdPlanHeaderVariationlist()
-	{
-		List<PostProdPlanHeader> PostProdPlanHeaderVariationlist=productionService.planVariationList();
-		
+	public @ResponseBody List<PostProdPlanHeader> PostProdPlanHeaderVariationlist() {
+		List<PostProdPlanHeader> PostProdPlanHeaderVariationlist = productionService.planVariationList();
+
 		return PostProdPlanHeaderVariationlist;
-		
+
 	}
-	
+
 	@RequestMapping(value = { "/PostProdPlanHeaderwithDetailed" }, method = RequestMethod.POST)
-	public @ResponseBody PostProdPlanHeader PostProdPlanHeaderwithDetailed(@RequestParam("planHeaderId") int planHeaderId)
-	{
-		PostProdPlanHeader postProdPlanHeader=postProdPlanHeaderRepository.planVariationList(planHeaderId);
-		
-		
+	public @ResponseBody PostProdPlanHeader PostProdPlanHeaderwithDetailed(
+			@RequestParam("planHeaderId") int planHeaderId) {
+		PostProdPlanHeader postProdPlanHeader = postProdPlanHeaderRepository.planVariationList(planHeaderId);
+
 		List<PostProductionPlanDetail> postProductionPlanDetail = new ArrayList<PostProductionPlanDetail>();
-		postProductionPlanDetail=postProdPlanDetailRepository.getlistbyproductiondetaildlist(planHeaderId);
+		postProductionPlanDetail = postProdPlanDetailRepository.getlistbyproductiondetaildlist(planHeaderId);
 		postProdPlanHeader.setPostProductionPlanDetail(postProductionPlanDetail);
 		return postProdPlanHeader;
-		
+
 	}
-	
-	@RequestMapping(value = { "/getQtyforVariance" }, method = RequestMethod.POST)
-	public @ResponseBody VarianceList getQtyforVariance(@RequestParam("Date") String Date,@RequestParam("groupType") String groupType,
-			@RequestParam("frId") List<String> frId,@RequestParam("all") int all)
-	{
-		VarianceList varianceList = new VarianceList();
-		List<Variance> Varianceorderlist = new ArrayList<Variance>();
-		try
-		{
-			if(all==1)
-			{
-				Varianceorderlist=varianceRepository.variancelistAllFr(Date, groupType);
-				varianceList.setVarianceorderlist(Varianceorderlist);
-				System.out.println(Varianceorderlist.size());
+
+	@RequestMapping(value = { "/getPostProdPlanHeaderForPlan" }, method = RequestMethod.POST)
+	public @ResponseBody PostProdPlanHeader getPostProdPlanHeaderForPlan(
+			@RequestParam("productionDate") String productionDate, @RequestParam("catId") int catId) {
+		PostProdPlanHeader postProdPlanHeader = null;
+		try {
+			Date initDate = new SimpleDateFormat("dd-MM-yyyy").parse(productionDate);
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			String parsedDate = formatter.format(initDate);
+			postProdPlanHeader = postProdPlanHeaderRepository.findByProductionDateAndCatId(parsedDate, catId);
+			if (postProdPlanHeader != null) {
+				List<PostProductionPlanDetail> postProductionPlanDetail = postProdPlanDetailRepository
+						.findByProductionHeaderId(postProdPlanHeader.getProductionHeaderId());
+				postProdPlanHeader.setPostProductionPlanDetail(postProductionPlanDetail);
 			}
-			else
-			{
-				Varianceorderlist=varianceRepository.variancelistSelectedFr(Date, groupType,frId);
-				varianceList.setVarianceorderlist(Varianceorderlist);
-				System.out.println(Varianceorderlist.size());
-			}
-			
-			
-		}catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		return varianceList;
-		
+		return postProdPlanHeader;
+
 	}
-	
+
+	@RequestMapping(value = { "/getQtyforVariance" }, method = RequestMethod.POST)
+	public @ResponseBody VarianceList getQtyforVariance(@RequestParam("Date") String Date,
+			@RequestParam("groupType") String groupType, @RequestParam("frId") List<String> frId,
+			@RequestParam("all") int all) {
+		VarianceList varianceList = new VarianceList();
+		List<Variance> Varianceorderlist = new ArrayList<Variance>();
+		try {
+			if (all == 1) {
+				Varianceorderlist = varianceRepository.variancelistAllFr(Date, groupType);
+				varianceList.setVarianceorderlist(Varianceorderlist);
+				System.out.println(Varianceorderlist.size());
+			} else {
+				Varianceorderlist = varianceRepository.variancelistSelectedFr(Date, groupType, frId);
+				varianceList.setVarianceorderlist(Varianceorderlist);
+				System.out.println(Varianceorderlist.size());
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return varianceList;
+
+	}
+
 	@RequestMapping(value = { "/updateIsBillGenerate" }, method = RequestMethod.POST)
-	public @ResponseBody Info updateIsBillGenerate(@RequestBody UpdateOrderStatus updateOrderStatus)
-	{
-		 
-		System.out.println("Order Id  "+updateOrderStatus.toString());
-		
-		Info info=productionService.updateBillStatus(updateOrderStatus);
-		 
+	public @ResponseBody Info updateIsBillGenerate(@RequestBody UpdateOrderStatus updateOrderStatus) {
+
+		System.out.println("Order Id  " + updateOrderStatus.toString());
+
+		Info info = productionService.updateBillStatus(updateOrderStatus);
+
 		return info;
 	}
 }
