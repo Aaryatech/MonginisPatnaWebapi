@@ -25,7 +25,7 @@ import com.ats.webapi.repository.SpCkAllocDetailRepository;
 @RestController
 public class BomController {
  
-	@Autowired
+	@Autowired 
 	BillOfMaterialRepository billOfMaterialRepository;
 
 	@Autowired
