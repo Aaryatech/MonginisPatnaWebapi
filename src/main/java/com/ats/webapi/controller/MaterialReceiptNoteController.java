@@ -175,6 +175,16 @@ public class MaterialReceiptNoteController {
 		return materialRecNoteRes;
 
 	}
+
+	@RequestMapping(value = { "/getMaterialRecNotesHeaderDetailsNew" }, method = RequestMethod.POST)
+	public @ResponseBody MaterialRecNote getMaterialRecNotesHeaderDetailsNew(@RequestParam("mrnId")int mrnId)
+	{
+
+		MaterialRecNote materialRecNoteRes = materialRecNoteService.getMaterialRecNotesHeaderDetailsNew(mrnId);
+
+		return materialRecNoteRes;
+
+	}
 	
 	@RequestMapping(value = { "/getRateByRmId" }, method = RequestMethod.POST)
 	public @ResponseBody ItemRateByRmIdAndSuppId getRateByRmId(@RequestParam("rmId")List<String> rmId,@RequestParam("suppId")int suppId)

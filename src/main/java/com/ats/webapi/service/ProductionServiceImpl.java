@@ -136,7 +136,8 @@ public class ProductionServiceImpl implements ProductionService{
 			for(int j=0;j<postProductionDetailList.size();j++) {
 				
 				PostProductionPlanDetail postProductionPlanDetail=postProductionDetailList.get(j);
-			
+			if(postProdPlanHeader.getIsPlanned()==1)
+			{
 				if(postProductionPlanDetail.getPlanQty()>0)
 				{
 					System.err.println("***----inserted----***id_="+postProductionPlanDetail.getProductionDetailId());
@@ -154,6 +155,19 @@ public class ProductionServiceImpl implements ProductionService{
 					postProdPlanDetailRepository.delete(postProductionPlanDetail.getProductionDetailId());
 					
 				}
+			}else
+			{
+				if(postProductionPlanDetail.getOrderQty()>0)
+				{
+				    postProductionPlanDetail.setProductionHeaderId(headerId);
+					
+				    postProductionPlanDetail.setProductionBatch(postProdPlanHeader.getProductionBatch());
+				
+				    postProductionPlanDetail.setProductionDate(postProdPlanHeader.getProductionDate());
+				
+				    postProdPlanDetailRepository.save(postProductionPlanDetail);
+				}
+			}
 			}
 			
 		

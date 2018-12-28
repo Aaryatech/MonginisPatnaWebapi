@@ -60,7 +60,7 @@ public interface RawMaterialService {
 
 	List<RawMaterialTaxDetails> getAllRmTax();
 
-	RmRateVerification getRmRateTaxVerification(int suppId, int rmId);
+	RmRateVerification getRmRateTaxVerification(int suppId, int rmId, int grpId);
 
 	RmRateVerification postRmRateVerification(RmRateVerification rmRateVerification);
 
@@ -70,7 +70,7 @@ public interface RawMaterialService {
 
 	RawMaterialUom insertRmUom(RawMaterialUom rawMaterialUom);
 
-	GetUomAndTax getUomAndTax(int rmId);
+	GetUomAndTax getUomAndTax(int rmId,int grpId);
 
 	List<ItemDetail> saveItemDetail(List<ItemDetail> itemDetail);
 

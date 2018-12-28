@@ -52,8 +52,21 @@ public class RmRateVerification {
 	@Column(name="tax_id")
 	private int taxId;
 	
+
+	@Column(name="grp_id")
+	private int grpId;
+	
+	
 	/*@Column(name="igst_per")
 	private float igstPer;*/
+
+	public int getGrpId() {
+		return grpId;
+	}
+
+	public void setGrpId(int grpId) {
+		this.grpId = grpId;
+	}
 
 	public int getRmRateVerId() {
 		return rmRateVerId;

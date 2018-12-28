@@ -38,7 +38,7 @@ public class SpCakeOrdersServiceImpl implements SpCakeOrdersService {
 	ErrorMessage errorMessage=new ErrorMessage();
 	@Override
 	public SpCakeOrderRes placeSpCakeOrder(SpCakeOrders spCakeOrders) {
-		boolean flag=false;
+		
 		try {
 		SpCakeOrders spCakeOrder=spCakeOrdersRepository.save(spCakeOrders);
 		if(spCakeOrder!=null) {

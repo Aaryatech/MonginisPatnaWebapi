@@ -35,15 +35,15 @@ public class StoreStockApiController {
 	}
 	
 	@RequestMapping(value = { "/getMonthWiseStoreStock" }, method = RequestMethod.POST)
-	public @ResponseBody StoreStockDetailList getMonthWiseStoreStock(@RequestParam("fromDate")String fromDate, @RequestParam("toDate")String toDate) {
+	public @ResponseBody StoreStockDetailList getMonthWiseStoreStock(@RequestParam("fromDate")String fromDate, @RequestParam("toDate")String toDate,@RequestParam("grpId")int grpId) {
 		
-		System.out.println("Dates from "+fromDate+"  toDate  "+toDate);
+		System.out.println("Dates from "+fromDate+"  toDate  "+toDate+"  GrpId  "+grpId);
 		StoreStockDetailList storeStockDetailList=new StoreStockDetailList();
-		List<StoreStockDetail> resStoreStockDetailList=new ArrayList<>();
 		Info info=new Info();
 		
-		resStoreStockDetailList=storeStockService.getMonthWiseStoreStock(fromDate,toDate);
+		List<StoreStockDetail> 	resStoreStockDetailList=storeStockService.getMonthWiseStoreStock(fromDate,toDate,grpId);
 		System.out.println("Return List"+resStoreStockDetailList.toString());
+		
 		
 		if(resStoreStockDetailList!=null && !resStoreStockDetailList.isEmpty())
 		{
@@ -55,26 +55,27 @@ public class StoreStockApiController {
 		{
 			info.setError(true);
 			info.setMessage("Failed");
+			storeStockDetailList.setStoreStockDetailList(resStoreStockDetailList);
 		}
 		storeStockDetailList.setInfo(info);
 		return storeStockDetailList;
 	}
 	
 	@RequestMapping(value = { "/getCurrentStoreStock" }, method = RequestMethod.POST)
-	public @ResponseBody List<GetStoreCurrentStock> getCurrentStoreStock(@RequestParam("deptId")int deptId) {
+	public @ResponseBody List<GetStoreCurrentStock> getCurrentStoreStock(@RequestParam("grpId")int grpId,@RequestParam("deptId")int deptId) {
 	
-		List<GetStoreCurrentStock> getStoreCurrentStockList=storeStockService.getCurrentStock(deptId);
+		List<GetStoreCurrentStock> getStoreCurrentStockList=storeStockService.getCurrentStock(grpId,deptId);
 		
 		return getStoreCurrentStockList;
 	}
 	
 	@RequestMapping(value = { "/getCurrentStoreStockHeader" }, method = RequestMethod.POST)
-	public @ResponseBody StoreStockHeader getCurrentStoreStockHeader(@RequestParam("status")int status) {
+	public @ResponseBody StoreStockHeader getCurrentStoreStockHeader(@RequestParam("subCatId")int subCatId,@RequestParam("status")int status) {
 		
 		StoreStockHeader storeStockHeader = new StoreStockHeader();
 		try
 		{
-			storeStockHeader=storeStockService.getCurrentStockHeader(status);
+			storeStockHeader=storeStockService.getCurrentStockHeader(subCatId,status);
 			if(storeStockHeader==null)
 			{
 				storeStockHeader = new StoreStockHeader();

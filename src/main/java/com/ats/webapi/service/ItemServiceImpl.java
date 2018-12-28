@@ -77,7 +77,7 @@ public class ItemServiceImpl implements ItemService{
 		 List<Item> items=new ArrayList<Item>();
 		 ItemsList itemsList=new ItemsList();
 		ErrorMessage errorMessage=new ErrorMessage();
-		items=itemRepository.findByDelStatusOrderByItemGrp1AscItemGrp2Asc(0);
+		items=itemRepository.findByDelStatusOrderByItemGrp1AscItemGrp2AscItemNameAsc(0);
 		if(items!=null)
 		{
 			

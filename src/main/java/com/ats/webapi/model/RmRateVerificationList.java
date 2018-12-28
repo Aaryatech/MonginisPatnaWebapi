@@ -26,6 +26,7 @@ public class RmRateVerificationList {
 	@Column(name="rm_name")
 	private String rmName;
 
+
 	public int getRmRateVerId() {
 		return rmRateVerId;
 	}

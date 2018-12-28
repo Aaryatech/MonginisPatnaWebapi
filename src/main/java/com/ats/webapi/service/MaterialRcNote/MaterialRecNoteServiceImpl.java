@@ -144,6 +144,18 @@ public class MaterialRecNoteServiceImpl implements MaterialRecNoteService{
 		return materialRecNote;
 	}
 	@Override
+	public MaterialRecNote getMaterialRecNotesHeaderDetailsNew(int mrnId) {
+		
+
+		MaterialRecNote materialRecNote=materialRecNoteRepository.findByMrnId(mrnId);
+		
+		//int mrnId=materialRecNote.getMrnId();
+		
+		List<MaterialRecNoteDetails> materialRecNoteDetailsList=materialRNoteDetailRepository.getByMrnIdNew(mrnId);
+		materialRecNote.setMaterialRecNoteDetails(materialRecNoteDetailsList);
+		return materialRecNote;
+	}
+	@Override
 	public MaterialRecNoteList getAllInwards() {
 
 		MaterialRecNoteList materialRecNoteList=new MaterialRecNoteList();

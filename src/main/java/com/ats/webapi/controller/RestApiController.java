@@ -35,12 +35,17 @@ import com.ats.webapi.repository.FranchiseForDispatchRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.FranchiseeRepository;
 import com.ats.webapi.repository.GetBillDetailsRepository;
+import com.ats.webapi.repository.GetRegSpCakeOrdersRepository;
 import com.ats.webapi.repository.GetReorderByStockTypeRepository;
 import com.ats.webapi.repository.ItemRepository;
+import com.ats.webapi.repository.ItemResponseRepository;
+import com.ats.webapi.repository.ItemStockRepository;
 import com.ats.webapi.repository.MessageRepository;
 import com.ats.webapi.repository.OrderLogRespository;
 import com.ats.webapi.repository.RouteRepository;
 import com.ats.webapi.repository.SpCakeOrderHisRepository;
+import com.ats.webapi.repository.SpCakeOrderUpdateRepository;
+import com.ats.webapi.repository.SpCakeOrdersRepository;
 import com.ats.webapi.repository.SpMessageRepository;
 import com.ats.webapi.repository.SpecialCakeRepository;
 import com.ats.webapi.repository.UpdatePBTimeRepo;
@@ -137,8 +142,20 @@ public class RestApiController {
 
 	}
 	@Autowired
-	FranchiseForDispatchRepository franchiseForDispatchRepository;
+	SpCakeOrderUpdateRepository spCakeOrderUpdateRepository;
+	@Autowired
+	ItemStockRepository itemStockRepository;
 	
+	@Autowired
+	SpCakeOrderHisRepository spCakeOrderHisRepository;
+	@Autowired
+	GetRegSpCakeOrdersRepository getRegSpCakeOrdersRepository;
+	@Autowired
+	FranchiseForDispatchRepository franchiseForDispatchRepository;
+	@Autowired
+	SpCakeOrdersRepository spCakeOrdersRepository;
+	@Autowired
+	ItemResponseRepository itemResRepository;
 	@Autowired
 	private UserService userService;
 
@@ -482,12 +499,12 @@ public class RestApiController {
 	GetGrnGvnForCreditNoteService getGrnGvnForCreditNoteService;
 
 	@RequestMapping(value = "/grnGvnDetailForCreditNote", method = RequestMethod.POST)
-	public @ResponseBody GetGrnGvnForCreditNoteList grnGvnDetailForCreditNote(@RequestParam("isGrn") int isGrn) {
+	public @ResponseBody GetGrnGvnForCreditNoteList grnGvnDetailForCreditNote(@RequestParam("isGrn") int isGrn,@RequestParam("frList") List<String> frList) {
 		System.out.println("inside rest");
 
 		System.out.println("Rest : is Grn Received /grnGvnDetailForCreditNote "+isGrn);
 		
-		GetGrnGvnForCreditNoteList getGrnGvnForCreditNoteList = getGrnGvnForCreditNoteService.getGrnGvnForCreditNote(isGrn);
+		GetGrnGvnForCreditNoteList getGrnGvnForCreditNoteList = getGrnGvnForCreditNoteService.getGrnGvnForCreditNote(isGrn,frList);
 
 		return getGrnGvnForCreditNoteList;
 
@@ -1533,6 +1550,30 @@ public class RestApiController {
 		return spCakeOrderRes;
 
 	}
+	// Place SpCake Order
+		@RequestMapping(value = { "/updateSpCakeOrder" }, method = RequestMethod.POST)
+
+		public @ResponseBody SpCakeOrderUpdate updateSpCakeOrder(@RequestBody SpCakeOrderUpdate orderJson)
+				throws ParseException, JsonParseException, JsonMappingException, IOException {
+
+			System.out.println("Inside Place Order " + orderJson.toString());
+
+			SpCakeOrderUpdate spCakeOrderRes = spCakeOrderUpdateRepository.save(orderJson);
+
+			return spCakeOrderRes;
+
+		}
+	@RequestMapping(value = { "/getSpOrderBySpOrderNo" }, method = RequestMethod.POST)
+
+	public @ResponseBody SpCakeOrders getSpOrderBySpOrderNo(@RequestParam("spOrderNo") int spOrderNo)
+			throws ParseException, JsonParseException, JsonMappingException, IOException {
+
+
+		SpCakeOrders spCakeOrderRes = spCakeOrdersRepository.findBySpOrderNo(spOrderNo);
+
+		return spCakeOrderRes;
+
+	}
 
 	// Search Special Cake By SpecialCake Code
 	@RequestMapping("/searchSpecialCake")
@@ -1564,15 +1605,44 @@ public class RestApiController {
 		return spCakeOrderList;
 
 	}
-	@Autowired
-	SpCakeOrderHisRepository spCakeOrderHisRepository;
+
 	@RequestMapping(value = { "/getSpCkOrderByOrderNo" }, method = RequestMethod.POST)
 	@ResponseBody
 	public SpCkOrderHis getSpCkOrderByOrderNo(@RequestParam("orderNo") int orderNo) {
 
 		SpCkOrderHis spCakeOrder = spCakeOrderHisRepository.findByOrderNo(orderNo);
-
 		return spCakeOrder;
+	}
+	
+	@RequestMapping(value = { "/getSpCkOrderForExBill" }, method = RequestMethod.POST)
+	@ResponseBody
+	public SpHistoryExBill getSpCkOrderForExBill(@RequestParam("orderNo") String orderNo,@RequestParam("date") String date,@RequestParam("menuId") List<String> menuId,@RequestParam("frId") int frId) {
+
+		SpHistoryExBill spHistoryExBill=new SpHistoryExBill();
+		try {
+			if(orderNo.equalsIgnoreCase("0"))
+			{
+				
+				List<SpCkOrderHis> spCakeOrder = spCakeOrderHisRepository.findByOrdersForExBill(date,menuId,frId);
+				List<GetRegSpCakeOrders> regularSpCkOrders=getRegSpCakeOrdersRepository.findByOrdersForExBill(date,menuId,frId);
+				spHistoryExBill.setSpCakeOrder(spCakeOrder);
+				spHistoryExBill.setRegularSpCkOrders(regularSpCkOrders);
+				
+			}
+			else
+			{
+				List<SpCkOrderHis> spCakeOrder = spCakeOrderHisRepository.findByOrderNoForEx(orderNo);
+				List<GetRegSpCakeOrders> regularSpCkOrders=getRegSpCakeOrdersRepository.findByOrderNo(orderNo);
+				spHistoryExBill.setSpCakeOrder(spCakeOrder);
+				spHistoryExBill.setRegularSpCkOrders(regularSpCkOrders);
+				
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return spHistoryExBill;
 	}
 	// Search Special Cake Order History
 	@RequestMapping("/orderHistory")
@@ -2699,7 +2769,17 @@ public class RestApiController {
 
 				List<Item> items = new ArrayList<Item>();
 				try {
-					items = itemRepository.findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(subCatId,0);
+					
+					if(Integer.parseInt(subCatId)<11)
+					{
+						items = itemRepository.findByItemGrp1AndDelStatusOrderByItemGrp1AscItemGrp2AscItemNameAsc(subCatId,0);
+
+					}
+					else
+					{
+						items = itemRepository.findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(subCatId,0);
+
+					}
 					System.err.println("Items by subcat id  and delStatus  " +items.toString() );
 				
 				} catch (Exception e) {
@@ -2710,8 +2790,41 @@ public class RestApiController {
 				return items;
 
 			}
-	
-	
+			
+			@RequestMapping(value = "/getItemsResBySubCatId", method = RequestMethod.POST)
+			public @ResponseBody List<ItemRes> getItemsResBySubCatId(@RequestParam("subCatId") String subCatId) {
+
+				List<ItemRes> items = new ArrayList<ItemRes>();
+				try {
+					
+						items = itemResRepository.findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(subCatId,0);
+
+					
+				} catch (Exception e) {
+					items = new ArrayList<>();
+					e.printStackTrace();
+
+				}
+				return items;
+
+			}
+			@RequestMapping(value = "/getStockItemsBySubCatId", method = RequestMethod.POST)
+			public @ResponseBody List<StockItem> getStockItemsBySubCatId(@RequestParam("subCatId") int subCatId,@RequestParam("type") int type) {
+
+				List<StockItem> items = new ArrayList<StockItem>();
+			try {
+					
+				items = itemStockRepository.findBySubCatIdAndType(subCatId,type);
+
+				
+				} catch (Exception e) {
+					items = new ArrayList<>();
+					e.printStackTrace();
+
+				}
+				return items;
+
+			}
 	// Get Items By Item Id and Delete Status 0
 	@RequestMapping(value = "/getItemsByItemId", method = RequestMethod.POST)
 	public @ResponseBody List<Item> getItems(@RequestParam List<Integer> itemList) {
@@ -3524,7 +3637,28 @@ public class RestApiController {
 		return orderList;
 
 	}
+	@RequestMapping(value = { "/getOrdersListRes" }, method = RequestMethod.POST)
+	@ResponseBody
+	public 	List<GetOrder> getOrdersList(@RequestParam List<String> frId, @RequestParam List<String> menuId,
+			@RequestParam String date) {
+		List<GetOrder> orderList = new 	ArrayList<GetOrder>();
+		try {
+			System.out.println("date str :" + date);
 
+			String strDate = Common.convertToYMD(date);
+			System.out.println("Converted date " + strDate);
+
+			System.out.println("fr id in rest " + frId.toString());
+			orderList = getOrderService.findOrder(frId, menuId, strDate);
+
+		
+		} catch (Exception e) {
+
+			System.out.println("exception in order list rest controller" + e.getMessage());
+		}
+		return orderList;
+
+	}
 	// 7 sep orderlist for all franchisee
 	@RequestMapping(value = { "/getOrderListForAllFr" }, method = RequestMethod.POST)
 	@ResponseBody
@@ -3692,12 +3826,12 @@ public class RestApiController {
 	}
 
 	// 18 sept sachin
-	@RequestMapping(value = { "/showOrderCounts" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/showOrderCounts" }, method = RequestMethod.POST)
 	@ResponseBody
-	public OrderCountsList showOrderCounts() {
+	public OrderCountsList showOrderCounts(@RequestParam String cDate) {
 
-		java.sql.Date cDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-		System.out.println("date " + cDate);
+/*		java.sql.Date cDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+*/		System.out.println("date " + cDate);
 
 		List<OrderCounts> orderCountList = orderCountService.findOrderCount(cDate);
 

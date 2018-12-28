@@ -11,11 +11,11 @@ public interface StoreStockService {
 
 	StoreStockHeader insertStoreOpStock(StoreStockHeader storeStockHeader);
 
-	List<StoreStockDetail> getMonthWiseStoreStock(String fromDate, String toDate);
+	List<StoreStockDetail> getMonthWiseStoreStock(String fromDate, String toDate,int grpId);
 
-	List<GetStoreCurrentStock> getCurrentStock(int deptId);
+	List<GetStoreCurrentStock> getCurrentStock(int grpId,int deptId);
 
-	StoreStockHeader getCurrentStockHeader(int status);
+	StoreStockHeader getCurrentStockHeader(int subCatId,int status);
 
 	
 	

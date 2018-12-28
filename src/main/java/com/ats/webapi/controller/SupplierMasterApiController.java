@@ -22,6 +22,7 @@ import com.ats.webapi.model.SupplierMaster.Transporter;
 import com.ats.webapi.model.SupplierMaster.TransporterList;
 import com.ats.webapi.model.rawmaterial.RmItemCatList;
 import com.ats.webapi.model.rawmaterial.RmItemCategory;
+import com.ats.webapi.repository.SupplierDetailRepository;
 import com.ats.webapi.service.SuppilerMasterService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -31,6 +32,8 @@ public class SupplierMasterApiController {
 
 	@Autowired
 	SuppilerMasterService suppilerMasterService;
+	@Autowired
+	SupplierDetailRepository supplierDetailRepository;
 	
 	@RequestMapping(value = { "/addNewSupplier" }, method = RequestMethod.POST)
 	public @ResponseBody Info addNewSupplier(@RequestBody SupplierDetails supplierDetails)
@@ -57,6 +60,21 @@ public class SupplierMasterApiController {
 	public @ResponseBody List<SupplierDetails> getAllSupplier()
 	{
 		List<SupplierDetails> supplierDetailsList=suppilerMasterService.getAllSupplier();
+		if(supplierDetailsList!=null)
+		{
+			System.out.println("Supplier List "+ supplierDetailsList.toString());
+		}
+		else
+		{
+			System.out.println("No supplier in List");
+		}
+		return supplierDetailsList;
+		
+	}
+	@RequestMapping(value = { "/getSuppliersByItemId" }, method = RequestMethod.POST)
+	public @ResponseBody List<SupplierDetails> getSupplierByItemId(@RequestParam("itemId")int itemId,@RequestParam("grpId")int grpId)
+	{
+		List<SupplierDetails> supplierDetailsList=supplierDetailRepository.getSupplierByItemId(itemId,grpId);
 		if(supplierDetailsList!=null)
 		{
 			System.out.println("Supplier List "+ supplierDetailsList.toString());

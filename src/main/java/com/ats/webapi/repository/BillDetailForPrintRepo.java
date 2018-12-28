@@ -42,7 +42,7 @@ public interface BillDetailForPrintRepo extends JpaRepository<GetBillDetailPrint
 			"						        t_bill_detail.bill_no IN (:billNoList)\n" + 
 			"\n" + 
 			"						        AND m_category.cat_id=t_bill_detail.cat_id \n" + 
-			"						        AND t_bill_detail.bill_no=t_bill_header.bill_no",nativeQuery=true)
+			"						        AND t_bill_detail.bill_qty>0 and t_bill_detail.bill_no=t_bill_header.bill_no  order by m_category.cat_id,sub_cat_id,item_name",nativeQuery=true)
 	
 	List<GetBillDetailPrint> getBillDetailsForPrint(@Param("billNoList") List<String> billNoList);
 	

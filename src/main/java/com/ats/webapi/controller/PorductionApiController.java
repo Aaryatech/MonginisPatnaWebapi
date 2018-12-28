@@ -429,8 +429,10 @@ public class PorductionApiController {
 			String parsedDate = formatter.format(initDate);
 			postProdPlanHeader = postProdPlanHeaderRepository.findByProductionDateAndCatId(parsedDate, catId);
 			if (postProdPlanHeader != null) {
+				System.err.println("postProdPlanHeader.getProductionHeaderId()"+postProdPlanHeader.getProductionHeaderId());
 				List<PostProductionPlanDetail> postProductionPlanDetail = postProdPlanDetailRepository
 						.findByProductionHeaderId(postProdPlanHeader.getProductionHeaderId());
+				System.err.println("postProductionPlanDetail"+postProductionPlanDetail.toString());
 				postProdPlanHeader.setPostProductionPlanDetail(postProductionPlanDetail);
 			}
 		} catch (Exception e) {
@@ -442,17 +444,18 @@ public class PorductionApiController {
 
 	@RequestMapping(value = { "/getQtyforVariance" }, method = RequestMethod.POST)
 	public @ResponseBody VarianceList getQtyforVariance(@RequestParam("Date") String Date,
-			@RequestParam("groupType") String groupType, @RequestParam("frId") List<String> frId,
+			@RequestParam("groupType") String groupType,@RequestParam("menus") List<String> menus, @RequestParam("frId") List<String> frId,
 			@RequestParam("all") int all) {
 		VarianceList varianceList = new VarianceList();
 		List<Variance> Varianceorderlist = new ArrayList<Variance>();
 		try {
 			if (all == 1) {
-				Varianceorderlist = varianceRepository.variancelistAllFr(Date, groupType);
+				System.err.println(menus+"menus");
+				Varianceorderlist = varianceRepository.variancelistAllFr(Date,menus, groupType);
 				varianceList.setVarianceorderlist(Varianceorderlist);
-				System.out.println(Varianceorderlist.size());
+				System.out.println(Varianceorderlist.toString());
 			} else {
-				Varianceorderlist = varianceRepository.variancelistSelectedFr(Date, groupType, frId);
+				Varianceorderlist = varianceRepository.variancelistSelectedFr(Date,menus, groupType, frId);
 				varianceList.setVarianceorderlist(Varianceorderlist);
 				System.out.println(Varianceorderlist.size());
 			}

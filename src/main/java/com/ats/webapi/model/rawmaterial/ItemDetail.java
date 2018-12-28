@@ -41,7 +41,7 @@ public class ItemDetail implements Serializable{
 	private int rmUomId;
 	
 	@Column(name="rm_qty")
-	private int rmQty;
+	private float rmQty;
 	
 	@Column(name="rm_weight")
 	private float rmWeight;
@@ -91,11 +91,11 @@ public class ItemDetail implements Serializable{
 		this.rmType = rmType;
 	}
 
-	public int getRmQty() {
+	public float getRmQty() {
 		return rmQty;
 	}
 
-	public void setRmQty(int rmQty) {
+	public void setRmQty(float rmQty) {
 		this.rmQty = rmQty;
 	}
 

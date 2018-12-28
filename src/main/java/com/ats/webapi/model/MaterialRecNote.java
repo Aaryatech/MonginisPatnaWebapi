@@ -166,11 +166,20 @@ public class MaterialRecNote implements Serializable{
 	@Column(name="other4")
 	private float other4;
 	 
+	private int grpId;
 	
 	@Transient
 	List<MaterialRecNoteDetails> materialRecNoteDetails; 
 	
 	 
+    
+	public int getGrpId() {
+		return grpId;
+	}
+
+	public void setGrpId(int grpId) {
+		this.grpId = grpId;
+	}
 
 	public int getDelStatus() {
 		return delStatus;

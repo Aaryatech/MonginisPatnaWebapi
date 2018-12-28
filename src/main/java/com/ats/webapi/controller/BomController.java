@@ -55,8 +55,9 @@ public class BomController {
 			for (int i = 0; i < bomDetailList.size(); i++) {
 
 				bomDetailList.get(i).setReqId(reqId);
-
+                if(bomDetailList.get(i).getRmReqQty()>0) {  //added on 31 Aug 2018 by Mahesh
 				 bDetail = billOfMaterialDetailedRepository.save(bomDetailList.get(i));
+                }
 				 System.out.println("Inside For Detail ");
 
 			}

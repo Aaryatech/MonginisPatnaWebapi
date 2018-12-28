@@ -6,6 +6,6 @@ import com.ats.webapi.model.stock.StoreStockHeader;
 
 public interface StoreStockHeaderRepository extends JpaRepository<StoreStockHeader, Integer>{
 
-	StoreStockHeader findByStoreStockStatus(int status);
+	StoreStockHeader findByExInt1AndStoreStockStatus(int subCatId,int status);
 
 }

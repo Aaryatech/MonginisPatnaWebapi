@@ -18,12 +18,14 @@ import com.ats.webapi.model.GetPoHeaderForPdf;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.purchaseorder.GetPurchaseOrderList;
 import com.ats.webapi.model.purchaseorder.GetRmRateAndTax;
+import com.ats.webapi.model.purchaseorder.PoDetailsByChkSupp;
 import com.ats.webapi.model.purchaseorder.PurchaseOrderDetail;
 import com.ats.webapi.model.purchaseorder.PurchaseOrderDetailedList;
 import com.ats.webapi.model.purchaseorder.PurchaseOrderHeader;
 import com.ats.webapi.model.purchaseorder.TransporterDetails;
 import com.ats.webapi.repository.GetPoDetailedForPdfRepository;
 import com.ats.webapi.repository.GetPoDetailedPdfRepository;
+import com.ats.webapi.repository.PoDetailsByChkSuppRepository;
 import com.ats.webapi.repository.PurchaseOrderDetailRepository;
 import com.ats.webapi.repository.PurchaseOrderHeaderRepository;
 import com.ats.webapi.service.FrItemStockConfigureService;
@@ -50,6 +52,8 @@ public class PurchaseOrderApiController {
 	@Autowired
 	GetPoDetailedPdfRepository getPoDetailedPdfRepository;
 
+	@Autowired
+	PoDetailsByChkSuppRepository poDetailsByChkSuppRepository;
 	
 	//----------------------Get Data Of Raw Material Item Categories---------------
 		@RequestMapping(value = { "/insertPurchaseOrder" }, method = RequestMethod.POST)
@@ -125,7 +129,21 @@ public class PurchaseOrderApiController {
 			
 		}
 
-		
+		@RequestMapping(value = { "/poDetailsByChkSuppList" }, method = RequestMethod.POST)
+		public List<PoDetailsByChkSupp> poDetailsByChkSuppList(@RequestParam("suppId")int suppId)
+		{
+			 List<PoDetailsByChkSupp> poDetailByChkSuppList = null; 
+			 try {
+				 poDetailByChkSuppList = poDetailsByChkSuppRepository.getPoDetailsBySuppId(suppId);
+			 }
+			 catch (Exception e) {
+				e.printStackTrace();
+			}
+			 
+			 return poDetailByChkSuppList;
+			
+			
+		}
 		@RequestMapping(value = { "/deletePoRecord" }, method = RequestMethod.POST)
 		public Info deletePoRecord(@RequestParam("poId")int poId)
 		{

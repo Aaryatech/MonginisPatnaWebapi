@@ -25,7 +25,7 @@ public interface OrderCountsRepository extends JpaRepository<OrderCounts, Intege
             + " m_fr_menu_show.menu_id=t_order.menu_id GROUP BY menu_id " +
             " ",nativeQuery=true)
 
-	List<OrderCounts> getOrderTotal(@Param("cDate") Date cDate);
+	List<OrderCounts> getOrderTotal(@Param("cDate") String cDate);
 	 
 	
 	

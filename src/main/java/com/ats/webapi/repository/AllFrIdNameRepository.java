@@ -10,7 +10,7 @@ import com.ats.webapi.model.AllFrIdName;
 
 public interface AllFrIdNameRepository extends JpaRepository<AllFrIdName, Integer> {
 	
-	@Query(value=" SELECT fr_id,fr_name from m_franchisee WHERE del_status=0 order by fr_name Asc",nativeQuery=true)
+	@Query(value=" SELECT fr_id,fr_name from m_franchisee WHERE del_status=0 order by fr_Id Asc",nativeQuery=true)
 	
 	List<AllFrIdName> getAllFrIdName();
 	

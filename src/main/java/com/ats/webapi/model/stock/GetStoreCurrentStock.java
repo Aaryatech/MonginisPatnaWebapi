@@ -34,12 +34,66 @@ public class GetStoreCurrentStock {
 	@Column(name="rm_name")
 	private String rmName;
 	
+	@Column(name="rm_code")
+	private String rmCode;
+	
+	@Column(name="rm_min_qty")
+	private float rmMinQty;
+	
+	@Column(name="rm_max_qty")
+	private float rmMaxQty;
+	
+	@Column(name="rm_rol_qty")
+	private float rmRolQty;
+	
 	@Column(name="pur_rec_qty")
 	private float purRecQty;
 	
 	
 	@Column(name="bms_issue_qty")
 	private float bmsIssueQty;
+
+	
+	
+
+	public String getRmCode() {
+		return rmCode;
+	}
+
+
+	public void setRmCode(String rmCode) {
+		this.rmCode = rmCode;
+	}
+
+
+	public float getRmMinQty() {
+		return rmMinQty;
+	}
+
+
+	public void setRmMinQty(float rmMinQty) {
+		this.rmMinQty = rmMinQty;
+	}
+
+
+	public float getRmMaxQty() {
+		return rmMaxQty;
+	}
+
+
+	public void setRmMaxQty(float rmMaxQty) {
+		this.rmMaxQty = rmMaxQty;
+	}
+
+
+	public float getRmRolQty() {
+		return rmRolQty;
+	}
+
+
+	public void setRmRolQty(float rmRolQty) {
+		this.rmRolQty = rmRolQty;
+	}
 
 
 	public int getStoreStockDetailId() {

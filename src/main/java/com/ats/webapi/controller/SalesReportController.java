@@ -15,11 +15,15 @@ import com.ats.webapi.model.report.frpurchase.SalesReportBillwiseAllFr;
 import com.ats.webapi.model.report.frpurchase.SalesReportItemwise;
 import com.ats.webapi.model.report.frpurchase.SalesReportRoyalty;
 import com.ats.webapi.model.report.frpurchase.SalesReportRoyaltyFr;
+import com.ats.webapi.model.taxreport.Tax1Report;
+import com.ats.webapi.model.taxreport.Tax2Report;
 import com.ats.webapi.repository.frpurchasereport.SaleReportBillwiseAllFrRepo;
 import com.ats.webapi.repository.frpurchasereport.SaleReportBillwiseRepo;
 import com.ats.webapi.repository.frpurchasereport.SaleReportItemwiseRepo;
 import com.ats.webapi.repository.frpurchasereport.SalesReportRoyaltyFrRepo;
 import com.ats.webapi.repository.frpurchasereport.SalesReportRoyaltyRepo;
+import com.ats.webapi.repository.taxreport.Tax1ReportRepository;
+import com.ats.webapi.repository.taxreport.Tax2ReportRepository;
 
 @RestController
 public class SalesReportController {
@@ -38,6 +42,45 @@ public class SalesReportController {
 	
 	@Autowired
 	SaleReportItemwiseRepo saleReportItemwiseRepo; //report 8
+	
+	@Autowired
+	Tax1ReportRepository tax1ReportRepository;
+	
+	@Autowired
+	Tax2ReportRepository tax2ReportRepository;
+	
+	
+	@RequestMapping(value = { "/getTax1Report" }, method = RequestMethod.POST)
+	public @ResponseBody List<Tax1Report> getTax1Report(@RequestParam("fromDate")String fromDate,@RequestParam("toDate") String toDate) {
+
+		List<Tax1Report> tax1ReportList = null;
+		try {
+			fromDate = Common.convertToYMD(fromDate);
+			toDate = Common.convertToYMD(toDate);
+
+			tax1ReportList = tax1ReportRepository.getTax1Report(fromDate, toDate);
+		} catch (Exception e) {
+			System.out.println(" Exce in Tax1 Report " + e.getMessage());
+			e.printStackTrace();
+		}
+		return tax1ReportList;
+	}
+
+	@RequestMapping(value = { "/getTax2Report" }, method = RequestMethod.POST)
+	public @ResponseBody List<Tax2Report> getTax2Report(@RequestParam("fromDate")String fromDate,@RequestParam("toDate") String toDate) {
+
+		List<Tax2Report> tax1ReportList = null;
+		try {
+			fromDate = Common.convertToYMD(fromDate);
+			toDate = Common.convertToYMD(toDate);
+
+			tax1ReportList = tax2ReportRepository.getTax2Report(fromDate, toDate);
+		} catch (Exception e) {
+			System.out.println(" Exce in Tax2 Report " + e.getMessage());
+			e.printStackTrace();
+		}
+		return tax1ReportList;
+	}
 	
 	//Report 1 sales report bill wise order by date
 	@RequestMapping(value = { "/getSaleReportBillwise" }, method = RequestMethod.POST)

@@ -34,6 +34,8 @@ public interface SpCakeOrdersRepository extends JpaRepository<SpCakeOrders,Integ
 	@Modifying	
 	@Query("UPDATE SpCakeOrders t SET t.isAllocated=1  WHERE t.spOrderNo=:gettSpCakeId")	
 	int updateSpCkAllocDId(@Param("gettSpCakeId")int gettSpCakeId);
+
+	SpCakeOrders findBySpOrderNo(int spOrderNo);
 	
 
 

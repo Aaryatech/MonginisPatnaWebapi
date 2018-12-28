@@ -17,7 +17,7 @@ public class OrderCountsServiceImpl implements OrderCountsService {
 	
 
 	@Override
-	public List<OrderCounts> findOrderCount(Date cDate) {
+	public List<OrderCounts> findOrderCount(String cDate) {
 		List<OrderCounts> orderCounts=orderCountRepository.getOrderTotal(cDate);
 		
 		

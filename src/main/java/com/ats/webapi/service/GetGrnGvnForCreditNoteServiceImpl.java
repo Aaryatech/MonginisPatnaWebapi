@@ -17,14 +17,14 @@ public class GetGrnGvnForCreditNoteServiceImpl implements GetGrnGvnForCreditNote
 	GrnGvnForCreditNoteRepositoty gvnForCreditNoteRepositoty;
 
 	@Override
-	public GetGrnGvnForCreditNoteList getGrnGvnForCreditNote(int isGrn) {
+	public GetGrnGvnForCreditNoteList getGrnGvnForCreditNote(int isGrn,List<String> frList) {
 		
 		
 		GetGrnGvnForCreditNoteList getGrnGvnForCreditNote=new GetGrnGvnForCreditNoteList();
 		
 		Info info=new Info();
 		
-		List<GetGrnGvnForCreditNote> getGrnGvnForCreditNoteList=gvnForCreditNoteRepositoty.getGrnGvnDetailForCreditNote(isGrn);
+		List<GetGrnGvnForCreditNote> getGrnGvnForCreditNoteList=gvnForCreditNoteRepositoty.getGrnGvnDetailForCreditNote(isGrn,frList);
 		
 		if(!getGrnGvnForCreditNoteList.isEmpty()||getGrnGvnForCreditNoteList!=null) {
 			

@@ -34,6 +34,7 @@ import com.ats.webapi.model.rawmaterial.RmItemGroup;
 import com.ats.webapi.model.rawmaterial.RmItemSubCatList;
 import com.ats.webapi.model.rawmaterial.RmItemSubCategory;
 import com.ats.webapi.model.rawmaterial.RmRateVerification;
+import com.ats.webapi.repository.RawMaterialDetailsRepository;
 import com.ats.webapi.repository.RmRateVerificationListRepository;
 import com.ats.webapi.service.rawmaterial.RawMaterialService;
 
@@ -43,7 +44,8 @@ public class RawMaterialApiCotroller {
 
 	@Autowired
 	RawMaterialService rawMaterialService;
-	
+	@Autowired
+	RawMaterialDetailsRepository rawMaterialDetailsRepository;
 	@Autowired
 	RmRateVerificationListRepository rmRateVerificationListRepository;
 	//----------------------Get Data Of Raw Material Item Categories---------------
@@ -190,6 +192,34 @@ public class RawMaterialApiCotroller {
 		 
 		
 	}
+	@RequestMapping(value = { "/getAllRawMaterialByGroup" }, method = RequestMethod.POST)
+	public @ResponseBody RawMaterialDetailsList getAllRawMaterialByGroup(@RequestParam("grpId")int grpId )
+	{
+		RawMaterialDetailsList rawMaterialDetails=new RawMaterialDetailsList();
+		ErrorMessage errorMessage;
+		List<RawMaterialDetails> rawMaterialDetailsList=rawMaterialDetailsRepository.findByGrpIdAndDelStatus(grpId, 0);
+		
+		if(rawMaterialDetailsList!=null)
+		{
+			errorMessage=new ErrorMessage();
+			errorMessage.setError(false);
+			errorMessage.setMessage("RM Details Found Successfully");
+			
+			rawMaterialDetails.setErrorMessage(errorMessage);
+			rawMaterialDetails.setRawMaterialDetailsList(rawMaterialDetailsList);
+		}
+		else
+		{
+			errorMessage=new ErrorMessage();
+			errorMessage.setError(true);
+			errorMessage.setMessage("RM Details Not Found");
+			
+			rawMaterialDetails.setErrorMessage(errorMessage);
+		}
+		return rawMaterialDetails;
+		 
+		
+	}
 	//------------------------------------Get Rm Details------------------------------------
 	@RequestMapping(value = { "/getRawMaterialDetail" }, method = RequestMethod.POST)
 	public @ResponseBody RawMaterialDetails getRawMaterialDetail(@RequestParam ("rmId")int rmId)
@@ -265,10 +295,10 @@ public class RawMaterialApiCotroller {
 	//---------------------------------------getRateVerification------------------------------
 	
 	@RequestMapping(value = { "/getRmRateVerification" }, method = RequestMethod.POST)
-	public @ResponseBody RmRateVerification getRmRateVerification(@RequestParam("suppId")int suppId, @RequestParam("rmId")int rmId)
+	public @ResponseBody RmRateVerification getRmRateVerification(@RequestParam("suppId")int suppId,@RequestParam("rmId")int rmId,@RequestParam("grpId")int grpId)
 	{
-		
-		return rawMaterialService.getRmRateTaxVerification(suppId, rmId);
+		System.err.println(suppId+"suppId"+"rmId"+rmId);
+		return rawMaterialService.getRmRateTaxVerification(suppId, rmId,grpId);
 	}
 	
 	@RequestMapping(value = { "/getRmRateVerificationList" }, method = RequestMethod.POST)
@@ -371,9 +401,9 @@ public class RawMaterialApiCotroller {
 	//-------------------------getRmTax------------------------------
 	
 	@RequestMapping(value = { "/getUomAndTax" }, method = RequestMethod.POST)
-	public @ResponseBody GetUomAndTax getUomAndTax(@RequestParam("rmId")int rmId)
+	public @ResponseBody GetUomAndTax getUomAndTax(@RequestParam("rmId")int rmId,@RequestParam("grpId")int grpId)
 	{
-		GetUomAndTax getUomAndTax=rawMaterialService.getUomAndTax( rmId);
+		GetUomAndTax getUomAndTax=rawMaterialService.getUomAndTax(rmId,grpId);
 		return getUomAndTax;
 	}
 	//-----------------------------------Delete RM Tax--------------------------

@@ -130,6 +130,17 @@ public class MaterialRecNoteDetails implements Serializable{
 	@Column(name="varified_rate")
 	private float varifiedRate;
 
+	private int grpId;
+	
+	
+	public int getGrpId() {
+		return grpId;
+	}
+
+	public void setGrpId(int grpId) {
+		this.grpId = grpId;
+	}
+
 	public int getMrnDetailId() {
 		return mrnDetailId;
 	}

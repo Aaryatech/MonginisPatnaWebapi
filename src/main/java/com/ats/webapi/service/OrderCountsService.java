@@ -7,6 +7,6 @@ import com.ats.webapi.model.OrderCounts;
 
 public interface OrderCountsService {
 	
-	List<OrderCounts> findOrderCount(Date cDate);
+	List<OrderCounts> findOrderCount(String cDate);
 
 }

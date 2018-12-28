@@ -18,6 +18,7 @@ public interface MaterialRecNoteService {
 	GetMaterialRecNoteList getMaterialRecNote(List<String> status);
 
 	MaterialRecNote getMaterialRecNotesHeaderDetails(int mrnId);
+	MaterialRecNote getMaterialRecNotesHeaderDetailsNew(int mrnId);
 
 	MaterialRecNoteList getAllInwards();
 

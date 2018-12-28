@@ -45,8 +45,17 @@ public class GetCustomerBill {
 	@Column(name="user_name")
 	private String custName;
 	
+	@Column(name="user_gst_no")
+	private String userGstNo;
+	
+	@Column(name="user_phone")
+	private String userPhone;
+	
 	@Column(name="item_id")
 	private int itemId;
+	
+	@Column(name="item_hsncd")
+	private String hsnCode;
 	
 	@Column(name="item_name")
 	private String itemName;
@@ -104,8 +113,38 @@ public class GetCustomerBill {
 	    this.intDiscAmt = Math.round(discountAmt);
 	
 	}
-
+   
 	
+	public String getUserGstNo() {
+		return userGstNo;
+	}
+
+
+	public void setUserGstNo(String userGstNo) {
+		this.userGstNo = userGstNo;
+	}
+
+
+	public String getUserPhone() {
+		return userPhone;
+	}
+
+
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
+	}
+
+
+	public String getHsnCode() {
+		return hsnCode;
+	}
+
+
+	public void setHsnCode(String hsnCode) {
+		this.hsnCode = hsnCode;
+	}
+
+
 	public int getSellBillDetailNo() {
 		return sellBillDetailNo;
 	}

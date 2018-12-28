@@ -83,7 +83,7 @@ public class GrnGvnApiController {
 			@RequestParam("isGrn")List<String> isGrn) {
 
 		List<GrnGvnHeader> grnGvnHeaderList = new ArrayList<GrnGvnHeader>();
-		
+		System.out.println(" GRN GVN Header LIST /getGrnGvnHeaderAllFr "+isGrn.toString());
 		GrnGvnHeaderList headerList=new GrnGvnHeaderList();
 
 

@@ -58,7 +58,7 @@ public interface GrnGvnForCreditNoteRepositoty extends JpaRepository<GetGrnGvnFo
 			"        t_grn_gvn_header," + 
 			"        m_sp_cake s " + 
 			"    WHERE" + 
-			"        t_grn_gvn.is_grn=:isGrn" + 
+			"        t_grn_gvn.is_grn=:isGrn  AND t_grn_gvn.fr_id IN(:frList)" + 
 			"        AND t_grn_gvn.fr_id=m_franchisee.fr_id " + 
 			"        AND t_grn_gvn.grn_gvn_header_id=t_grn_gvn_header.grn_gvn_header_id " + 
 			"        AND  CASE " + 
@@ -71,6 +71,6 @@ public interface GrnGvnForCreditNoteRepositoty extends JpaRepository<GetGrnGvnFo
 			"        t_grn_gvn.grn_gvn_id "
 			, nativeQuery = true)
 	
-	List<GetGrnGvnForCreditNote> getGrnGvnDetailForCreditNote(@Param("isGrn") int isGrn);
+	List<GetGrnGvnForCreditNote> getGrnGvnDetailForCreditNote(@Param("isGrn") int isGrn,@Param("frList") List<String> frList);
 	
 }

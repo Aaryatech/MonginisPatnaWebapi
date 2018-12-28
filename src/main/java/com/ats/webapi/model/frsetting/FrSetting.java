@@ -31,8 +31,20 @@ public class FrSetting implements Serializable{
 	@Column(name="grn_gvn_no")
 	private int grnGvnNo;
 
+	@Column(name="ex_int")
+	private int spNo;
 
 	
+
+	public int getSpNo() {
+		return spNo;
+	}
+
+
+	public void setSpNo(int spNo) {
+		this.spNo = spNo;
+	}
+
 
 	public int getFrId() {
 		return frId;

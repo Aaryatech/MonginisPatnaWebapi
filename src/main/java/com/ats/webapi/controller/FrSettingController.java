@@ -110,5 +110,38 @@ public class FrSettingController {
 		return info;
 
 	}
+	@RequestMapping(value = { "/updateFrSettingSpNo" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateFrSettingSpNo(@RequestParam("frId") int frId) {
+
+		Info info = new Info();
+
+		int updateResponse = 0;
+
+		try {
+
+			System.out.println(
+					"Fr setting Para Received for Update /updateFrSettingSpNo " + frId );
+			updateResponse = frSettingRepo.updateFrSettingSpNo( frId);
+
+			if (updateResponse > 0) {
+
+				info.setError(false);
+				info.setMessage("success Updating fr seting Sp  no ");
+
+			} else {
+
+				info.setError(true);
+				info.setMessage("failure");
+			}
+
+		} catch (Exception e) {
+			System.out.println(
+					" /updateFrSettingGrnGvnNo Exce in Update fr Setting /FrSettingController " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return info;
+
+	}
 
 }
