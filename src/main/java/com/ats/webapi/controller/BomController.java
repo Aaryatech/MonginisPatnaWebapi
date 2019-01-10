@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.bom.BillOfMaterialDetailed;
 import com.ats.webapi.model.bom.BillOfMaterialHeader;
@@ -62,6 +63,63 @@ public class BomController {
 
 			}
 
+			if (billMatHeader != null) {
+
+				info.setError(false);
+				info.setMessage("insert successfull");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			System.out.println("Exce in Bom Insert " + e.getMessage());
+		}
+
+		return info;
+
+	}
+	
+	@RequestMapping(value = { "/updateBomWhileIssueFromStore" }, method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage updateBomWhileIssueFromStore(@RequestBody BillOfMaterialHeader billOfMaterialHeader) {
+
+		ErrorMessage info = new ErrorMessage();
+		
+		System.out.println("Input Req Param "+billOfMaterialHeader.toString());
+		try {
+
+			BillOfMaterialHeader billMatHeader = billOfMaterialRepository.save(billOfMaterialHeader);
+
+			List<BillOfMaterialDetailed> bomDetailList = billOfMaterialHeader.getBillOfMaterialDetailed();
+  
+				 bomDetailList = billOfMaterialDetailedRepository.save(billOfMaterialHeader.getBillOfMaterialDetailed());
+				 billMatHeader.setBillOfMaterialDetailed(bomDetailList);
+			 
+			List<BillOfMaterialDetailed> billOfMaterialDetailed=billOfMaterialDetailedRepository.findByReqIdAndExInt1AndRmType(billOfMaterialHeader.getReqId(),1,1);
+			 if(billOfMaterialDetailed.size()>0) {
+				 billOfMaterialHeader.setStatus(1);
+			 }else {
+				 
+				billOfMaterialDetailed=billOfMaterialDetailedRepository.findByReqIdAndExInt1AndRmType(billOfMaterialHeader.getReqId(),0,1);
+				
+				if(billOfMaterialDetailed.size()>0) {
+					
+					billOfMaterialDetailed=billOfMaterialDetailedRepository.findByReqIdAndExInt1AndRmType(billOfMaterialHeader.getReqId(),2,1);
+					
+					if(billOfMaterialDetailed.size()>0) {
+						billOfMaterialHeader.setStatus(1);
+					}else {
+						billOfMaterialHeader.setStatus(0);
+					}
+					 
+				}else {
+					billOfMaterialHeader.setStatus(2);
+				}
+			 }
+			
+			
+			 billMatHeader = billOfMaterialRepository.save(billOfMaterialHeader);
+			
+				 
 			if (billMatHeader != null) {
 
 				info.setError(false);

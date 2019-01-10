@@ -16,4 +16,10 @@ public interface BillOfMaterialDetailedRepository extends JpaRepository<BillOfMa
 	@Query(value=" select * from t_req_bom_detail where req_id=:reqId",nativeQuery=true)
 	List<BillOfMaterialDetailed> getBomdetailedListById(@Param("reqId")int reqId);
 
+	@Query(value=" select * from t_req_bom_detail where req_id=:reqId and rm_type=1",nativeQuery=true)
+	List<BillOfMaterialDetailed> getBomdetailedListByIdAndRmType(@Param("reqId")int reqId);
+
+	List<BillOfMaterialDetailed> findByReqIdAndExInt1(int reqId, int i);
+
+	List<BillOfMaterialDetailed> findByReqIdAndExInt1AndRmType(int reqId, int i, int j);
 }

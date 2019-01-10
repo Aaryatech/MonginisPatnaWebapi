@@ -37,9 +37,21 @@ public interface BillOfMaterialRepository extends JpaRepository<BillOfMaterialHe
 	 @Modifying
 	 @Query("UPDATE BillOfMaterialHeader SET status=4 WHERE production_id=:prodId and is_production=:isProduction")
 	int updateStatusWhileCompletProd(@Param("prodId")int prodId,@Param("isProduction")int isProduction);
+
 	
-	/*@Query(value=" update BillOfMaterialHeader set status=3 and req_id=:reqId")
-	int updatestatus(@Param("reqId")int reqId);*/
+	/*@Query(value="select * from t_req_bom where req_date BETWEEN :frmdate and :todate and del_status=0 "
+			+ "and status IN(:status) ",nativeQuery=true)*/
+	
+	@Query(value="select * from t_req_bom where   del_status=0 "
+			+ "and status IN(:status) ",nativeQuery=true)
+	List<BillOfMaterialHeader> getBOMListForStoreSWHeaderBmsAndStore(@Param("status") List<String> status);
+
+	@Query(value="select * from t_req_bom where req_date BETWEEN :frmdate and :todate and del_status=0 "
+			+ "and status IN(:status) ",nativeQuery=true)
+	List<BillOfMaterialHeader> getBOMListForStoreSWHeaderBmsAndStoreBetweenDate(@Param("frmdate")String frmdate,@Param("todate") String todate,
+			@Param("status")List<String> status);
+	
+ 
 
 	
 	

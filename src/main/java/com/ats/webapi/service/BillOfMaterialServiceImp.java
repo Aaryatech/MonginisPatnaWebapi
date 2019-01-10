@@ -79,6 +79,27 @@ public class BillOfMaterialServiceImp implements BillOfMaterialService{
 		return billOfMaterial;
 		
 	}
+	
+	@Override
+	public BillOfMaterialHeader getBomdetailedListByIdAndRmType(int reqId) {
+		BillOfMaterialHeader billOfMaterial = new BillOfMaterialHeader();
+		try
+		{
+			billOfMaterial=billOfMaterialRepository.getByReqstId(reqId);
+			
+			
+				List<BillOfMaterialDetailed> billOfMaterialDetailed= new ArrayList<BillOfMaterialDetailed>();
+				billOfMaterialDetailed=billOfMaterialDetailedRepository.getBomdetailedListByIdAndRmType(reqId);
+				billOfMaterial.setBillOfMaterialDetailed(billOfMaterialDetailed);
+				
+			
+					
+		}catch(Exception e)
+		{
+			System.out.println("in Implementation  "+e.getMessage());
+		}
+		return billOfMaterial;
+	}
 
 	@Override
 	public GetBillOfMaterialList getallBOMHeaderList() {
@@ -166,6 +187,61 @@ public class BillOfMaterialServiceImp implements BillOfMaterialService{
 		}
 		return getBillOfMaterialList;
 	}
+
+	@Override
+	public GetBillOfMaterialList getBOMListForStoreSWHeaderBmsAndStore(List<String> status) {
+		GetBillOfMaterialList getBillOfMaterialList = new GetBillOfMaterialList();
+		ErrorMessage errorMessage = new ErrorMessage();
+		 
+		try
+		{
+			List<BillOfMaterialHeader> billOfMaterialHeaderList =  billOfMaterialRepository.getBOMListForStoreSWHeaderBmsAndStore(status);
+			
+			 
+			getBillOfMaterialList.setBillOfMaterialHeader(billOfMaterialHeaderList);
+			errorMessage.setError(false);
+			errorMessage.setMessage("success");
+			getBillOfMaterialList.setErrorMessage(errorMessage);
+			
+			
+		}catch(Exception e)
+		{
+			e.getStackTrace();
+			errorMessage.setError(true);
+			errorMessage.setMessage("unsuccess");
+			getBillOfMaterialList.setErrorMessage(errorMessage);
+		}
+		return getBillOfMaterialList;
+	}
+
+	@Override
+	public GetBillOfMaterialList getBOMListForStoreSWHeaderBmsAndStoreBetweenDate(String frmdate, String todate,
+			List<String> status) {
+		GetBillOfMaterialList getBillOfMaterialList = new GetBillOfMaterialList();
+		ErrorMessage errorMessage = new ErrorMessage();
+		 
+		try
+		{
+			List<BillOfMaterialHeader> billOfMaterialHeaderList =  billOfMaterialRepository.getBOMListForStoreSWHeaderBmsAndStoreBetweenDate(frmdate,todate,status);
+			
+			 
+			getBillOfMaterialList.setBillOfMaterialHeader(billOfMaterialHeaderList);
+			errorMessage.setError(false);
+			errorMessage.setMessage("success");
+			getBillOfMaterialList.setErrorMessage(errorMessage);
+			
+			
+		}catch(Exception e)
+		{
+			e.getStackTrace();
+			errorMessage.setError(true);
+			errorMessage.setMessage("unsuccess");
+			getBillOfMaterialList.setErrorMessage(errorMessage);
+		}
+		return getBillOfMaterialList;
+	}
+
+	
 
 	 
 	

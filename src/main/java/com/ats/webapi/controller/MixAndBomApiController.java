@@ -180,6 +180,45 @@ public class MixAndBomApiController {
 
 	}
 	
+	@RequestMapping(value = { "/getBOMListForStoreSWHeaderBmsAndStore" }, method = RequestMethod.POST)
+	@ResponseBody
+	public GetBillOfMaterialList getBOMListForStoreSWHeaderBmsAndStore( @RequestParam("status")List<String> status ) {
+		
+		GetBillOfMaterialList getBillOfMaterialList=new GetBillOfMaterialList();
+		try {
+			
+			
+			getBillOfMaterialList = billOfMaterialService.getBOMListForStoreSWHeaderBmsAndStore(status);
+
+
+		} catch (Exception e) {
+				e.printStackTrace();
+			System.out.println("exception in order list rest controller" + e.getMessage());
+		}
+		return getBillOfMaterialList;
+
+	}
+	
+	@RequestMapping(value = { "/getBOMListForStoreSWHeaderBmsAndStoreBetweenDate" }, method = RequestMethod.POST)
+	@ResponseBody
+	public GetBillOfMaterialList getBOMListForStoreSWHeaderBmsAndStoreBetweenDate(@RequestParam("frmdate")String frmdate, @RequestParam("todate")String todate,
+			@RequestParam("status")List<String> status ) {
+		
+		GetBillOfMaterialList getBillOfMaterialList=new GetBillOfMaterialList();
+		try {
+			
+			
+			getBillOfMaterialList = billOfMaterialService.getBOMListForStoreSWHeaderBmsAndStoreBetweenDate(frmdate,todate,status);
+
+
+		} catch (Exception e) {
+				e.printStackTrace();
+			System.out.println("exception in order list rest controller" + e.getMessage());
+		}
+		return getBillOfMaterialList;
+
+	}
+	
 	@RequestMapping(value = { "/getallBOMHeaderList" }, method = RequestMethod.GET)
 	@ResponseBody
 	public GetBillOfMaterialList getallBOMHeaderList() {
@@ -208,6 +247,24 @@ public class MixAndBomApiController {
 		try {
 			
 			billOfMaterialHeader = billOfMaterialService.gettBomdetaildwithId(reqId);
+			
+
+		} catch (Exception e) {
+				e.printStackTrace();
+			System.out.println("exception in order list rest controller" + e.getMessage());
+		}
+		return billOfMaterialHeader;
+
+	}
+	
+	@RequestMapping(value = { "/getBomdetailedListByIdAndRmType" }, method = RequestMethod.POST)
+	@ResponseBody
+	public BillOfMaterialHeader getBomdetailedListByIdAndRmType(@RequestParam("reqId")int reqId) {
+		
+		BillOfMaterialHeader billOfMaterialHeader=new BillOfMaterialHeader();
+		try {
+			
+			billOfMaterialHeader = billOfMaterialService.getBomdetailedListByIdAndRmType(reqId);
 			
 
 		} catch (Exception e) {

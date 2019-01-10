@@ -14,9 +14,16 @@ public interface BillOfMaterialService{
 
 	BillOfMaterialHeader gettBomdetaildwithId(int reqId);
 
+	BillOfMaterialHeader getBomdetailedListByIdAndRmType(int reqId);
+	
 	GetBillOfMaterialList getallBOMHeaderList();
 
 	GetBillOfMaterialList getBillOfMaterialBmsToStoreDate(int fromDept, int toDept, List<String> status);
+
+	GetBillOfMaterialList getBOMListForStoreSWHeaderBmsAndStore(List<String> status);
+
+	GetBillOfMaterialList getBOMListForStoreSWHeaderBmsAndStoreBetweenDate(String frmdate, String todate,
+			List<String> status);
 
 	/*ErrorMessage updatestatus(int reqId);*/
 
