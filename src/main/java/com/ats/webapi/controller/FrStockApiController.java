@@ -92,6 +92,8 @@ public class FrStockApiController {
 	@Autowired
 	StockPurchaseRepository stockPurchaseRepository;
 	
+	@Autowired
+	PostFrOpStockHeaderRepository frOpStockHeaderRepository;
 	
 	@RequestMapping(value = "/getCurrentOpStock", method = RequestMethod.POST)
 	public @ResponseBody List<PostFrItemStockDetail> getCurrentOpStock(@RequestParam("frId") int frId,@RequestParam("itemIdList") List<Integer> itemIdList , @RequestParam("catId") int catId) {
@@ -731,7 +733,56 @@ public class FrStockApiController {
 		return frItemStockHeader;
 
 	}
+	@RequestMapping(value = "/checkIsMonthClosed", method = RequestMethod.POST)
+	public @ResponseBody Info checkIsMonthClosed(@RequestParam("frId") int frId) {
 
+		System.out.println("inside rest checkIsMonthClosed");
+
+		Info info = new Info();
+
+		info.setError(false);
+		info.setMessage("month end process completed");
+		DateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
+		Date date = new Date();
+		System.out.println(dateFormat1.format(date));
+
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTime(date);
+
+		Integer dayOfMonth = cal1.get(Calendar.DATE);
+
+		int calCurrentMonth = cal1.get(Calendar.MONTH) + 1;
+		System.out.println("Current Cal Month " + calCurrentMonth);
+		int prevMonth = 0;
+
+		if (calCurrentMonth == 1) {
+			prevMonth = 12;
+		} else {
+			prevMonth = calCurrentMonth - 1;
+		}
+
+		// frOpStockHeaderRepository
+		List<PostFrItemStockHeader> frItemStockHeaderList = new ArrayList<>();
+
+		frItemStockHeaderList = frOpStockHeaderRepository.findByFrIdAndMonth(frId, prevMonth);
+		try {
+			for (PostFrItemStockHeader header : frItemStockHeaderList) {
+
+				if (header.getIsMonthClosed() == 0) {
+
+					info.setError(true);
+					info.setMessage("month end process pending");
+				}
+
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return info;
+
+	}
 	@RequestMapping(value = { "/postFrOpStock" }, method = RequestMethod.POST)
 	public @ResponseBody Info postFrOpStock(@RequestBody PostFrItemStockHeader postFrItemStockHeader)
 			throws ParseException, JsonParseException, JsonMappingException, IOException {
@@ -796,6 +847,25 @@ public class FrStockApiController {
 	public @ResponseBody List<PostFrItemStockHeader> getCurrentMonthOfCatId(@RequestParam("frId") int frId) {
  
 		List<PostFrItemStockHeader> getCurrentMonthOfCatId = postFrOpStockHeaderRepository.findByFrIdAndIsMonthClosed(frId,0);
+
+		return getCurrentMonthOfCatId;
+
+	}
+	
+
+	// getCurrentMonthByCatIdFrId
+	@RequestMapping(value = "/getCurrentMonthByCatIdFrId", method = RequestMethod.POST)
+	public @ResponseBody PostFrItemStockHeader getCurrentMonthByCatIdFrId(@RequestParam("frId") int frId,
+			@RequestParam("catId") int catId) {
+		PostFrItemStockHeader getCurrentMonthOfCatId = new PostFrItemStockHeader();
+		try {
+			getCurrentMonthOfCatId = postFrOpStockHeaderRepository.findByCatIdAndFrIdAndIsMonthClosed(catId, frId, 0);
+
+			System.err.println("getCurrentMonthByCatIdFrId " + getCurrentMonthOfCatId.toString());
+		} catch (Exception e) {
+			System.err.println("Exce in getCurrentMonthByCatIdFrId " + e.getMessage());
+			e.printStackTrace();
+		}
 
 		return getCurrentMonthOfCatId;
 

@@ -38,6 +38,10 @@ public interface PostFrOpStockHeaderRepository extends JpaRepository<PostFrItemS
 
 	PostFrItemStockHeader findByFrIdAndCatIdAndIsMonthClosed(int parseInt, int catId, int i);
 
+	List<PostFrItemStockHeader> findByFrIdAndMonth(int frId, int prevMonth);
+
+	PostFrItemStockHeader findByCatIdAndFrIdAndIsMonthClosed(int catId, int frId, int i);
+
 	
 //	PostFrItemStockHeader findByFrIdAndisMonthClosed(int frId,int stockStatus);
 	
