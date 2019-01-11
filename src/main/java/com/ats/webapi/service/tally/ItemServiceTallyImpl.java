@@ -68,4 +68,30 @@ public class ItemServiceTallyImpl implements TallyItemService{
 		
 	}
 
+	@Override
+	public ItemList getAllItemsByCatId(int catId) {
+		 List<TallyItem> itemList=tallyItemRepository.findByIsTallySyncAndCatId(catId);
+			
+			ItemList allItemList=new ItemList();
+			ErrorMessage errorMessage=new ErrorMessage();
+			
+			if(itemList==null)
+			{
+			
+				errorMessage.setError(true);
+				errorMessage.setMessage("Item Not Found");
+				
+				allItemList.setErrorMessage(errorMessage);
+			}
+			else
+			{
+				errorMessage.setError(false);
+				errorMessage.setMessage("Item Found Successfully");
+				
+				allItemList.setItemList(itemList);
+	            allItemList.setErrorMessage(errorMessage);			
+			}
+			return allItemList;
+	}
+
 }

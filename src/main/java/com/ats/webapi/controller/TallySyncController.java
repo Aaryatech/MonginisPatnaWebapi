@@ -93,6 +93,15 @@ public class TallySyncController {
 		    return itemList;
 		    
 	  }
+	
+	@RequestMapping(value = { "/getAllExcelItemsByCatId" }, method = RequestMethod.POST)
+	public @ResponseBody ItemList getAllExcelItemsByCatId(@RequestParam("catId") int catId)
+	  {
+
+		    ItemList itemList=itemService.getAllItemsByCatId(catId);
+		    return itemList;
+		    
+	  }
 	@RequestMapping(value = { "/getAllExcelSpCake" }, method = RequestMethod.GET)
 	public @ResponseBody SpCakeList getAllExcelSpCake()
 	  {

@@ -30,6 +30,7 @@ import com.ats.webapi.model.grngvn.PostCreditNoteHeader;
 import com.ats.webapi.model.grngvn.PostCreditNoteHeaderList;
 import com.ats.webapi.model.grngvn.TempGrnGvnBeanUp;
 import com.ats.webapi.model.remarks.GetAllRemarksList;
+import com.ats.webapi.repository.ConfigureFrListRepository;
 import com.ats.webapi.repository.FlavourRepository;
 import com.ats.webapi.repository.FranchiseForDispatchRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
@@ -121,6 +122,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 @RestController
 public class RestApiController {
 
@@ -141,11 +143,12 @@ public class RestApiController {
 		return date;
 
 	}
+
 	@Autowired
 	SpCakeOrderUpdateRepository spCakeOrderUpdateRepository;
 	@Autowired
 	ItemStockRepository itemStockRepository;
-	
+
 	@Autowired
 	SpCakeOrderHisRepository spCakeOrderHisRepository;
 	@Autowired
@@ -344,32 +347,32 @@ public class RestApiController {
 	@Autowired
 	ItemRepository itemRepository;
 	@Autowired
-	UserRepository userRepo;//20 March
-	
+	UserRepository userRepo;// 20 March
+
 	@Autowired
-	OrderLogRespository  logRespository;
-	
+	OrderLogRespository logRespository;
+
 	@Autowired
 	RouteRepository routeRepository;
-	
+
 	@Autowired
 	FlavourRepository flavourRepository;
-	
+
 	@Autowired
 	SpMessageRepository spMessageRepository;
-	
+
 	@Autowired
 	MessageRepository messageRepository;
-	
+
 	@Autowired
-    FranchiseeRepository franchiseeRepository;
+	FranchiseeRepository franchiseeRepository;
 
 	@Autowired
 	FranchiseSupRepository franchiseSupRepository;
-	
+
 	@Autowired
 	SpecialCakeRepository specialcakeRepository;
-	
+
 	@RequestMapping(value = { "/changeAdminUserPass" }, method = RequestMethod.POST)
 	public @ResponseBody Info changeAdminUserPass(@RequestBody User user) {
 
@@ -377,7 +380,7 @@ public class RestApiController {
 
 		User result = userRepo.save(user);
 
-		if (result !=null) {
+		if (result != null) {
 
 			info.setError(false);
 			info.setMessage("Password changed successfully");
@@ -392,7 +395,6 @@ public class RestApiController {
 		return info;
 
 	}
-	
 
 	// This web api Not used Anywhere
 	@RequestMapping(value = { "/updatePBTime" }, method = RequestMethod.POST)
@@ -499,40 +501,42 @@ public class RestApiController {
 	GetGrnGvnForCreditNoteService getGrnGvnForCreditNoteService;
 
 	@RequestMapping(value = "/grnGvnDetailForCreditNote", method = RequestMethod.POST)
-	public @ResponseBody GetGrnGvnForCreditNoteList grnGvnDetailForCreditNote(@RequestParam("isGrn") int isGrn,@RequestParam("frList") List<String> frList) {
+	public @ResponseBody GetGrnGvnForCreditNoteList grnGvnDetailForCreditNote(@RequestParam("isGrn") int isGrn,
+			@RequestParam("frList") List<String> frList) {
 		System.out.println("inside rest");
 
-		System.out.println("Rest : is Grn Received /grnGvnDetailForCreditNote "+isGrn);
-		
-		GetGrnGvnForCreditNoteList getGrnGvnForCreditNoteList = getGrnGvnForCreditNoteService.getGrnGvnForCreditNote(isGrn,frList);
+		System.out.println("Rest : is Grn Received /grnGvnDetailForCreditNote " + isGrn);
+
+		GetGrnGvnForCreditNoteList getGrnGvnForCreditNoteList = getGrnGvnForCreditNoteService
+				.getGrnGvnForCreditNote(isGrn, frList);
 
 		return getGrnGvnForCreditNoteList;
 
 	}
 
-	//comment 24 FEb
+	// comment 24 FEb
 	@RequestMapping(value = "/updateStoreGvn", method = RequestMethod.POST)
 	public @ResponseBody Info updateStoreGvn(@RequestBody List<TempGrnGvnBeanUp> dataList) {
-		
-		System.out.println("inside rest /updateStoreGvn : input para = dataList "+dataList.toString());
 
-		Info info=new Info();
+		System.out.println("inside rest /updateStoreGvn : input para = dataList " + dataList.toString());
+
+		Info info = new Info();
 		System.out.println("inside rest");
 
 		TempGrnGvnBeanUp data;
-		
-		int x=0;
-		
-		for(int i=0;i<dataList.size();i++) {
-			data=new TempGrnGvnBeanUp();
-			 data=dataList.get(i);
-			
-			x = updateGrnGvnService.updateGrnGvnForStore(data.getApprovedLoginStore(), data.getAprQtyStore(), data.getApprovedDateTimeStore(), 
-					data.getApprovedRemarkStore(),
-					data.getGrnGvnStatus(), data.getGrnGvnId());
-			
+
+		int x = 0;
+
+		for (int i = 0; i < dataList.size(); i++) {
+			data = new TempGrnGvnBeanUp();
+			data = dataList.get(i);
+
+			x = updateGrnGvnService.updateGrnGvnForStore(data.getApprovedLoginStore(), data.getAprQtyStore(),
+					data.getApprovedDateTimeStore(), data.getApprovedRemarkStore(), data.getGrnGvnStatus(),
+					data.getGrnGvnId());
+
 		}
-		
+
 		if (x > 0) {
 
 			info.setError(false);
@@ -552,19 +556,19 @@ public class RestApiController {
 
 		Info info = new Info();
 		try {
-			System.out.println("inside rest /updateGateGrn : input para = dataList "+dataList.toString());
-			
-			int x=0;
+			System.out.println("inside rest /updateGateGrn : input para = dataList " + dataList.toString());
+
+			int x = 0;
 			TempGrnGvnBeanUp data;
-			
-			for(int i=0;i<dataList.size();i++) {
-				data=new TempGrnGvnBeanUp();
-				 data=dataList.get(i);
-				
-				x = updateGrnGvnService.updateGrnForGate(data.getApprovedLoginGate(), data.getAprQtyGate(), data.getApproveimedDateTimeGate(), 
-						data.getApprovedRemarkGate(),
-						data.getGrnGvnStatus(), data.getGrnGvnId());
-			
+
+			for (int i = 0; i < dataList.size(); i++) {
+				data = new TempGrnGvnBeanUp();
+				data = dataList.get(i);
+
+				x = updateGrnGvnService.updateGrnForGate(data.getApprovedLoginGate(), data.getAprQtyGate(),
+						data.getApproveimedDateTimeGate(), data.getApprovedRemarkGate(), data.getGrnGvnStatus(),
+						data.getGrnGvnId());
+
 			}
 
 			if (x > 0) {
@@ -586,47 +590,47 @@ public class RestApiController {
 		return info;
 
 	}
-//comment 24 FEb
+
+	// comment 24 FEb
 	@RequestMapping(value = "/updateAccGrn", method = RequestMethod.POST)
 	public @ResponseBody Info updateAccGrn(@RequestBody List<TempGrnGvnBeanUp> dataList) {
 
 		Info info = new Info();
 		try {
-			System.out.println("inside rest /updateAccGrn : Param "+ dataList.toString());
-		
-			int x=0;
-			TempGrnGvnBeanUp data;
-			for(int i=0;i<dataList.size();i++) {
-				data=new TempGrnGvnBeanUp();
-				 data=dataList.get(i);
+			System.out.println("inside rest /updateAccGrn : Param " + dataList.toString());
 
-					 x = updateGrnGvnService.updateGrnForAcc(data.getApprovedLoginAcc(), data.getAprQtyAcc(), data.getApprovedDateTimeAcc(), data.getApprovedRemarkAcc(),
-							data.getGrnGvnStatus(), data.getAprTaxableAmt(),data.getAprTotalTax(),data.getAprSgstRs(),data.getAprCgstRs(),
-							data.getAprIgstRs(),data.getAprGrandTotal(),data.getAprROff(),
-							data.getGrnGvnId());
-			
+			int x = 0;
+			TempGrnGvnBeanUp data;
+			for (int i = 0; i < dataList.size(); i++) {
+				data = new TempGrnGvnBeanUp();
+				data = dataList.get(i);
+
+				x = updateGrnGvnService.updateGrnForAcc(data.getApprovedLoginAcc(), data.getAprQtyAcc(),
+						data.getApprovedDateTimeAcc(), data.getApprovedRemarkAcc(), data.getGrnGvnStatus(),
+						data.getAprTaxableAmt(), data.getAprTotalTax(), data.getAprSgstRs(), data.getAprCgstRs(),
+						data.getAprIgstRs(), data.getAprGrandTotal(), data.getAprROff(), data.getGrnGvnId());
+
 			}
 
 			if (x > 0) {
 
 				info.setError(false);
 				info.setMessage("Success");
-				
+
 			} else {
 
 				info.setError(true);
 				info.setMessage("Failed");
-				
 
 			}
 
 		} catch (Exception e) {
-			
+
 			System.out.println("/Rest Api Exce in Updating Gate Grn Gvn Record /updateAccGrn" + e.getMessage());
 			e.printStackTrace();
-			
+
 		}
-		
+
 		return info;
 
 	}
@@ -711,12 +715,9 @@ public class RestApiController {
 		return billsForFrLisr;
 
 	}
-	
-	
+
 	@RequestMapping(value = "/getBillsForManGrnBackEndFr", method = RequestMethod.POST)
-	public @ResponseBody GetBillsForFrList getBillsForManGrnBackEndFr(@RequestParam("frId") int frId
-			) {
-		
+	public @ResponseBody GetBillsForFrList getBillsForManGrnBackEndFr(@RequestParam("frId") int frId) {
 
 		GetBillsForFrList billsForFrLisr = getBillsForFrService.getAllBillForManGrnBackEnd(frId);
 		System.out.println("GEt BillS for Fr " + billsForFrLisr.toString());
@@ -895,14 +896,16 @@ public class RestApiController {
 		return grnItemConfigList;
 
 	}
-//21 march Front End Manual GRN
+
+	// 21 march Front End Manual GRN
 	@RequestMapping(value = "/getItemsForManGrn", method = RequestMethod.POST)
-	public @ResponseBody GetGrnItemConfigList getItemsForManGrn(@RequestParam("frId") int frId,@RequestParam("billNo") int billNo) {
+	public @ResponseBody GetGrnItemConfigList getItemsForManGrn(@RequestParam("frId") int frId,
+			@RequestParam("billNo") int billNo) {
 		System.out.println("inside rest /getItemsForManGrn");
 		GetGrnItemConfigList grnItemConfigList = null;
 
 		try {
-			
+
 			grnItemConfigList = getGrnItemConfigService.getItemForManualGrn(billNo, frId);
 
 			System.out.println("grn Item getItemForManualGrn  Rest: " + grnItemConfigList.toString());
@@ -1086,15 +1089,17 @@ public class RestApiController {
 		return frNameIdByRouteIdList;
 
 	}
-	
+
 	@RequestMapping(value = "/getFranchiseForDispatch", method = RequestMethod.POST)
 	public @ResponseBody List<FranchiseForDispatch> getFranchiseForDispatch(@RequestParam("routeId") int routeId) {
 
-		List<FranchiseForDispatch> frNameIdByRouteIdList = franchiseForDispatchRepository.getFranchiseForDispatch(routeId);
+		List<FranchiseForDispatch> frNameIdByRouteIdList = franchiseForDispatchRepository
+				.getFranchiseForDispatch(routeId);
 
 		return frNameIdByRouteIdList;
 
 	}
+
 	@RequestMapping(value = "/getBillDetails", method = RequestMethod.POST)
 	public @ResponseBody GetBillDetailsList getBillDetails(@RequestParam("billNo") int billNo) {
 		System.out.println("inside rest");
@@ -1119,9 +1124,9 @@ public class RestApiController {
 	 * }
 	 */
 
-//	@Autowired
-	//BillLogRepo saveBillLogRepo;
-	
+	// @Autowired
+	// BillLogRepo saveBillLogRepo;
+
 	@RequestMapping(value = { "/insertBillData" }, method = RequestMethod.POST)
 
 	public @ResponseBody Info postBillData(@RequestBody PostBillDataCommon postBillDataCommon)
@@ -1131,14 +1136,14 @@ public class RestApiController {
 
 		List<PostBillHeader> jsonBillHeader = null;
 		List<PostBillDetail> jsonBillDetail;
-		
-		
-		/*BillLog log=new BillLog();
-		
-		log.setBillData(postBillDataCommon.toString());
-		log.setUserId(0);
-		
-		BillLog billLogResponse=saveBillLogRepo.save(log);*/
+
+		/*
+		 * BillLog log=new BillLog();
+		 * 
+		 * log.setBillData(postBillDataCommon.toString()); log.setUserId(0);
+		 * 
+		 * BillLog billLogResponse=saveBillLogRepo.save(log);
+		 */
 
 		Info info = new Info();
 		try {
@@ -1521,12 +1526,11 @@ public class RestApiController {
 
 		List<Orders> participantJsonList;
 		List<Orders> jsonResult;
-		
-		
-		OrderLog log=new OrderLog();
+
+		OrderLog log = new OrderLog();
 		log.setFrId(orderJson.get(0).getFrId());
 		log.setJson(orderJson.toString());
-		
+
 		logRespository.save(log);
 
 		System.out.println("Inside Place Order " + orderJson.toString());
@@ -1550,24 +1554,25 @@ public class RestApiController {
 		return spCakeOrderRes;
 
 	}
+
 	// Place SpCake Order
-		@RequestMapping(value = { "/updateSpCakeOrder" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "/updateSpCakeOrder" }, method = RequestMethod.POST)
 
-		public @ResponseBody SpCakeOrderUpdate updateSpCakeOrder(@RequestBody SpCakeOrderUpdate orderJson)
-				throws ParseException, JsonParseException, JsonMappingException, IOException {
+	public @ResponseBody SpCakeOrderUpdate updateSpCakeOrder(@RequestBody SpCakeOrderUpdate orderJson)
+			throws ParseException, JsonParseException, JsonMappingException, IOException {
 
-			System.out.println("Inside Place Order " + orderJson.toString());
+		System.out.println("Inside Place Order " + orderJson.toString());
 
-			SpCakeOrderUpdate spCakeOrderRes = spCakeOrderUpdateRepository.save(orderJson);
+		SpCakeOrderUpdate spCakeOrderRes = spCakeOrderUpdateRepository.save(orderJson);
 
-			return spCakeOrderRes;
+		return spCakeOrderRes;
 
-		}
+	}
+
 	@RequestMapping(value = { "/getSpOrderBySpOrderNo" }, method = RequestMethod.POST)
 
 	public @ResponseBody SpCakeOrders getSpOrderBySpOrderNo(@RequestParam("spOrderNo") int spOrderNo)
 			throws ParseException, JsonParseException, JsonMappingException, IOException {
-
 
 		SpCakeOrders spCakeOrderRes = spCakeOrdersRepository.findBySpOrderNo(spOrderNo);
 
@@ -1593,15 +1598,14 @@ public class RestApiController {
 		List<String> spCakeCodesResponse = specialcakeService.searchSpecialCakeSpCodes(items, frId, menuId);
 
 		return spCakeCodesResponse;
- 
+
 	}
 
 	// Search Special Cake Order History
 	@RequestMapping("/SpCakeOrderHistory")
-	public @ResponseBody SpCkOrderHisList searchSpCakeOrderHistory(
-			@RequestParam String spDeliveryDt, String frCode) {
+	public @ResponseBody SpCkOrderHisList searchSpCakeOrderHistory(@RequestParam String spDeliveryDt, String frCode) {
 
-		SpCkOrderHisList spCakeOrderList = spCakeOrdersService.searchOrderHistory( spDeliveryDt, frCode);
+		SpCkOrderHisList spCakeOrderList = spCakeOrdersService.searchOrderHistory(spDeliveryDt, frCode);
 		return spCakeOrderList;
 
 	}
@@ -1613,37 +1617,37 @@ public class RestApiController {
 		SpCkOrderHis spCakeOrder = spCakeOrderHisRepository.findByOrderNo(orderNo);
 		return spCakeOrder;
 	}
-	
+
 	@RequestMapping(value = { "/getSpCkOrderForExBill" }, method = RequestMethod.POST)
 	@ResponseBody
-	public SpHistoryExBill getSpCkOrderForExBill(@RequestParam("orderNo") String orderNo,@RequestParam("date") String date,@RequestParam("menuId") List<String> menuId,@RequestParam("frId") int frId) {
+	public SpHistoryExBill getSpCkOrderForExBill(@RequestParam("orderNo") String orderNo,
+			@RequestParam("date") String date, @RequestParam("menuId") List<String> menuId,
+			@RequestParam("frId") int frId) {
 
-		SpHistoryExBill spHistoryExBill=new SpHistoryExBill();
+		SpHistoryExBill spHistoryExBill = new SpHistoryExBill();
 		try {
-			if(orderNo.equalsIgnoreCase("0"))
-			{
-				
-				List<SpCkOrderHis> spCakeOrder = spCakeOrderHisRepository.findByOrdersForExBill(date,menuId,frId);
-				List<GetRegSpCakeOrders> regularSpCkOrders=getRegSpCakeOrdersRepository.findByOrdersForExBill(date,menuId,frId);
+			if (orderNo.equalsIgnoreCase("0")) {
+
+				List<SpCkOrderHis> spCakeOrder = spCakeOrderHisRepository.findByOrdersForExBill(date, menuId, frId);
+				List<GetRegSpCakeOrders> regularSpCkOrders = getRegSpCakeOrdersRepository.findByOrdersForExBill(date,
+						menuId, frId);
 				spHistoryExBill.setSpCakeOrder(spCakeOrder);
 				spHistoryExBill.setRegularSpCkOrders(regularSpCkOrders);
-				
-			}
-			else
-			{
+
+			} else {
 				List<SpCkOrderHis> spCakeOrder = spCakeOrderHisRepository.findByOrderNoForEx(orderNo);
-				List<GetRegSpCakeOrders> regularSpCkOrders=getRegSpCakeOrdersRepository.findByOrderNo(orderNo);
+				List<GetRegSpCakeOrders> regularSpCkOrders = getRegSpCakeOrdersRepository.findByOrderNo(orderNo);
 				spHistoryExBill.setSpCakeOrder(spCakeOrder);
 				spHistoryExBill.setRegularSpCkOrders(regularSpCkOrders);
-				
+
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return spHistoryExBill;
 	}
+
 	// Search Special Cake Order History
 	@RequestMapping("/orderHistory")
 	public @ResponseBody ItemOrderList searchOrderHistory(@RequestParam int catId, @RequestParam String deliveryDt,
@@ -1691,40 +1695,40 @@ public class RestApiController {
 
 		return jsonResult;
 	}
-//23 March updateUser
+
+	// 23 March updateUser
 	@Autowired
 	UserRepository updateUserRepo;
-	
+
 	@RequestMapping(value = { "/updateUser" }, method = RequestMethod.POST)
 	@ResponseBody
 	public Info updateUser(@RequestBody User user) {
 
-		Info info=new Info();
+		Info info = new Info();
 		int result;
-		
+
 		try {
-			
-			if(user.getDelStatus()==0) {
-			result=updateUserRepo.updateUser(user.getId(), user.getPassword(), user.getUsertype(), user.getDeptId());
-			}else {
-				result=updateUserRepo.delteUser(user.getId(), user.getDelStatus());
+
+			if (user.getDelStatus() == 0) {
+				result = updateUserRepo.updateUser(user.getId(), user.getPassword(), user.getUsertype(),
+						user.getDeptId());
+			} else {
+				result = updateUserRepo.delteUser(user.getId(), user.getDelStatus());
 			}
-			if(result>0) {
+			if (result > 0) {
 				info.setError(false);
 				info.setMessage("success Update/delete User");
-			}else {
+			} else {
 				info.setError(true);
 				info.setMessage("Failed Updating/deleting User");
 			}
-		}
-		catch (Exception e) {
-			System.out.println("Exc in updating user/deleting user" +e.getMessage());
+		} catch (Exception e) {
+			System.out.println("Exc in updating user/deleting user" + e.getMessage());
 			e.printStackTrace();
 		}
 		return info;
 	}
-	
-	
+
 	// Save Rate
 	@RequestMapping(value = { "/insertRate" }, method = RequestMethod.POST)
 	@ResponseBody
@@ -1837,18 +1841,18 @@ public class RestApiController {
 		item.setItemId(itemId);
 		item.setShelfLife(itemShelfLife);
 
-		Item jsonResult = item= itemRepository.save(item);
-		 try {
-			    List<String> frTokens=franchiseSupRepository.findTokens();
+		Item jsonResult = item = itemRepository.save(item);
+		try {
+			List<String> frTokens = franchiseSupRepository.findTokens();
 
-			 for(String token:frTokens) {
-	          Firebase.sendPushNotifForCommunication(token,"Item Details Updated","Changes have been made in OPS at item level, SP level, in the rates. Kindly refer the OPS for exact changes made.","inbox");
-			 }
-	         }
-	         catch(Exception e2)
-	         {
-		       e2.printStackTrace();
-	         }
+			for (String token : frTokens) {
+				Firebase.sendPushNotifForCommunication(token, "Item Details Updated",
+						"Changes have been made in OPS at item level, SP level, in the rates. Kindly refer the OPS for exact changes made.",
+						"inbox");
+			}
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
 		return jsonResult;
 	}
 
@@ -1892,38 +1896,37 @@ public class RestApiController {
 	}
 
 	@RequestMapping(value = "/updateFrConfMenuTime")
-	public @ResponseBody Info updateFrConf(@RequestParam ("frIdList") List<Integer> frIdList,@RequestParam("menuId")int menuId,
-			@RequestParam("fromTime")String fromTime,@RequestParam("toTime")String toTime) {
-		Info info=new Info();
-		int result=0;
-		System.err.println("from time received " +fromTime + "to time  " +toTime);
-		System.err.println("Fr id List " +frIdList.toString());
+	public @ResponseBody Info updateFrConf(@RequestParam("frIdList") List<Integer> frIdList,
+			@RequestParam("menuId") int menuId, @RequestParam("fromTime") String fromTime,
+			@RequestParam("toTime") String toTime) {
+		Info info = new Info();
+		int result = 0;
+		System.err.println("from time received " + fromTime + "to time  " + toTime);
+		System.err.println("Fr id List " + frIdList.toString());
 		try {
-		if(frIdList.contains(0)) {
-			System.err.println("fr id is zero");
-			result=connfigureService.updateFrConfForAllFr(menuId, fromTime, toTime);
-		}
-		else {
-			System.err.println("fr Id is not zero");
-			result=connfigureService.updateFrConfForSelectedFr(frIdList, menuId,fromTime,toTime);
-		}
-		
-		if(result>0) {
-			info.setError(false);
-			info.setMessage("update Conf fr Successs");
-		}else {
-			info.setError(true);
-			info.setMessage("update Conf fr Failed");
-		}
-		}catch (Exception e) {
-			System.err.println("Exc in rest /updateFrConfMenuTime"+ e.getMessage());
+			if (frIdList.contains(0)) {
+				System.err.println("fr id is zero");
+				result = connfigureService.updateFrConfForAllFr(menuId, fromTime, toTime);
+			} else {
+				System.err.println("fr Id is not zero");
+				result = connfigureService.updateFrConfForSelectedFr(frIdList, menuId, fromTime, toTime);
+			}
+
+			if (result > 0) {
+				info.setError(false);
+				info.setMessage("update Conf fr Successs");
+			} else {
+				info.setError(true);
+				info.setMessage("update Conf fr Failed");
+			}
+		} catch (Exception e) {
+			System.err.println("Exc in rest /updateFrConfMenuTime" + e.getMessage());
 			e.printStackTrace();
 		}
 		return info;
-		
+
 	}
-	
-	
+
 	// Get Configured MenuId
 	@RequestMapping(value = "/getConfiguredMenuId")
 	public @ResponseBody List<Integer> getConfiguredMenuId(@RequestParam int frId) {
@@ -1970,28 +1973,31 @@ public class RestApiController {
 		// DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		// java.util.Date date = sdf.parse(frOpeningDate);
 		// java.sql.Date sqlOpeningDate = new java.sql.Date(date.getTime());
-		java.sql.Date sqlOpeningDate=null;java.sql.Date sqlFrAgreementDate=null;java.sql.Date sqlOwnerBirthDate=null;java.sql.Date SQLfbaLicenseDate=null;
-	try {
-		 sqlOpeningDate = Common.convertToSqlDate(frOpeningDate);
-	    }catch (Exception e) {
-		// TODO: handle exception
-	   }
-		
-		 try {
-		 sqlFrAgreementDate = Common.convertToSqlDate(frAgreementDate);
-		 }catch (Exception e) {
-				// TODO: handle exception
-			}
-		 try {
-		 sqlOwnerBirthDate = Common.convertToSqlDate(ownerBirthDate);
-		 }catch (Exception e) {
-				// TODO: handle exception
-			}
-		 try {
-		 SQLfbaLicenseDate = Common.convertToSqlDate(fbaLicenseDate);
-		 }catch (Exception e) {
-				// TODO: handle exception
-			}
+		java.sql.Date sqlOpeningDate = null;
+		java.sql.Date sqlFrAgreementDate = null;
+		java.sql.Date sqlOwnerBirthDate = null;
+		java.sql.Date SQLfbaLicenseDate = null;
+		try {
+			sqlOpeningDate = Common.convertToSqlDate(frOpeningDate);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		try {
+			sqlFrAgreementDate = Common.convertToSqlDate(frAgreementDate);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			sqlOwnerBirthDate = Common.convertToSqlDate(ownerBirthDate);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			SQLfbaLicenseDate = Common.convertToSqlDate(fbaLicenseDate);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		Franchisee franchisee = new Franchisee();
 		// franchisee.setFrId(frId);
 		franchisee.setFrName(frName);
@@ -2051,7 +2057,7 @@ public class RestApiController {
 			@RequestParam("spRate2") int spRate2, @RequestParam("spRate3") int spRate3,
 			@RequestParam("isSlotUsed") int isSlotUsed) {
 
-		SpecialCake specialCakeRes=null;
+		SpecialCake specialCakeRes = null;
 		try {
 			System.out.println("isSlotUsed");
 
@@ -2091,20 +2097,20 @@ public class RestApiController {
 
 			System.out.println("*********Special Cake:***************" + specialcake.toString());
 
-			 specialCakeRes=specialcakeRepository.save(specialcake);
-			
-			 try {
-				    List<String> frTokens=franchiseSupRepository.findTokens();
+			specialCakeRes = specialcakeRepository.save(specialcake);
 
-				 for(String token:frTokens) {
-		          Firebase.sendPushNotifForCommunication(token,"Special Cake Details Updated","Changes have been made in OPS at item level, SP level, in the rates. Kindly refer the OPS for exact changes made.","inbox");
-				 }
-		         }
-		         catch(Exception e2)
-		         {
-			       e2.printStackTrace();
-		         }
-			
+			try {
+				List<String> frTokens = franchiseSupRepository.findTokens();
+
+				for (String token : frTokens) {
+					Firebase.sendPushNotifForCommunication(token, "Special Cake Details Updated",
+							"Changes have been made in OPS at item level, SP level, in the rates. Kindly refer the OPS for exact changes made.",
+							"inbox");
+				}
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+
 		} catch (Exception e) {
 			System.out.println("inser cake error " + e.getMessage());
 
@@ -2400,14 +2406,13 @@ public class RestApiController {
 	// Delete Route
 	@RequestMapping("/deleteRoute")
 	public @ResponseBody String deleteRoute(@RequestParam List<Integer> routeId) {
-		
-		String jsonResult=null;
+
+		String jsonResult = null;
 		Info info = new Info();
 		List<Route> route = routeRepository.findByRouteIdIn(routeId);
-		for(int i=0;i<route.size();i++)
-		{
-		 route.get(i).setDelStatus(1);
-		 jsonResult = routeService.save(route.get(i));
+		for (int i = 0; i < route.size(); i++) {
+			route.get(i).setDelStatus(1);
+			jsonResult = routeService.save(route.get(i));
 		}
 		try {
 			if (jsonResult == null) {
@@ -2430,16 +2435,15 @@ public class RestApiController {
 	@RequestMapping("/deleteMessage")
 	public @ResponseBody String deleteMessage(@RequestParam List<Integer> id) {
 
-		String jsonResult=""; 
+		String jsonResult = "";
 		Info info = new Info();
 		try {
 			List<Message> message = messageRepository.findByMsgIdIn(id);
-			for(int i=0;i<message.size();i++)
-			{
+			for (int i = 0; i < message.size(); i++) {
 				message.get(i).setDelStatus(1);
-				 jsonResult = messageService.save(message.get(i));
+				jsonResult = messageService.save(message.get(i));
 			}
-			
+
 			if (jsonResult == null) {
 				info.setError(true);
 				info.setMessage("Message deletion failed");
@@ -2460,42 +2464,39 @@ public class RestApiController {
 	@RequestMapping(value = "/deleteItem", method = RequestMethod.POST)
 	public @ResponseBody ErrorMessage deleteItem(@RequestParam List<Integer> id) {
 
-		ErrorMessage errorMessage=new ErrorMessage();
-		
+		ErrorMessage errorMessage = new ErrorMessage();
+
 		int isUpdated = itemRepository.deleteItems(id);
-		if(isUpdated==1) {
-			
+		if (isUpdated == 1) {
+
 			errorMessage.setError(false);
 			errorMessage.setMessage("Items Deleted Successfully");
-			}
-			else
-			{
-				errorMessage.setError(false);
-				errorMessage.setMessage("Items Deletion Failed");
-				
-			}
-			return errorMessage;
-	}
-	// Delete Item
-		@RequestMapping(value = "/inactivateItems", method = RequestMethod.POST)
-		public @ResponseBody ErrorMessage inactivateItems(@RequestParam List<Integer> id) {
+		} else {
+			errorMessage.setError(false);
+			errorMessage.setMessage("Items Deletion Failed");
 
-			ErrorMessage errorMessage=new ErrorMessage();
-			
-			int isUpdated = itemRepository.inactivateItems(id);
-			if(isUpdated>=1) {
-				
-				errorMessage.setError(false);
-				errorMessage.setMessage("Items Isused changed Successfully");
-				}
-				else
-				{
-					errorMessage.setError(false);
-					errorMessage.setMessage("Items Isused Changes Failed");
-					
-				}
-				return errorMessage;
 		}
+		return errorMessage;
+	}
+
+	// Delete Item
+	@RequestMapping(value = "/inactivateItems", method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage inactivateItems(@RequestParam List<Integer> id) {
+
+		ErrorMessage errorMessage = new ErrorMessage();
+
+		int isUpdated = itemRepository.inactivateItems(id);
+		if (isUpdated >= 1) {
+
+			errorMessage.setError(false);
+			errorMessage.setMessage("Items Isused changed Successfully");
+		} else {
+			errorMessage.setError(false);
+			errorMessage.setMessage("Items Isused Changes Failed");
+
+		}
+		return errorMessage;
+	}
 
 	// Delete Flavor
 	@RequestMapping(value = "/deleteFlavour", method = RequestMethod.POST)
@@ -2503,11 +2504,10 @@ public class RestApiController {
 
 		ErrorMessage errorMessage = null;
 		List<Flavour> flavour = flavourRepository.findBySpfIdIn(spfId);
-		for(int i=0;i<flavour.size();i++)
-		{
-		flavour.get(i).setDelStatus(1);
+		for (int i = 0; i < flavour.size(); i++) {
+			flavour.get(i).setDelStatus(1);
 
-		 errorMessage = flavourService.save(flavour.get(i));
+			errorMessage = flavourService.save(flavour.get(i));
 		}
 		return JsonUtil.javaToJson(errorMessage);
 	}
@@ -2537,15 +2537,14 @@ public class RestApiController {
 	public @ResponseBody ErrorMessage deleteSpMessage(@RequestParam List<Integer> spMsgId) {
 
 		ErrorMessage errorMessage = new ErrorMessage();
-		String spMessages="";
+		String spMessages = "";
 		List<SpMessage> spMessage = spMessageRepository.findBySpMsgIdIn(spMsgId);
-		for(int i=0;i<spMessage.size();i++)
-		{
+		for (int i = 0; i < spMessage.size(); i++) {
 			spMessage.get(i).setDelStatus(1);
 
-			 spMessages = spMsgService.save(spMessage.get(i));
+			spMessages = spMsgService.save(spMessage.get(i));
 		}
-		
+
 		if (spMessages != "") {
 			errorMessage.setError(false);
 			errorMessage.setMessage("SpMessage deleted Successfully");
@@ -2654,7 +2653,7 @@ public class RestApiController {
 			if (jsonResult.isError()) {
 				info.setError(true);
 				info.setMessage("Franchisee deletion failed");
-			} else if (!jsonResult.isError()){
+			} else if (!jsonResult.isError()) {
 				info.setError(false);
 				info.setMessage("Franchisee deletion Successful");
 			}
@@ -2719,14 +2718,16 @@ public class RestApiController {
 		return subCategoryList;
 
 	}
-	//getSubCat List by Cat Id Sachin 2018-07-19 Patna
-		@RequestMapping(value = "/getSubCateListByCatId", method = RequestMethod.POST)
-		public @ResponseBody List<SubCategory> getSubCateListByCatId(@RequestParam("catId") int catId) {
 
-			List<SubCategory> subCategoryList = subCategoryService.findSubCatByCatId(catId);
-			return subCategoryList;
+	// getSubCat List by Cat Id Sachin 2018-07-19 Patna
+	@RequestMapping(value = "/getSubCateListByCatId", method = RequestMethod.POST)
+	public @ResponseBody List<SubCategory> getSubCateListByCatId(@RequestParam("catId") int catId) {
 
-		}
+		List<SubCategory> subCategoryList = subCategoryService.findSubCatByCatId(catId);
+		return subCategoryList;
+
+	}
+
 	// Get Flavour
 	@RequestMapping(value = "/getFlavour", method = RequestMethod.GET)
 	public @ResponseBody Flavour getFlavour(@RequestParam int spfId) {
@@ -2752,7 +2753,7 @@ public class RestApiController {
 		List<Item> items = null;
 		try {
 			items = itemRepository.findByItemGrp1AndDelStatusOrderByItemGrp1AscItemGrp2AscItemNameAsc(itemGrp1, 0);
-		} catch (Exception e) {/*findByItemGrp1AndDelStatusOrderByItemGrp2AscItemSortIdAsc*/
+		} catch (Exception e) {/* findByItemGrp1AndDelStatusOrderByItemGrp2AscItemSortIdAsc */
 			items = new ArrayList<>();
 			e.printStackTrace();
 
@@ -2761,70 +2762,67 @@ public class RestApiController {
 
 	}
 
-	
-	//12 April Sachin
-		// Get Items By Category order by sub cat and sort id
-			@RequestMapping(value = "/getItemsBySubCatId", method = RequestMethod.POST)
-			public @ResponseBody List<Item> getItemsBySubCatId(@RequestParam("subCatId") String subCatId) {
+	// 12 April Sachin
+	// Get Items By Category order by sub cat and sort id
+	@RequestMapping(value = "/getItemsBySubCatId", method = RequestMethod.POST)
+	public @ResponseBody List<Item> getItemsBySubCatId(@RequestParam("subCatId") String subCatId) {
 
-				List<Item> items = new ArrayList<Item>();
-				try {
-					
-					if(Integer.parseInt(subCatId)<11)
-					{
-						items = itemRepository.findByItemGrp1AndDelStatusOrderByItemGrp1AscItemGrp2AscItemNameAsc(subCatId,0);
+		List<Item> items = new ArrayList<Item>();
+		try {
 
-					}
-					else
-					{
-						items = itemRepository.findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(subCatId,0);
+			if (Integer.parseInt(subCatId) < 11) {
+				items = itemRepository.findByItemGrp1AndDelStatusOrderByItemGrp1AscItemGrp2AscItemNameAsc(subCatId, 0);
 
-					}
-					System.err.println("Items by subcat id  and delStatus  " +items.toString() );
-				
-				} catch (Exception e) {
-					items = new ArrayList<>();
-					e.printStackTrace();
-
-				}
-				return items;
+			} else {
+				items = itemRepository.findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(subCatId, 0);
 
 			}
-			
-			@RequestMapping(value = "/getItemsResBySubCatId", method = RequestMethod.POST)
-			public @ResponseBody List<ItemRes> getItemsResBySubCatId(@RequestParam("subCatId") String subCatId) {
+			System.err.println("Items by subcat id  and delStatus  " + items.toString());
 
-				List<ItemRes> items = new ArrayList<ItemRes>();
-				try {
-					
-						items = itemResRepository.findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(subCatId,0);
+		} catch (Exception e) {
+			items = new ArrayList<>();
+			e.printStackTrace();
 
-					
-				} catch (Exception e) {
-					items = new ArrayList<>();
-					e.printStackTrace();
+		}
+		return items;
 
-				}
-				return items;
+	}
 
-			}
-			@RequestMapping(value = "/getStockItemsBySubCatId", method = RequestMethod.POST)
-			public @ResponseBody List<StockItem> getStockItemsBySubCatId(@RequestParam("subCatId") int subCatId,@RequestParam("type") int type) {
+	@RequestMapping(value = "/getItemsResBySubCatId", method = RequestMethod.POST)
+	public @ResponseBody List<ItemRes> getItemsResBySubCatId(@RequestParam("subCatId") String subCatId) {
 
-				List<StockItem> items = new ArrayList<StockItem>();
-			try {
-					
-				items = itemStockRepository.findBySubCatIdAndType(subCatId,type);
+		List<ItemRes> items = new ArrayList<ItemRes>();
+		try {
 
-				
-				} catch (Exception e) {
-					items = new ArrayList<>();
-					e.printStackTrace();
+			items = itemResRepository.findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(subCatId, 0);
 
-				}
-				return items;
+		} catch (Exception e) {
+			items = new ArrayList<>();
+			e.printStackTrace();
 
-			}
+		}
+		return items;
+
+	}
+
+	@RequestMapping(value = "/getStockItemsBySubCatId", method = RequestMethod.POST)
+	public @ResponseBody List<StockItem> getStockItemsBySubCatId(@RequestParam("subCatId") int subCatId,
+			@RequestParam("type") int type) {
+
+		List<StockItem> items = new ArrayList<StockItem>();
+		try {
+
+			items = itemStockRepository.findBySubCatIdAndType(subCatId, type);
+
+		} catch (Exception e) {
+			items = new ArrayList<>();
+			e.printStackTrace();
+
+		}
+		return items;
+
+	}
+
 	// Get Items By Item Id and Delete Status 0
 	@RequestMapping(value = "/getItemsByItemId", method = RequestMethod.POST)
 	public @ResponseBody List<Item> getItems(@RequestParam List<Integer> itemList) {
@@ -3319,7 +3317,7 @@ public class RestApiController {
 
 		SpecialCake specialCake = specialcakeService.findSpecialCake(id);
 		Info info = new Info();
-		SpecialCake jsonResult=null;
+		SpecialCake jsonResult = null;
 		try {
 
 			specialCake.setSpName(spname);
@@ -3355,7 +3353,7 @@ public class RestApiController {
 
 			System.out.println("*********Special Cake:***************" + specialCake.getIsSlotUsed());
 
-			 jsonResult = specialcakeRepository.save(specialCake);
+			jsonResult = specialcakeRepository.save(specialCake);
 
 			if (jsonResult == null) {
 
@@ -3379,14 +3377,13 @@ public class RestApiController {
 	// Delete Special Cake
 	@RequestMapping(value = "/deleteSpecialCake")
 	public @ResponseBody String deleteSpecialCake(@RequestParam List<Integer> spId) {
-		String jsonResult=null;
+		String jsonResult = null;
 		Info info = new Info();
 		try {
 			List<SpecialCake> specialCakeList = specialcakeService.findSpecialCakes(spId);
-			for(int i=0;i<specialCakeList.size();i++)
-			{
+			for (int i = 0; i < specialCakeList.size(); i++) {
 				specialCakeList.get(i).setDelStatus(1);
-			     jsonResult = specialcakeService.save(specialCakeList.get(i));
+				jsonResult = specialcakeService.save(specialCakeList.get(i));
 			}
 			if (jsonResult == null) {
 				info.setError(true);
@@ -3475,37 +3472,33 @@ public class RestApiController {
 		try {
 
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-			
-			Date date=null;
+
+			Date date = null;
 			try {
-			 date = sdf.parse(frOpeningDate);
-			}
-			catch (Exception e) {
+				date = sdf.parse(frOpeningDate);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			Date utilFrAgreementDate=null;
-		try {
-				utilFrAgreementDate= sdf.parse(frAgreementDate);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-			Date utilOwnerBirthDate=null;
+			Date utilFrAgreementDate = null;
 			try {
-				 utilOwnerBirthDate = sdf.parse(ownerBirthDate);
-			}
-			catch (Exception e) {
+				utilFrAgreementDate = sdf.parse(frAgreementDate);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			Date utilFbaLicenseDate=null;
-			
-		try {
-			utilFbaLicenseDate = sdf.parse(fbaLicenseDate);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+			Date utilOwnerBirthDate = null;
+			try {
+				utilOwnerBirthDate = sdf.parse(ownerBirthDate);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			Date utilFbaLicenseDate = null;
+
+			try {
+				utilFbaLicenseDate = sdf.parse(fbaLicenseDate);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 			Franchisee franchisee = franchiseeService.findFranchisee(frId);
 
 			// franchisee.setFrId(frId);
@@ -3637,11 +3630,12 @@ public class RestApiController {
 		return orderList;
 
 	}
+
 	@RequestMapping(value = { "/getOrdersListRes" }, method = RequestMethod.POST)
 	@ResponseBody
-	public 	List<GetOrder> getOrdersList(@RequestParam List<String> frId, @RequestParam List<String> menuId,
+	public List<GetOrder> getOrdersList(@RequestParam List<String> frId, @RequestParam List<String> menuId,
 			@RequestParam String date) {
-		List<GetOrder> orderList = new 	ArrayList<GetOrder>();
+		List<GetOrder> orderList = new ArrayList<GetOrder>();
 		try {
 			System.out.println("date str :" + date);
 
@@ -3651,7 +3645,6 @@ public class RestApiController {
 			System.out.println("fr id in rest " + frId.toString());
 			orderList = getOrderService.findOrder(frId, menuId, strDate);
 
-		
 		} catch (Exception e) {
 
 			System.out.println("exception in order list rest controller" + e.getMessage());
@@ -3659,6 +3652,7 @@ public class RestApiController {
 		return orderList;
 
 	}
+
 	// 7 sep orderlist for all franchisee
 	@RequestMapping(value = { "/getOrderListForAllFr" }, method = RequestMethod.POST)
 	@ResponseBody
@@ -3830,8 +3824,10 @@ public class RestApiController {
 	@ResponseBody
 	public OrderCountsList showOrderCounts(@RequestParam String cDate) {
 
-/*		java.sql.Date cDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-*/		System.out.println("date " + cDate);
+		/*
+		 * java.sql.Date cDate = new
+		 * java.sql.Date(Calendar.getInstance().getTime().getTime());
+		 */ System.out.println("date " + cDate);
 
 		List<OrderCounts> orderCountList = orderCountService.findOrderCount(cDate);
 
@@ -3894,6 +3890,38 @@ public class RestApiController {
 		beanList.setInfo(info);
 
 		return beanList;
+	}
+	// sachin 11 Jan 2019
+	// delete multi fr config
+
+	@Autowired
+	ConfigureFrListRepository confFrRepo;
+
+	@RequestMapping(value = { "/deleteMultiFrConfig" }, method = RequestMethod.POST)
+	public @ResponseBody Info deleteMultiFrConfig(@RequestParam("settingIdList") List<Integer> settingIdList) {
+
+		Info info = new Info();
+		try {
+			confFrRepo.deleteFrConfBySettingIdList(settingIdList);
+
+			info.setError(false);
+			info.setMessage("configure Fr List deleted successfully");
+		} catch (Exception e) {
+
+			info.setError(true);
+			info.setMessage("Exce occured");
+		}
+		/*
+		 * ConfigureFrBeanList beanList = new ConfigureFrBeanList();
+		 * List<ConfigureFrBean> configBean = configureFrBeanService.findAllConfFr();
+		 * 
+		 * beanList.setConfigureFrBean(configBean); Info info = new Info();
+		 * info.setError(false);
+		 * info.setMessage("configure Fr List displayed successfully");
+		 * beanList.setInfo(info);
+		 */
+
+		return info;
 	}
 
 	// get one conf fr for update
@@ -4012,7 +4040,7 @@ public class RestApiController {
 	@RequestMapping(value = "/getFrGvnDetails", method = RequestMethod.POST)
 	public @ResponseBody GetGrnGvnDetailsList getFrGvnDetails(@RequestParam("grnGvnHeaderId") int grnGvnHeaderId) {
 		System.out.println("inside rest /getFrGvnDetails");
-		
+
 		GetGrnGvnDetailsList gvnDetailList = getGrnGvnDetailService.getFrGvnDetails(grnGvnHeaderId);
 
 		return gvnDetailList;
@@ -4223,6 +4251,7 @@ public class RestApiController {
 		System.out.println("Res  :" + spCakeOrder.toString());
 		return spCakeOrder;
 	}
+
 	@RequestMapping(value = { "/getSpCKOrderBySpOrderNo" }, method = RequestMethod.POST)
 	@ResponseBody
 	public List<GetSpCkOrder> getSpCKOrderBySpOrderNo(@RequestParam("spOrderNo") List<String> spOrderNo) {

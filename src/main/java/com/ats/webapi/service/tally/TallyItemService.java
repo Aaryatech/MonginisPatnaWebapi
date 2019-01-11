@@ -13,5 +13,5 @@ public interface TallyItemService {
 	 ItemList getAllItems();
 
 	ErrorMessage updateItems(int id, int isTallySync);
-
+	 ItemList getAllItemsByCatId(int catId);//11Jan Sachin
 }
