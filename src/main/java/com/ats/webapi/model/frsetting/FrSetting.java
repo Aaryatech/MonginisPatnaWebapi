@@ -1,6 +1,7 @@
 package com.ats.webapi.model.frsetting;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name="t_fr_setting")
@@ -33,8 +36,30 @@ public class FrSetting implements Serializable{
 
 	@Column(name="ex_int")
 	private int spNo;
-
 	
+	private Date orderDate;
+	private Date prodDate;
+	
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public Date getProdDate() {
+		return prodDate;
+	}
+
+
+	public void setProdDate(Date prodDate) {
+		this.prodDate = prodDate;
+	}
+
 
 	public int getSpNo() {
 		return spNo;
@@ -99,7 +124,8 @@ public class FrSetting implements Serializable{
 	@Override
 	public String toString() {
 		return "FrSetting [frSettingId=" + frSettingId + ", frId=" + frId + ", frCode=" + frCode + ", sellBillNo="
-				+ sellBillNo + ", grnGvnNo=" + grnGvnNo + "]";
+				+ sellBillNo + ", grnGvnNo=" + grnGvnNo + ", spNo=" + spNo + ", orderDate=" + orderDate + ", prodDate="
+				+ prodDate + "]";
 	}
 
 
