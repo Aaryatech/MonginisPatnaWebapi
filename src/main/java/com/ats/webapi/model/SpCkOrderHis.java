@@ -79,6 +79,9 @@ public class SpCkOrderHis implements Serializable{
 	@Column(name = "sp_cust_dob")
 	private Date spCustDob;
 	
+	@Column(name = "cust_gst_no")//new 16 jan
+	private String custGstNo;
+	
 	@Column(name = "sp_cust_mob_no")
 	private String spCustMobNo;
 	
@@ -140,6 +143,16 @@ public class SpCkOrderHis implements Serializable{
 
 
     private String spName;
+
+
+	public String getCustGstNo() {
+		return custGstNo;
+	}
+
+
+	public void setCustGstNo(String custGstNo) {
+		this.custGstNo = custGstNo;
+	}
 
 
 	public int getSpOrderNo() {

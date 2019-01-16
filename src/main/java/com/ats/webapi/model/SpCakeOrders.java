@@ -84,7 +84,9 @@ public class SpCakeOrders  {
 	@Column(name = "sp_cust_name")
 	private String spCustName;
 	
-	
+	//new on 16jan19
+	private String custGstNo;
+
 	@Column(name = "sp_cust_dob")
 	private Date spCustDob;
 	
@@ -152,6 +154,14 @@ public class SpCakeOrders  {
 	private int isAllocated;
 	
     
+	public String getCustGstNo() {
+		return custGstNo;
+	}
+
+	public void setCustGstNo(String custGstNo) {
+		this.custGstNo = custGstNo;
+	}
+
 	public int getIsAllocated() {
 		return isAllocated;
 	}
