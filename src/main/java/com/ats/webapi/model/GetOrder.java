@@ -12,6 +12,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Immutable;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity(name="getOrder")
 //@Table(name = "t_order")
 @Immutable
@@ -120,7 +122,7 @@ public class GetOrder {
 		Id = id;
 	}
 
-
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getDeliveryDate() {
 		return deliveryDate;
 	}
