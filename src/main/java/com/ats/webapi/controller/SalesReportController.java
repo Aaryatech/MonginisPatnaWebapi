@@ -86,14 +86,14 @@ public class SalesReportController {
 	@RequestMapping(value = { "/getSaleReportBillwise" }, method = RequestMethod.POST)
 	public @ResponseBody List<SalesReportBillwise> getSaleReportBillwise(@RequestParam("frIdList") List<String> frIdList,@RequestParam("fromDate")
 	String fromDate,
-			@RequestParam("toDate") String toDate) {
+			@RequestParam("toDate") String toDate,@RequestParam("catIdList") List<String> catIdList) {
 
 		List<SalesReportBillwise> salesReportBillwiseList = null;
 		try {
 			fromDate = Common.convertToYMD(fromDate);
 			toDate = Common.convertToYMD(toDate);
 			System.out.println("Input received "+fromDate+""+toDate+""+frIdList);
-			salesReportBillwiseList = saleReportBillwiseRepo.getSaleReportBillwise(frIdList, fromDate, toDate);
+			salesReportBillwiseList = saleReportBillwiseRepo.getSaleReportBillwise(frIdList, fromDate, toDate,catIdList);
 			System.out.println("getSaleReportBillwise"+salesReportBillwiseList.toString());
 
 		} catch (Exception e) {
@@ -107,14 +107,14 @@ public class SalesReportController {
 		@RequestMapping(value = { "/getSaleReportBillwiseAllFrSelected" }, method = RequestMethod.POST)
 		public @ResponseBody List<SalesReportBillwise> getSaleReportBillwiseAllFrSelected(@RequestParam("fromDate")
 		String fromDate,
-				@RequestParam("toDate") String toDate) {
+				@RequestParam("toDate") String toDate,@RequestParam("catIdList") List<String> catIdList) {
 
 			List<SalesReportBillwise> salesReportBillwiseList = null;
 			try {
 				fromDate = Common.convertToYMD(fromDate);
 				toDate = Common.convertToYMD(toDate);
 				System.out.println("Input received "+fromDate+""+toDate+"");
-				salesReportBillwiseList = saleReportBillwiseRepo.getSaleReportBillwiseAllFr(fromDate, toDate);
+				salesReportBillwiseList = saleReportBillwiseRepo.getSaleReportBillwiseAllFr(fromDate, toDate,catIdList);
 				System.out.println("getSaleReportBillwise"+salesReportBillwiseList.toString());
 
 			} catch (Exception e) {
@@ -130,7 +130,7 @@ public class SalesReportController {
 	@RequestMapping(value = { "/getSaleReportBillwiseByFr" }, method = RequestMethod.POST)
 	public @ResponseBody List<SalesReportBillwise> getSaleReportBillwiseByFr(@RequestParam("frIdList") List<String> frIdList,@RequestParam("fromDate")
 	String fromDate,
-			@RequestParam("toDate") String toDate) {
+			@RequestParam("toDate") String toDate,@RequestParam("catIdList") List<String> catIdList) {
 
 		List<SalesReportBillwise> salesReportBillwiseList = null;
 		try {
@@ -138,7 +138,7 @@ public class SalesReportController {
 			toDate = Common.convertToYMD(toDate);
 			System.out.println("Input received " +fromDate+ "" +toDate+ "" +frIdList);
 
-			salesReportBillwiseList = saleReportBillwiseRepo.getSaleReportBillwiseByFr(frIdList, fromDate, toDate);
+			salesReportBillwiseList = saleReportBillwiseRepo.getSaleReportBillwiseByFr(frIdList, fromDate, toDate,catIdList);
 			System.out.println("getSaleReportBillwiseByFr"+salesReportBillwiseList.toString());
 		} catch (Exception e) {
 			System.out.println(" Exce in sale Report Billwise  by Fr " + e.getMessage());
@@ -151,7 +151,7 @@ public class SalesReportController {
 	@RequestMapping(value = { "/getSaleReportBillwiseByFrAllFr" }, method = RequestMethod.POST)
 	public @ResponseBody List<SalesReportBillwise> getSaleReportBillwiseByFrAllFrSel(@RequestParam("fromDate")
 	String fromDate,
-			@RequestParam("toDate") String toDate) {
+			@RequestParam("toDate") String toDate,@RequestParam("catIdList") List<String> catIdList) {
 
 		List<SalesReportBillwise> salesReportBillwiseList = null;
 		try {
@@ -159,7 +159,7 @@ public class SalesReportController {
 			toDate = Common.convertToYMD(toDate);
 			System.out.println("Input received " +fromDate+ "" +toDate+ "");
 
-			salesReportBillwiseList = saleReportBillwiseRepo.getSaleReportBillwiseByFrAllFr(fromDate, toDate);
+			salesReportBillwiseList = saleReportBillwiseRepo.getSaleReportBillwiseByFrAllFr(fromDate, toDate,catIdList);
 			System.out.println("getSaleReportBillwiseByFr"+salesReportBillwiseList.toString());
 		} catch (Exception e) {
 			System.out.println(" Exce in sale Report Billwise  by Fr " + e.getMessage());
