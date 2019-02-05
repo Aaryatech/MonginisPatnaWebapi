@@ -82,9 +82,23 @@ public class GenerateBill {
 	@Column(name="delivery_date")//newly added
 	Date  deliveryDate;
 	
+	@Column(name="sp_delivery_place")//newly added
+	String spDeliveryPlace;
 	
 	
 	
+	
+	
+
+
+	public String getSpDeliveryPlace() {
+		return spDeliveryPlace;
+	}
+
+	public void setSpDeliveryPlace(String spDeliveryPlace) {
+		this.spDeliveryPlace = spDeliveryPlace;
+	}
+
 	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getDeliveryDate() {
 		return deliveryDate;
@@ -263,7 +277,18 @@ public class GenerateBill {
 	public void setIsSameState(int isSameState) {
 		this.isSameState = isSameState;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "GenerateBill [orderId=" + orderId + ", frId=" + frId + ", isPositive=" + isPositive + ", menuId="
+				+ menuId + ", itemId=" + itemId + ", orderQty=" + orderQty + ", orderRate=" + orderRate + ", orderMrp="
+				+ orderMrp + ", frName=" + frName + ", menuTitle=" + menuTitle + ", itemName=" + itemName + ", catId="
+				+ catId + ", frCode=" + frCode + ", rateType=" + rateType + ", subCatId=" + subCatId + ", itemTax1="
+				+ itemTax1 + ", itemTax2=" + itemTax2 + ", itemTax3=" + itemTax3 + ", grnType=" + grnType
+				+ ", itemShelfLife=" + itemShelfLife + ", isSameState=" + isSameState + ", deliveryDate=" + deliveryDate
+				+ ", spDeliveryPlace=" + spDeliveryPlace + "]";
+	}
+
 	
 
 }

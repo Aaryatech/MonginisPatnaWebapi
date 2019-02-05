@@ -67,6 +67,9 @@ public class GenerateSpBill {
 	@Column(name="sp_tax3")
 	private double spTax3;
 	
+	@Column(name="sp_delivery_place")
+	private String spDeliveryPlace;
+	
 	
 		
 	@Column(name="sp_delivery_date") // delivery Date
@@ -256,6 +259,17 @@ public class GenerateSpBill {
 		this.isSameState = isSameState;
 	}
 
+	
+
+	public String getSpDeliveryPlace() {
+		return spDeliveryPlace;
+	}
+
+
+	public void setSpDeliveryPlace(String spDeliveryPlace) {
+		this.spDeliveryPlace = spDeliveryPlace;
+	}
+
 
 	@Override
 	public String toString() {
@@ -263,10 +277,12 @@ public class GenerateSpBill {
 				+ ", menuId=" + menuId + ", spId=" + spId + ", spBackendRate=" + spBackendRate + ", spGrandTotal="
 				+ spGrandTotal + ", frName=" + frName + ", menuTitle=" + menuTitle + ", spName=" + spName + ", catId="
 				+ catId + ", frCode=" + frCode + ", rateType=" + rateType + ", subCatId=" + subCatId + ", spTax1="
-				+ spTax1 + ", spTax2=" + spTax2 + ", spTax3=" + spTax3 + ", spDeliveryDate=" + spDeliveryDate + "]";
+				+ spTax1 + ", spTax2=" + spTax2 + ", spTax3=" + spTax3 + ", spDeliveryPlace=" + spDeliveryPlace
+				+ ", spDeliveryDate=" + spDeliveryDate + "]";
 	}
 
 
+	
 	
 	
 	

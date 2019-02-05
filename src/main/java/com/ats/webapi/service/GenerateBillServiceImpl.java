@@ -2,6 +2,7 @@ package com.ats.webapi.service;
 
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -203,7 +204,7 @@ public class GenerateBillServiceImpl implements GenerateBillService {
 			GenerateRegSpBill regSpBill=generateRegSpBills.get(i);
 			
 			GenerateBill generateBill = new GenerateBill();
-
+			
 			generateBill.setCatId(regSpBill.getItemGrp1());
 			generateBill.setDeliveryDate(regSpBill.getRspDeliveryDt());
 			generateBill.setFrCode(regSpBill.getFrCode());
@@ -246,6 +247,7 @@ public class GenerateBillServiceImpl implements GenerateBillService {
 
 			generateBill.setCatId(spBill.getCatId());
 			generateBill.setDeliveryDate(spBill.getSpDeliveryDate());
+			generateBill.setSpDeliveryPlace(spBill.getSpDeliveryPlace());
 			generateBill.setFrCode(spBill.getFrCode());
 			generateBill.setFrId(spBill.getFrId());
 			generateBill.setFrName(spBill.getFrName());

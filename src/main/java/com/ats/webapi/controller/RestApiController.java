@@ -1275,6 +1275,9 @@ public class RestApiController {
 		return billHeaderList;
 
 	}
+	
+	
+	
 
 	@RequestMapping(value = "/generateBillForAllMenu", method = RequestMethod.POST)
 	public @ResponseBody GenerateBillList generateBillForAllMenu(@RequestParam("frId") List<String> frId,
@@ -1285,11 +1288,14 @@ public class RestApiController {
 		System.out.println("delivery Date after convert " + delDate);
 
 		GenerateBillList billList = generateBillService.generateBillForAllMenu(frId, delDate);
-
+		System.out.println("data is"+billList.toString());
 		return billList;
 
 	}
 
+	
+	
+	
 	@RequestMapping(value = "/generateBillForAllFrAllMenu", method = RequestMethod.POST)
 	public @ResponseBody GenerateBillList generateBillForAllFrAllMenu(@RequestParam("delDate") String delDate) {
 
@@ -1298,7 +1304,7 @@ public class RestApiController {
 		System.out.println("delivery Date after convert " + delDate);
 
 		GenerateBillList billList = generateBillService.generateBillForAllFrAllMenu(delDate);
-
+		System.out.println("data is"+billList.toString());
 		return billList;
 
 	}
@@ -1312,7 +1318,7 @@ public class RestApiController {
 		System.out.println("delivery Date after convert " + delDate);
 
 		GenerateBillList billList = generateBillService.generateBillServiceForAllFr(menuId, delDate);
-
+		System.out.println("data is"+billList.toString());
 		return billList;
 
 	}
@@ -1326,6 +1332,7 @@ public class RestApiController {
 		System.out.println("delivery Date after convert " + delDate);
 
 		GenerateBillList billList = generateBillService.generateBillService(frId, menuId, delDate);
+		System.out.println("data is"+billList.toString());
 
 		return billList;
 
