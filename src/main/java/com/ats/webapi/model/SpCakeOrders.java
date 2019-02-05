@@ -153,6 +153,25 @@ public class SpCakeOrders  {
 	@Column(name = "is_allocated")
 	private int isAllocated;
 	
+	@Column(name = "extra_charges")
+	private float extraCharges;
+
+	@Column(name = "disc")
+	private float disc;
+
+	@Column(name = "ex_int1")
+	private int exInt1;
+
+	@Column(name = "ex_int2")
+	private int exInt2;
+
+	@Column(name = "ex_var1")
+	private String exVar1;
+
+	@Column(name = "ex_var2")
+	private String exVar2;
+
+
     
 	public String getCustGstNo() {
 		return custGstNo;
@@ -471,6 +490,57 @@ public class SpCakeOrders  {
 	}
 	
 	
+	
+	
+	
+	public float getExtraCharges() {
+		return extraCharges;
+	}
+
+	public void setExtraCharges(float extraCharges) {
+		this.extraCharges = extraCharges;
+	}
+
+	public float getDisc() {
+		return disc;
+	}
+
+	public void setDisc(float disc) {
+		this.disc = disc;
+	}
+
+	public int getExInt1() {
+		return exInt1;
+	}
+
+	public void setExInt1(int exInt1) {
+		this.exInt1 = exInt1;
+	}
+
+	public int getExInt2() {
+		return exInt2;
+	}
+
+	public void setExInt2(int exInt2) {
+		this.exInt2 = exInt2;
+	}
+
+	public String getExVar1() {
+		return exVar1;
+	}
+
+	public void setExVar1(String exVar1) {
+		this.exVar1 = exVar1;
+	}
+
+	public String getExVar2() {
+		return exVar2;
+	}
+
+	public void setExVar2(String exVar2) {
+		this.exVar2 = exVar2;
+	}
+
 	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getOrderDate() {
 		return orderDate;
