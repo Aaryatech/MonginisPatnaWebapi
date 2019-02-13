@@ -15,7 +15,8 @@ public interface BillDetailForPrintRepo extends JpaRepository<GetBillDetailPrint
 			"        t_bill_detail.bill_detail_no,\n" + 
 			"        t_bill_detail.bill_no,\n" + 
 			"        t_bill_detail.order_id,\n" + 
-			"        t_bill_detail.menu_id,\n" + 
+			"        t_bill_detail.menu_id,"
+			+ "      t_bill_header.bill_date, m_category.cat_name,\n" + 
 			"        t_bill_detail.cat_id,\n" + 
 			"        t_bill_detail.item_id,\n" + 
 			"        t_bill_detail.order_qty,\n" + 
