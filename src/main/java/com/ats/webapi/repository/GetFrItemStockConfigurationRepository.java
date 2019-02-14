@@ -12,7 +12,7 @@ public interface GetFrItemStockConfigurationRepository extends JpaRepository<Get
 	
 
 	@Query(value=" SELECT m_fr_item_stock.*, m_item.item_name from m_fr_item_stock, m_item WHERE"
-			+ " m_fr_item_stock.item_id IN(:itemId) AND m_fr_item_stock.item_id=m_item.id "
+			+ " m_fr_item_stock.item_id IN(:itemId) AND m_fr_item_stock.item_id=m_item.id ORDER BY m_fr_item_stock.item_name "
 			+ "",nativeQuery=true)
 	public List<GetFrItemStockConfiguration> findByItemId(@Param("itemId")List<String> itemId);
 	

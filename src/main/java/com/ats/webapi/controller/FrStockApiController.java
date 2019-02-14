@@ -580,11 +580,14 @@ public class FrStockApiController {
 		System.out.println("inside rest getCurrentStock : I/p : currentMonth: " + currentMonth);
 		System.out.println("inside rest getCurrentStock : I/p : year: " + year);
 		System.out.println("inside rest getCurrentStock : I/p : itemIdList: " + itemIdList.toString());
+		
 
 		List<GetCurrentStockDetails> stockDetailsList = new ArrayList<GetCurrentStockDetails>();
 		PostFrItemStockDetail postFrItemStockDetail = new PostFrItemStockDetail();
 
 		List<Item> itemsList = itemService.findAllItemsByItemId(itemIdList);
+		
+		System.err.println("item list is "+itemsList.toString());
 
 
 		StockRegSpSell totalRegSell = new StockRegSpSell();
@@ -599,11 +602,11 @@ public class FrStockApiController {
 		//	 totalRegSell = new StockRegSpSell();
 			 
 		//	 regSpPurchase= new StockRegSpPurchase();
-			
+			//0
 			 regSpPurchase  = stockPurchaseRepository.getTotalPurchase(frId, fromDate, toDate, itemId);
-
+			 //0
 			int totalRegGrnGvn = calculationRepository.getRegTotalGrnGvn(frId, fromDate, toDate, itemId);
-
+			//0
 			totalRegSell = stockSellRepository.getRegTotalSell(frId, fromDate, toDate, itemId);
 
 			System.out.println("Purchase " + regSpPurchase.toString());
@@ -611,6 +614,7 @@ public class FrStockApiController {
 			int reorderQty = 0;
 
 			try {
+				//0
 				reorderQty = getFrItemStockConfigurationRepository.findByItemIdAndType(itemId, frStockType);
 			} catch (Exception e) {
 				reorderQty = 0;
@@ -625,7 +629,7 @@ public class FrStockApiController {
 					System.out.println("fr stock response " + postFrItemStockDetail.toString());
 
 					GetCurrentStockDetails getCurrentStockDetails = new GetCurrentStockDetails();
-
+ 
 					getCurrentStockDetails.setStockHeaderId(postFrItemStockDetail.getOpeningStockHeaderId());
 					getCurrentStockDetails.setStockDetailId(postFrItemStockDetail.getOpeningStockDetailId());
 					getCurrentStockDetails.setRegOpeningStock(postFrItemStockDetail.getRegOpeningStock());
