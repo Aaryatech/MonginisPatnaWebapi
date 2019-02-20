@@ -60,7 +60,7 @@ public class RegularSpCkOrderServiceImpl implements RegularSpCkOrderService{
 
 
 	@Override
-	public RegSpCkOrderResponse findRegularSpCkOrder(List<Integer> frId, String strDate) {
+	public RegSpCkOrderResponse findRegularSpCkOrder(List<Integer> frId, String strDate,List<Integer> menuId) {
 		
 		RegSpCkOrderResponse regSpCkOrderResponse=new RegSpCkOrderResponse();
         ErrorMessage errorMessage=new ErrorMessage();
@@ -68,7 +68,15 @@ public class RegularSpCkOrderServiceImpl implements RegularSpCkOrderService{
 		List<RegularSpCkOrders> regularSpCkOrdersList=new ArrayList<RegularSpCkOrders>();
 		/*try {*/
 			System.out.println("sevice try " );
-			regularSpCkOrdersList=regularSpCkOrderAdminRepo.findRegularSpCakeOrder(frId, strDate);
+			if(menuId.contains(-1)) {
+				System.err.println("Menu Id = -1 some fr all menu A");
+			regularSpCkOrdersList=regularSpCkOrderAdminRepo.findRegularSpCakeOrderAllMenu(frId, strDate);
+			}else {
+				
+				System.err.println("Menu Id not -1 some fr some menu B");
+				regularSpCkOrdersList=regularSpCkOrderAdminRepo.findRegularSpCakeOrderOneMenu(frId, strDate, menuId);	
+				
+			}
 			if(regularSpCkOrdersList!=null)
 			{System.out.println("sevice tryif " );
 				regSpCkOrderResponse.setRegularSpCkOrdersList(regularSpCkOrdersList);
@@ -96,14 +104,22 @@ public class RegularSpCkOrderServiceImpl implements RegularSpCkOrderService{
 
 
 	@Override
-	public RegSpCkOrderResponse findRegSpCakeOrderAllFr(String strDate) {
+	public RegSpCkOrderResponse findRegSpCakeOrderAllFr(String strDate,List<Integer> menuId) {
 
 		RegSpCkOrderResponse regSpCkOrderResponse=new RegSpCkOrderResponse();
           ErrorMessage errorMessage=new ErrorMessage();
           
 		List<RegularSpCkOrders> regularSpCkOrdersList=new ArrayList<RegularSpCkOrders>();
 		try {
+			
+			if(menuId.get(0)==-1) {
+				System.err.println("Menu Id all fr all menu = -1 C");
 			regularSpCkOrdersList=regularSpCkOrderAdminRepo.findRegularSpCakeOrderAllFr(strDate);
+			}else {
+				System.err.println("Menu Id not all fr one menu = -1 D");
+				regularSpCkOrdersList=regularSpCkOrderAdminRepo.findRegularSpCakeOrderAllFrOneMenu(strDate,menuId);
+
+			}
 		
 			if(regularSpCkOrdersList!=null)
 			{

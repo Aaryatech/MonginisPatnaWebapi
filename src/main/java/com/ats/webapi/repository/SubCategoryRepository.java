@@ -25,5 +25,16 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory, Intege
 	public List<SubCategory> findByCatIdAndDelStatusOrderByCatIdAndSubCatId(@Param("catId")int catId,@Param("delStatus") int delStatus);
 */
 	public List<SubCategory> findByCatIdAndDelStatus(int catId, int i);
+	
+	//sachin FEB 18-2019
+	@Query(value=" Select " + 
+			"        m_cat_sub.* " + 
+			"    from " + 
+			"        m_cat_sub " + 
+			"    where " + 
+			"         m_cat_sub.sub_cat_id NOT IN(SELECT m_tax_hsn.sub_cat_id from m_tax_hsn WHERE m_tax_hsn.del_status=0) " + 
+			"        AND m_cat_sub.cat_id=:catId " + 
+			"        AND m_cat_sub.del_status=0 ",nativeQuery=true)
+	public List<SubCategory> getAllSubCategoriesForTaxHsn(@Param("catId") int catId);
 
 }

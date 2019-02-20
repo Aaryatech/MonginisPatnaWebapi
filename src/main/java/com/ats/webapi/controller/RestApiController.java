@@ -3714,7 +3714,6 @@ public class RestApiController {
 	}
 
 	// getAllFrSpCakeOrderList
-
 	@RequestMapping(value = { "/getAllFrSpCakeOrderList" }, method = RequestMethod.POST)
 	@ResponseBody
 	public SpCakeOrdersBeanList getAllFrSpCakeOrderList(@RequestParam String prodDate) {
@@ -3760,11 +3759,11 @@ public class RestApiController {
 		}
 		return eventList;
 	}
-
+//b
 	@RequestMapping(value = { "/getRegSpCkOrderList" }, method = RequestMethod.POST)
 	@ResponseBody
-	public RegSpCkOrderResponse getRegSpCkOrderList(@RequestParam List<Integer> frId, @RequestParam String prodDate) {
-
+	public RegSpCkOrderResponse getRegSpCkOrderList(@RequestParam List<Integer> frId, @RequestParam String prodDate,@RequestParam List<Integer> menuId) {
+System.err.println("meu Id rece " +menuId);
 		RegSpCkOrderResponse regSpCakeOrderRes = new RegSpCkOrderResponse();
 
 		try {
@@ -3772,7 +3771,7 @@ public class RestApiController {
 			String strDate = Common.convertToYMD(prodDate);
 			System.out.println("Converted date " + strDate);
 
-			regSpCakeOrderRes = regularSpCkOrderService.findRegularSpCkOrder(frId, strDate);
+			regSpCakeOrderRes = regularSpCkOrderService.findRegularSpCkOrder(frId, strDate,menuId);
 
 		} catch (Exception e) {
 			System.out.println("controller ");
@@ -3783,18 +3782,19 @@ public class RestApiController {
 		return regSpCakeOrderRes;
 
 	}
-
+//a
 	@RequestMapping(value = { "/getAllFrRegSpCakeOrders" }, method = RequestMethod.POST)
 	@ResponseBody
-	public RegSpCkOrderResponse getAllFrRegSpCakeOrders(@RequestParam String prodDate) {
+	public RegSpCkOrderResponse getAllFrRegSpCakeOrders(@RequestParam String prodDate,@RequestParam List<Integer> menuId) {
 
 		RegSpCkOrderResponse regSpCakeOrderRes = new RegSpCkOrderResponse();
+		System.err.println("meu Id rece " +menuId);
 
 		try {
 			String strDate = Common.convertToYMD(prodDate);
 			System.out.println("Converted date " + strDate);
 
-			regSpCakeOrderRes = regularSpCkOrderService.findRegSpCakeOrderAllFr(strDate);
+			regSpCakeOrderRes = regularSpCkOrderService.findRegSpCakeOrderAllFr(strDate,menuId);
 
 		} catch (Exception e) {
 

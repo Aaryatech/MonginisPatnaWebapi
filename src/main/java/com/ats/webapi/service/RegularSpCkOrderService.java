@@ -16,9 +16,9 @@ public interface RegularSpCkOrderService {
 
 	RegularSpCake placeRegularSpCakeOrder(RegularSpCake regularSpCake);
 
-	RegSpCkOrderResponse findRegularSpCkOrder(List<Integer> frId, String strDate);
+	RegSpCkOrderResponse findRegularSpCkOrder(List<Integer> frId, String strDate,List<Integer> menuId);
 
-	RegSpCkOrderResponse findRegSpCakeOrderAllFr(String strDate);
+	RegSpCkOrderResponse findRegSpCakeOrderAllFr(String strDate,List<Integer> menuId);
 
 	List<GetRegSpCakeOrders> getRegSpCakeOrder(List<String> orderNo);
 
