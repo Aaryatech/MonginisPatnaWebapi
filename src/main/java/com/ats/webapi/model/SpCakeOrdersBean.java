@@ -51,14 +51,16 @@ public class SpCakeOrdersBean implements Serializable {
 	private String itemId;
 
 	private float spSelectedWeight;
-	
+
 	@Column(name = "sp_booked_for_name")
 	private String spBookedForName;
-	
+
 	@Column(name = "is_allocated")
 	private int isAllocated;
 
-	
+//	@Column(name = "sp_instructions")
+	private String spInstructions;
+
 	public String getSpBookedForName() {
 		return spBookedForName;
 	}
@@ -162,6 +164,23 @@ public class SpCakeOrdersBean implements Serializable {
 
 	public void setItemId(String itemId) {
 		this.itemId = itemId;
+	}
+
+	public String getSpInstructions() {
+		return spInstructions;
+	}
+
+	public void setSpInstructions(String spInstructions) {
+		this.spInstructions = spInstructions;
+	}
+
+	@Override
+	public String toString() {
+		return "SpCakeOrdersBean [spOrderNo=" + spOrderNo + ", spCode=" + spCode + ", spName=" + spName + ", spfName="
+				+ spfName + ", spEvents=" + spEvents + ", spDeliveryDate=" + spDeliveryDate + ", spPrice=" + spPrice
+				+ ", spTotalAddRate=" + spTotalAddRate + ", frName=" + frName + ", itemId=" + itemId
+				+ ", spSelectedWeight=" + spSelectedWeight + ", spBookedForName=" + spBookedForName + ", isAllocated="
+				+ isAllocated + ", spInstructions=" + spInstructions + "]";
 	}
 
 }

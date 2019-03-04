@@ -8,18 +8,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "t_sp_cake") 
-public class SpCakeOrderUpdate implements Serializable{
+@Table(name = "t_sp_cake")
+public class SpCakeOrderUpdate implements Serializable {
 
 	@Id
-	@Column(name="sp_order_no")
+	@Column(name = "sp_order_no")
 	private int spOrderNo;
-	
-	@Column(name="sp_booked_for_name")
+
+	@Column(name = "sp_booked_for_name")
 	private String spBookedForName;
-	
-	@Column(name="is_allocated")
+
+	@Column(name = "is_allocated")
 	private int isAllocated;
+
+	@Column(name = "sp_instructions")
+	private String spInstructions;
 
 	public int getSpOrderNo() {
 		return spOrderNo;
@@ -45,11 +48,18 @@ public class SpCakeOrderUpdate implements Serializable{
 		this.isAllocated = isAllocated;
 	}
 
+	public String getSpInstructions() {
+		return spInstructions;
+	}
+
+	public void setSpInstructions(String spInstructions) {
+		this.spInstructions = spInstructions;
+	}
+
 	@Override
 	public String toString() {
 		return "SpCakeOrderUpdate [spOrderNo=" + spOrderNo + ", spBookedForName=" + spBookedForName + ", isAllocated="
-				+ isAllocated + "]";
+				+ isAllocated + ", spInstructions=" + spInstructions + "]";
 	}
-	
-	
+
 }
