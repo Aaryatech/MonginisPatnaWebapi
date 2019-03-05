@@ -18,7 +18,7 @@ public interface SalesReportRoyaltyRepo extends JpaRepository<SalesReportRoyalty
 			
 			" COALESCE((SELECT SUM(t_credit_note_details.taxable_amt) FROM t_credit_note_details,t_credit_note_header WHERE t_credit_note_header.crn_date  BETWEEN :fromDate AND :toDate AND t_credit_note_header.crn_id=t_credit_note_details.crn_id AND m_item.id=t_credit_note_details.item_id  AND t_credit_note_header.is_grn=0 AND t_credit_note_header.fr_id IN(:frIdList) AND t_credit_note_details.del_status=0),0) AS  t_gvn_taxable_amt" + 
 			
-			"	FROM m_item,m_category WHERE m_item.item_grp1=m_category.cat_id group by m_item.id order by m_category.cat_id",nativeQuery=true)
+			"	FROM m_item,m_category WHERE m_item.item_grp1=m_category.cat_id AND m_category.cat_id NOT IN(3,7) group by m_item.id order by m_category.cat_id",nativeQuery=true)
 		
 		List<SalesReportRoyalty> getSaleReportRoyalty(@Param("frIdList") List<String> frIdList,@Param("fromDate") String fromDate,@Param("toDate") String toDate);
 
@@ -29,7 +29,7 @@ public interface SalesReportRoyaltyRepo extends JpaRepository<SalesReportRoyalty
 			"	COALESCE((SELECT SUM(t_credit_note_details.taxable_amt) FROM t_credit_note_details,t_credit_note_header WHERE t_credit_note_header.crn_date  BETWEEN :fromDate AND :toDate AND t_credit_note_header.crn_id=t_credit_note_details.crn_id AND m_item.id=t_credit_note_details.item_id  AND t_credit_note_header.is_grn=1 AND  t_credit_note_details.del_status=0),0) AS  t_grn_taxable_amt," + 
 			"	COALESCE((SELECT SUM(t_credit_note_details.grn_gvn_qty) FROM t_credit_note_details,t_credit_note_header WHERE t_credit_note_header.crn_date  BETWEEN :fromDate AND :toDate AND t_credit_note_header.crn_id=t_credit_note_details.crn_id AND m_item.id=t_credit_note_details.item_id  AND t_credit_note_header.is_grn=0 AND  t_credit_note_details.del_status=0),0) AS  t_gvn_qty," + 
 			"	COALESCE((SELECT SUM(t_credit_note_details.taxable_amt) FROM t_credit_note_details,t_credit_note_header WHERE t_credit_note_header.crn_date  BETWEEN :fromDate AND :toDate AND t_credit_note_header.crn_id=t_credit_note_details.crn_id AND m_item.id=t_credit_note_details.item_id  AND t_credit_note_header.is_grn=0 AND  t_credit_note_details.del_status=0),0) AS  t_gvn_taxable_amt " + 
-			"	FROM m_item,m_category WHERE m_item.item_grp1=m_category.cat_id group by m_item.id order by m_category.cat_id",nativeQuery=true)
+			"	FROM m_item,m_category WHERE m_item.item_grp1=m_category.cat_id AND m_category.cat_id NOT IN(3,7) group by m_item.id order by m_category.cat_id",nativeQuery=true)
 		
 		List<SalesReportRoyalty> getSaleReportRoyaltyAllFr(@Param("fromDate") String fromDate,@Param("toDate") String toDate);
 
