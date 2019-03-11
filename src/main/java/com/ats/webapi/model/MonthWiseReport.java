@@ -15,7 +15,7 @@ public class MonthWiseReport {
 	@Column(name="bill_no")
 	private int billNo;
 	
-	private int month;
+	private String month;
 	
 	private float taxableAmt;
 	
@@ -41,11 +41,11 @@ public class MonthWiseReport {
 		this.billNo = billNo;
 	}
 
-	public int getMonth() {
+	public String getMonth() {
 		return month;
 	}
 
-	public void setMonth(int month) {
+	public void setMonth(String month) {
 		this.month = month;
 	}
 

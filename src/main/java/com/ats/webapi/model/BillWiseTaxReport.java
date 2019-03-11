@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class BillWiseTaxReport implements Serializable{
 	
@@ -18,7 +20,7 @@ public class BillWiseTaxReport implements Serializable{
 	private int billDetailNo;
 	
 	
-	private int billNo;
+	private String billNo;
 	
 	private String billDate;
 	
@@ -47,14 +49,14 @@ public class BillWiseTaxReport implements Serializable{
 		this.billDetailNo = billDetailNo;
 	}
 
-	public int getBillNo() {
+	public String getBillNo() {
 		return billNo;
 	}
 
-	public void setBillNo(int billNo) {
+	public void setBillNo(String billNo) {
 		this.billNo = billNo;
 	}
-
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public String getBillDate() {
 		return billDate;
 	}

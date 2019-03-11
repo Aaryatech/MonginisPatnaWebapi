@@ -26,7 +26,7 @@ public class GetRepMonthwiseSell {
 		@Column(name="fr_id")
 		private int frId;
 		
-		private int month;
+		private String month;
 		
 		
 		private float cash;
@@ -92,11 +92,11 @@ public class GetRepMonthwiseSell {
 			this.frName = frName;
 		}
 
-		public int getMonth() {
+		public String getMonth() {
 			return month;
 		}
 
-		public void setMonth(int month) {
+		public void setMonth(String month) {
 			this.month = month;
 		}
 

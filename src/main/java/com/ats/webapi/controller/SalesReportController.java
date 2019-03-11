@@ -376,8 +376,12 @@ public class SalesReportController {
 			fromDate = Common.convertToYMD(fromDate);
 			toDate = Common.convertToYMD(toDate);
 			System.out.println("Input received "+fromDate+""+toDate);
+			if(catId==5)
+			{
+			 salesReportItemwise = saleReportItemwiseRepo.getSaleReportSpcakewise(fromDate, toDate);
+			}else
 			if(catId!=-3)
-			salesReportItemwise = saleReportItemwiseRepo.getSaleReportItemwise(fromDate, toDate);
+			salesReportItemwise = saleReportItemwiseRepo.getSaleReportItemwise(catId,fromDate, toDate);
 			else
 				salesReportItemwise = saleReportItemwiseRepo.getSaleReportItemwiseExceptTradingPacking(fromDate, toDate);
 

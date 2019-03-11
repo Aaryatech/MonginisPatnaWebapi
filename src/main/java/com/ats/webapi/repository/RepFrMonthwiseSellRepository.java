@@ -15,8 +15,8 @@ public interface RepFrMonthwiseSellRepository extends JpaRepository<GetRepMonthw
 			+" sum(CASE WHEN t_sell_bill_header.payment_mode = 1 THEN t_sell_bill_header.payable_amt ELSE 0 END) as cash,"
 					+" sum(CASE WHEN t_sell_bill_header.payment_mode = 2 THEN t_sell_bill_header.payable_amt ELSE 0 END) as card ,"
 			+ " sum(CASE WHEN t_sell_bill_header.payment_mode = 3 THEN t_sell_bill_header.payable_amt ELSE 0 END) as other,"
-					+" m_franchisee.fr_name, MONTH(t_sell_bill_header.bill_date) as month FROM t_sell_bill_header, m_franchisee WHERE t_sell_bill_header.bill_date BETWEEN :fromDate "
+					+" m_franchisee.fr_name, CONCAT(MONTHNAME(t_sell_bill_header.bill_date),'-',YEAR(t_sell_bill_header.bill_date)) as month FROM t_sell_bill_header, m_franchisee WHERE t_sell_bill_header.bill_date BETWEEN :fromDate "
 			+" AND :toDate AND t_sell_bill_header.fr_id IN(:frId) AND m_franchisee.fr_id=t_sell_bill_header.fr_id GROUP BY"
-					+" MONTH(t_sell_bill_header.bill_date),t_sell_bill_header.fr_id ",nativeQuery=true)
+					+" MONTH(t_sell_bill_header.bill_date),t_sell_bill_header.fr_id order by   t_sell_bill_header.bill_date",nativeQuery=true)
 			List<GetRepMonthwiseSell> getRepFrMonthwiseSell(@Param("fromDate") String fromDate,@Param("toDate") String toDate, @Param("frId") List<String> frId);
 }

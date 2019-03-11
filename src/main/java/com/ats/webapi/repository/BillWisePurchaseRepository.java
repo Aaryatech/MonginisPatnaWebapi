@@ -16,7 +16,7 @@ public interface BillWisePurchaseRepository extends JpaRepository<BillWisePurcha
 
 	
 	
-	@Query(value="select h.bill_no,h.invoice_no,h.bill_date,h.taxable_amt,SUM(d.igst_rs) as igst_rs,SUM(d.cgst_rs) as cgst_rs,SUM(d.sgst_rs) as sgst_rs,h.grand_total from t_bill_header h,t_bill_detail d where h.bill_no=d.bill_no AND h.fr_id=:frId AND h.bill_date BETWEEN :fromDate AND :toDate group by d.bill_no",nativeQuery=true)
+	@Query(value="select h.bill_no,h.invoice_no,h.bill_date,h.taxable_amt,SUM(d.igst_rs) as igst_rs,SUM(d.cgst_rs) as cgst_rs,SUM(d.sgst_rs) as sgst_rs,h.grand_total from t_bill_header h,t_bill_detail d where h.bill_no=d.bill_no AND h.fr_id=:frId AND  h.del_status=0 and d.del_status=0 and h.bill_date BETWEEN :fromDate AND :toDate group by d.bill_no",nativeQuery=true)
 	List<BillWisePurchase> findBillWisePurchaseReport(@Param("frId")int frId,@Param("fromDate") String fromDate,@Param("toDate") String toDate);
 
 	

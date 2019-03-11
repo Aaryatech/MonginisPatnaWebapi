@@ -1,6 +1,7 @@
 package com.ats.webapi.model.report;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class GetRepTaxSell {
@@ -18,7 +21,7 @@ public class GetRepTaxSell {
 		private int sellBillDetailNo;
 	
 	@Column(name="sell_bill_no")
-	private int sellBillNo;
+	private String sellBillNo;
 	
 	@Column(name="bill_date")
 	private Date billDate;
@@ -59,14 +62,14 @@ public class GetRepTaxSell {
 		this.sellBillDetailNo = sellBillDetailNo;
 	}
 
-	public int getSellBillNo() {
+	public String getSellBillNo() {
 		return sellBillNo;
 	}
 
-	public void setSellBillNo(int sellBillNo) {
+	public void setSellBillNo(String sellBillNo) {
 		this.sellBillNo = sellBillNo;
 	}
-
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getBillDate() {
 		return billDate;
 	}

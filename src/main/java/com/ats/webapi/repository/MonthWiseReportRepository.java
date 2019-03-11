@@ -13,7 +13,7 @@ import com.ats.webapi.model.MonthWiseReport;
 public interface MonthWiseReportRepository extends JpaRepository<MonthWiseReport, Long> {
 
 	
-	@Query(value="select h.bill_no, MONTH(h.bill_date) as month, SUM(d.taxable_amt) AS taxable_amt,SUM(d.igst_rs) AS igst_rs,SUM(d.cgst_rs) as cgst_rs,SUM(d.sgst_rs) as sgst_rs,SUM(d.grand_total) AS grand_total from t_bill_header h,t_bill_detail d where h.bill_no=d.bill_no AND h.fr_id=:frId AND h.bill_date BETWEEN :fromDate AND :toDate group by month(h.bill_date), h.fr_id",nativeQuery=true)
+	@Query(value="select h.bill_no,CONCAT(MONTHNAME(h.bill_date),'-',(YEAR(h.bill_date))) as month, ROUND(SUM(d.taxable_amt),2) AS taxable_amt,ROUND(SUM(d.igst_rs),2) AS igst_rs,ROUND(SUM(d.cgst_rs),2) as cgst_rs,ROUND(SUM(d.sgst_rs),2) as sgst_rs,ROUND(SUM(d.grand_total),2) AS grand_total from t_bill_header h,t_bill_detail d where h.bill_no=d.bill_no AND h.fr_id=:frId  and h.del_status=0 and d.del_status=0 AND h.bill_date BETWEEN :fromDate AND :toDate group by month(h.bill_date), h.fr_id order by h.bill_date",nativeQuery=true)
 	List<MonthWiseReport> findMonthWiseReport(@Param("frId")int frId,@Param("fromDate") String fromDate,@Param("toDate") String toDate);
 	
 	
