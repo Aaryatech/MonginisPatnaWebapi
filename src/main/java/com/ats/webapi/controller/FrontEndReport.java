@@ -54,7 +54,15 @@ public class FrontEndReport {
 			System.out.println("fromDate : "+fromDate);
 			System.out.println("toDate : "+toDate);
 			System.out.println("isGrn : "+isGrn);
+			if(isGrn.equals("1")) {
 			tSellReport = grnGvnReportRepository.grnGvnReportDateWise(frId, fromDate, toDate, isGrn);
+			}else {
+				tSellReport = grnGvnReportRepository.grnGvnReportDateWiseOfGvn(frId, fromDate, toDate, isGrn);
+				List<GrnGvnReport> tSellList=grnGvnReportRepository.grnGvnReportDateWiseOfGvnForSp(frId, fromDate, toDate, isGrn);
+				if(tSellList.size()>0) {
+				tSellReport.addAll(tSellList);
+				}
+			}
 		}catch(Exception e)
 		{
 			e.printStackTrace();

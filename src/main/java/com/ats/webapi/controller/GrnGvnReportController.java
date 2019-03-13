@@ -161,7 +161,7 @@ public class GrnGvnReportController {
 			@RequestParam("frIdList") List<String> frIdList, @RequestParam("catIdList") List<String> catIdList) {
 
 		System.err.println("Parameter received fromDate:  " + fromDate + "toDate : " + toDate + "frIdList  : "
-				+ frIdList + "isGrn : " + isGrn);
+				+ frIdList + "isGrn : " + isGrn+"catIdList"+catIdList);
 
 		List<GGReportGrpByItemId> grpByFrIdList = null;
 

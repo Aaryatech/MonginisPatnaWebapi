@@ -16,7 +16,9 @@ public class SalesReportBillwiseAllFr implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="bill_no")
+	@Column(name="id")
+	private String id;
+	
 	private int billNo;
 		
 	@Column(name="invoice_no")
@@ -25,8 +27,8 @@ public class SalesReportBillwiseAllFr implements Serializable {
 	@Column(name="fr_name")
 	private String frName;
 	
-	@Column(name="bill_date")
-	private Date billDate;
+	@Column(name="bill_date")             
+	private Date billDate;     
 	
 	@Column(name="fr_id")
 	private int frId;
@@ -63,6 +65,14 @@ public class SalesReportBillwiseAllFr implements Serializable {
 	 float sgstRsSum;
 	 float cgstRsSum;
 	 float igstRsSum;
+	 
+	 
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public int getBillNo() {
 		return billNo;
 	}
