@@ -110,39 +110,39 @@ AND           t_credit_note_header.crn_id= t_credit_note_details.crn_id
     order by
         m_franchisee.fr_id
 	 */
-	@Query(value="SELECT        m_franchisee.fr_id,  m_franchisee.fr_code,     m_franchisee.fr_name,      m_franchisee.fr_city," + 
-			"            COALESCE((SELECT" + 
-			"                        SUM(t_bill_header.taxable_amt)      " + 
-			"                    FROM" + 
-			"                        t_bill_header      " + 
-			"                    WHERE " + 
-			"                        t_bill_header.bill_date BETWEEN :fromDate AND :toDate        " + 
-			"                        AND t_bill_header.del_status=0 AND m_franchisee.fr_id=t_bill_header.fr_id )," + 
-			"                    0) AS  t_bill_taxable_amt," + 
-			"                    COALESCE((SELECT " + 
-			"                        SUM(t_credit_note_header.crn_taxable_amt)    " + 
-			"                    FROM " + 
-			"                        t_credit_note_header     " + 
-			"                    WHERE " + 
-			"                        t_credit_note_header.crn_date BETWEEN :fromDate AND :toDate         " + 
-			"                        AND t_credit_note_header.is_grn=1       " + 
-			"                        AND m_franchisee.fr_id=t_credit_note_header.fr_id" + 
-			"                        )," + 
-			"                    0) AS  t_grn_taxable_amt," + 
-			"                    COALESCE((SELECT " + 
-			"                        SUM(t_credit_note_header.crn_taxable_amt)     " + 
-			"                    FROM " + 
-			"                        t_credit_note_header     " + 
-			"                    WHERE" + 
-			"                        t_credit_note_header.crn_date BETWEEN :fromDate AND :toDate         " + 
-			"                        AND t_credit_note_header.is_grn=0        " + 
-			"                          AND m_franchisee.fr_id=t_credit_note_header.fr_id    " + 
-			"                        )," + 
-			"                    0) AS  t_gvn_taxable_amt                 from " + 
-			"                    m_franchisee              where " + 
-			"                 m_franchisee.fr_id IN(:frIdList) " + 
-			"              order by " + 
-			"                  m_franchisee.fr_id" 
+	@Query(value="SELECT m_franchisee.fr_id,  m_franchisee.fr_code,     m_franchisee.fr_name,      m_franchisee.fr_city, \n" + 
+			"			            COALESCE((SELECT \n" + 
+			"			                        SUM(t_bill_header.taxable_amt)     \n" + 
+			"			                    FROM  \n" + 
+			"			                       t_bill_header     \n" + 
+			"		                   WHERE  \n" + 
+			"		                       t_bill_header.bill_date BETWEEN :fromDate AND :toDate        \n" + 
+			"			                        AND t_bill_header.del_status=0 AND m_franchisee.fr_id=t_bill_header.fr_id ),\n" + 
+			"			                    0) AS  t_bill_taxable_amt, \n" + 
+			"			                    COALESCE((SELECT \n" + 
+			"			                        SUM(t_grn_gvn.apr_taxable_amt)   \n" + 
+			"			                    FROM \n" + 
+			"			                        t_grn_gvn      \n" + 
+			"			                    WHERE \n" + 
+			"			                        t_grn_gvn.grn_gvn_date BETWEEN :fromDate AND :toDate        \n" + 
+			"                        AND t_grn_gvn.is_grn=1 AND  t_grn_gvn.grn_gvn_status=6    \n" + 
+			"		                       AND m_franchisee.fr_id=t_grn_gvn.fr_id \n" + 
+			"			                        ), \n" + 
+			"			                    0) AS  t_grn_taxable_amt,\n" + 
+			"			                   COALESCE((SELECT \n" + 
+			"			                        SUM(t_grn_gvn.apr_taxable_amt)   \n" + 
+			"			                    FROM \n" + 
+			"			                        t_grn_gvn      \n" + 
+			"			                    WHERE \n" + 
+			"			                        t_grn_gvn.grn_gvn_date BETWEEN :fromDate AND :toDate        \n" + 
+			"                        AND t_grn_gvn.is_grn IN (0,2) AND  t_grn_gvn.grn_gvn_status=6    \n" + 
+			"		                       AND m_franchisee.fr_id=t_grn_gvn.fr_id \n" + 
+			"			                        ), \n" + 
+			"			                    0) AS   t_gvn_taxable_amt                 from \n" + 
+			"			                    m_franchisee              where \n" + 
+			"			                 m_franchisee.fr_id IN(:frIdList)  \n" + 
+			"			             order by \n" + 
+			"			                  m_franchisee.fr_id" 
 			,nativeQuery=true)
 		
 		List<SalesReportRoyaltyFr> getSaleReportRoyaltyFr(@Param("frIdList") List<String> frIdList,@Param("fromDate") String fromDate,@Param("toDate") String toDate);
@@ -150,38 +150,39 @@ AND           t_credit_note_header.crn_id= t_credit_note_details.crn_id
 	
 	
 	//report 6 All fr sel
-		@Query(value="SELECT        m_franchisee.fr_id,  m_franchisee.fr_code,     m_franchisee.fr_name,      m_franchisee.fr_city," + 
-				"			            COALESCE((SELECT " + 
-				"			                        SUM(t_bill_header.taxable_amt)     " + 
-				"		                    FROM " + 
-				"		                       t_bill_header      " + 
-				"			                  WHERE " + 
-				"			                     t_bill_header.bill_date BETWEEN :fromDate AND :toDate " + 
-				"			                      AND t_bill_header.del_status=0 AND m_franchisee.fr_id=t_bill_header.fr_id )," + 
-				"			                  0) AS  t_bill_taxable_amt," + 
-				"		                 COALESCE((SELECT " + 
-				"			                       SUM(t_credit_note_header.crn_taxable_amt) " + 
-				"			                 FROM " + 
-				"		                      t_credit_note_header     " + 
-				"			                   WHERE " + 
-				"		                      t_credit_note_header.crn_date BETWEEN :fromDate AND :toDate        " + 
-				"			                      AND t_credit_note_header.is_grn=1 " + 
-				"			                       AND m_franchisee.fr_id=t_credit_note_header.fr_id" + 
-				"			                        )," + 
-				"			                   0) AS  t_grn_taxable_amt," + 
-				"			                   COALESCE((SELECT " + 
-				"			                       SUM(t_credit_note_header.crn_taxable_amt)   " + 
-				"			                  FROM " + 
-				"		                       t_credit_note_header     " + 
-				"			                   WHERE " + 
-				"			                      t_credit_note_header.crn_date BETWEEN :fromDate AND :toDate        " + 
-				"			                       AND t_credit_note_header.is_grn=0       " + 
-				"			                      AND m_franchisee.fr_id=t_credit_note_header.fr_id    " + 
-				"			                        )," + 
-				"			                  0) AS  t_gvn_taxable_amt                 from " + 
-				"			                  m_franchisee             "+
-				"			             order by " + 
-				"			                m_franchisee.fr_id" 
+		@Query(value="SELECT  m_franchisee.fr_id,  m_franchisee.fr_code,     m_franchisee.fr_name,      m_franchisee.fr_city, \n" + 
+				"			            COALESCE((SELECT \n" + 
+				"			                        SUM(t_bill_header.taxable_amt)     \n" + 
+				"			                    FROM  \n" + 
+				"			                       t_bill_header     \n" + 
+				"		                   WHERE  \n" + 
+				"		                       t_bill_header.bill_date BETWEEN :fromDate AND :toDate        \n" + 
+				"			                        AND t_bill_header.del_status=0 AND m_franchisee.fr_id=t_bill_header.fr_id ),\n" + 
+				"			                    0) AS  t_bill_taxable_amt, \n" + 
+				"			                    COALESCE((SELECT \n" + 
+				"			                        SUM(t_grn_gvn.apr_taxable_amt)   \n" + 
+				"			                    FROM \n" + 
+				"			                        t_grn_gvn      \n" + 
+				"			                    WHERE \n" + 
+				"			                        t_grn_gvn.grn_gvn_date BETWEEN :fromDate AND :toDate        \n" + 
+				"                        AND t_grn_gvn.is_grn=1 AND  t_grn_gvn.grn_gvn_status=6    \n" + 
+				"		                       AND m_franchisee.fr_id=t_grn_gvn.fr_id \n" + 
+				"			                        ), \n" + 
+				"			                    0) AS  t_grn_taxable_amt,\n" + 
+				"			                   COALESCE((SELECT \n" + 
+				"			                        SUM(t_grn_gvn.apr_taxable_amt)   \n" + 
+				"			                    FROM \n" + 
+				"			                        t_grn_gvn      \n" + 
+				"			                    WHERE \n" + 
+				"			                        t_grn_gvn.grn_gvn_date BETWEEN :fromDate AND :toDate        \n" + 
+				"                        AND t_grn_gvn.is_grn IN (0,2) AND  t_grn_gvn.grn_gvn_status=6    \n" + 
+				"		                       AND m_franchisee.fr_id=t_grn_gvn.fr_id \n" + 
+				"			                        ), \n" + 
+				"			                    0) AS   t_gvn_taxable_amt                 from \n" + 
+				"			                    m_franchisee              \n" + 
+				"			                 \n" + 
+				"			             order by \n" + 
+				"			                  m_franchisee.fr_id" 
 				,nativeQuery=true)
 			
 			List<SalesReportRoyaltyFr> getSaleReportRoyaltyFrAllFrSel(@Param("fromDate") String fromDate,@Param("toDate") String toDate);
