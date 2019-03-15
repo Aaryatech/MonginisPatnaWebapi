@@ -31,7 +31,7 @@ public interface Tax2ReportRepository extends JpaRepository<Tax2Report, Integer>
 			"ROUND(COALESCE((SELECT SUM(t_bill_detail.cgst_rs) FROM t_bill_detail   WHERE t_bill_header.bill_no=t_bill_detail.bill_no and t_bill_detail.cgst_per+sgst_per=18),0),2) AS cgst_amt_eighteen,\n" + 
 			"ROUND(COALESCE((SELECT SUM(t_bill_detail.cgst_rs) FROM t_bill_detail   WHERE t_bill_header.bill_no=t_bill_detail.bill_no and t_bill_detail.cgst_per+sgst_per=28),0),2) AS cgst_amt_twenty_eight,\n" + 
 			"t_bill_header.cgst_sum\n" + 
-			" from  t_bill_header,m_franchisee where  t_bill_header.bill_date BETWEEN :fromDate AND :toDate AND m_franchisee.fr_id=t_bill_header.fr_id   order by t_bill_header.bill_no\n" + 
+			" from  t_bill_header,m_franchisee where  t_bill_header.bill_date BETWEEN :fromDate AND :toDate AND m_franchisee.fr_id=t_bill_header.fr_id  and t_bill_header.del_status=0   order by t_bill_header.bill_no\n" + 
 			"",nativeQuery=true)
 	List<Tax2Report> getTax2Report(@Param("fromDate")String fromDate,@Param("toDate") String toDate);
 

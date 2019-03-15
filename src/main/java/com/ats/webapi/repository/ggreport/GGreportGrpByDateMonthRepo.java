@@ -13,8 +13,8 @@ public interface GGreportGrpByDateMonthRepo  extends JpaRepository<GGReportGrpBy
 	//r3 group by date
 	
 		//r3 sumit sir query
-		
-		@Query(value=" SELECT t_grn_gvn.grn_gvn_date,monthname(t_grn_gvn.grn_gvn_date) as month, t_grn_gvn.is_grn," + 
+	
+		@Query(value=" SELECT t_grn_gvn.grn_gvn_date,CONCAT(MONTHNAME(t_grn_gvn.grn_gvn_date),'-',(YEAR(t_grn_gvn.grn_gvn_date))) as month, t_grn_gvn.is_grn," + 
 				"			sum(t_grn_gvn.apr_grand_total) as apr_grand_total , sum(t_grn_gvn.grn_gvn_amt)as total_amt ," + 
 				"			sum(t_grn_gvn.grn_gvn_qty) as req_qty, sum(t_grn_gvn.apr_qty_acc) as apr_qty " + 
 				"			from t_grn_gvn " + 
@@ -26,7 +26,7 @@ public interface GGreportGrpByDateMonthRepo  extends JpaRepository<GGReportGrpBy
 			String fromDate,@Param("toDate") String toDate, @Param("isGrn") List<String> isGrn, @Param("frIdList") List<String> frIdList);
 		
 	//r3
-		@Query(value="SELECT t_grn_gvn.grn_gvn_date,monthname(t_grn_gvn.grn_gvn_date) as month, t_grn_gvn.is_grn," + 
+		@Query(value="SELECT t_grn_gvn.grn_gvn_date,CONCAT(MONTHNAME(t_grn_gvn.grn_gvn_date),'-',(YEAR(t_grn_gvn.grn_gvn_date))) as month, t_grn_gvn.is_grn," + 
 				"							sum(t_grn_gvn.apr_grand_total) as apr_grand_total , sum(t_grn_gvn.grn_gvn_amt)as total_amt, " + 
 				"							sum(t_grn_gvn.grn_gvn_qty) as req_qty, sum(t_grn_gvn.apr_qty_acc) as apr_qty " + 
 				"							from t_grn_gvn " + 
@@ -39,15 +39,15 @@ public interface GGreportGrpByDateMonthRepo  extends JpaRepository<GGReportGrpBy
 		
 		//r4 group by month
 		
-		//r4
+		//r4 CONCAT(MONTHNAME(t_grn_gvn.grn_gvn_date),'-',(YEARt_grn_gvn.grn_gvn_date))) as month
 		
-		@Query(value="SELECT t_grn_gvn.grn_gvn_date,monthname(t_grn_gvn.grn_gvn_date) as month, t_grn_gvn.is_grn," + 
+		@Query(value="SELECT t_grn_gvn.grn_gvn_date,CONCAT(MONTHNAME(CONCAT(MONTHNAME(t_grn_gvn.grn_gvn_date),'-',(YEAR(t_grn_gvn.grn_gvn_date))) as month),'-',(YEAR(t_grn_gvn.grn_gvn_date))) as month, t_grn_gvn.is_grn," + 
 				"											sum(t_grn_gvn.apr_grand_total) as apr_grand_total , sum(t_grn_gvn.grn_gvn_amt)as total_amt, " + 
 				"										sum(t_grn_gvn.grn_gvn_qty) as req_qty, sum(t_grn_gvn.apr_qty_acc) as apr_qty " + 
 				"											from t_grn_gvn " + 
 				"									WHERE " + 
 				"										t_grn_gvn.grn_gvn_date BETWEEN :fromDate AND :toDate AND t_grn_gvn.is_grn IN ( :isGrn) AND t_grn_gvn.fr_id IN(:frIdList)" + 
-				"									GROUP BY month" + 
+				"									GROUP BY month order by t_grn_gvn.grn_gvn_date" + 
 				"",nativeQuery=true)
 		
 			List<GGReportGrpByMonthDate> getGrnGvnReportByDateSelFrGroupByMonth(@Param("fromDate") 
@@ -56,13 +56,13 @@ public interface GGreportGrpByDateMonthRepo  extends JpaRepository<GGReportGrpBy
 
 		
 	//r4
-		@Query(value="SELECT t_grn_gvn.grn_gvn_date,monthname(t_grn_gvn.grn_gvn_date) as month, t_grn_gvn.is_grn," + 
+		@Query(value="SELECT t_grn_gvn.grn_gvn_date,CONCAT(MONTHNAME(t_grn_gvn.grn_gvn_date),'-',(YEAR(t_grn_gvn.grn_gvn_date))) as month , t_grn_gvn.is_grn," + 
 				"								sum(t_grn_gvn.apr_grand_total) as apr_grand_total , sum(t_grn_gvn.grn_gvn_amt)as total_amt, " + 
 				"									sum(t_grn_gvn.grn_gvn_qty) as req_qty, sum(t_grn_gvn.apr_qty_acc) as apr_qty " + 
 				"								from t_grn_gvn " + 
 				"									WHERE" + 
 				"									t_grn_gvn.grn_gvn_date BETWEEN :fromDate AND :toDate AND t_grn_gvn.is_grn IN ( :isGrn) " + 
-				"								GROUP BY month " + 
+				"								GROUP BY month order by t_grn_gvn.grn_gvn_date" + 
 				"",nativeQuery=true)
 		
 			List<GGReportGrpByMonthDate> getGrnGvnReportByDateAllFrAllGGGroupByMonth(@Param("fromDate") 

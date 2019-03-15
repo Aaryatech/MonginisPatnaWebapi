@@ -424,10 +424,19 @@ if(catIdList.contains("0")) {
 				}
 				
 				System.err.println("New cat ID List" +catIdList );
+				
 }
+if(catIdList.contains("5"))
+{
+	salesReportRoyaltyList = salesReportRoyaltyRepo.getSaleReportRoyConsoByCatForSp(frIdList, catIdList, fromDate, toDate);
+	System.out.println("getSaleReportRoyConsoByCatForSp"+salesReportRoyaltyList.toString());
+}
+else
+{
 			salesReportRoyaltyList = salesReportRoyaltyRepo.getSaleReportRoyConsoByCat(frIdList, catIdList, fromDate, toDate);
 			System.out.println("getSaleReportBillwise"+salesReportRoyaltyList.toString());
 
+}
 		} catch (Exception e) {
 			System.out.println(" Exce in sales Report Royalty  By Category " + e.getMessage());
 			e.printStackTrace();
@@ -468,9 +477,19 @@ if(catIdList.contains("0")) {
 				System.err.println("New cat ID List" +catIdList );
 				
 			}
+System.err.println("New cat ID List" +catIdList );
+			if(catIdList.contains("5"))
+			{
+				salesReportRoyaltyList = salesReportRoyaltyRepo.getSaleReportRoyConsoByCatAllFrForSpCake(catIdList, fromDate, toDate);
+				System.out.println("getSaleReportBillwisespppppp"+salesReportRoyaltyList.toString());
+				
+			}
+			else
+			{
 
 			salesReportRoyaltyList = salesReportRoyaltyRepo.getSaleReportRoyConsoByCatAllFr(catIdList, fromDate, toDate);
 			System.out.println("getSaleReportBillwise"+salesReportRoyaltyList.toString());
+			}
 
 		} catch (Exception e) {
 			System.out.println(" Exce in sales Report Royalty  By Category " + e.getMessage());
