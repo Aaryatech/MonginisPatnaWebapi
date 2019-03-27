@@ -35,7 +35,6 @@ public interface GGReportGrpByItemIdRepo extends JpaRepository<GGReportGrpByItem
 			"        AND  t_grn_gvn.fr_id=m_franchisee.fr_id     AND t_grn_gvn_header.fr_id IN(:frIdList) AND i.item_grp1 IN(:catIdList)   \n" + 
 			"        AND t_grn_gvn.item_id=i.id  and t_grn_gvn.cat_id!=5 \n" + 
 			"    GROUP by\n" + 
-			"        t_grn_gvn.fr_id,\n" + 
 			"        t_grn_gvn.item_id\n" + 
 			"        \n" + 
 			"        UNION ALL\n" + 
@@ -65,7 +64,6 @@ public interface GGReportGrpByItemIdRepo extends JpaRepository<GGReportGrpByItem
 			"        AND  t_grn_gvn.fr_id=m_franchisee.fr_id    AND t_grn_gvn_header.fr_id IN(:frIdList)     \n" + 
 			"        AND t_grn_gvn.item_id=s.sp_id  and t_grn_gvn.cat_id=5  and t_grn_gvn.cat_id IN(:catIdList) \n" + 
 			"    GROUP by\n" + 
-			"        t_grn_gvn.fr_id,\n" + 
 			"        t_grn_gvn.item_id", nativeQuery = true)
 
 	List<GGReportGrpByItemId> getGGReportGrpByFrIdSelFr(@Param("fromDate") String fromDate,
@@ -97,7 +95,6 @@ public interface GGReportGrpByItemIdRepo extends JpaRepository<GGReportGrpByItem
 			"        AND  t_grn_gvn.fr_id=m_franchisee.fr_id     \n" + 
 			"        AND t_grn_gvn.item_id=i.id and t_grn_gvn.cat_id!=5 and   i.item_grp1 IN(:catIdList)\n" + 
 			"    GROUP by\n" + 
-			"        t_grn_gvn.fr_id,\n" + 
 			"        t_grn_gvn.item_id\n" + 
 			"        \n" + 
 			"        UNION ALL\n" + 
@@ -127,7 +124,6 @@ public interface GGReportGrpByItemIdRepo extends JpaRepository<GGReportGrpByItem
 			"        AND  t_grn_gvn.fr_id=m_franchisee.fr_id \n" + 
 			"        AND t_grn_gvn.item_id=s.sp_id  and t_grn_gvn.cat_id=5 and t_grn_gvn.cat_id IN(:catIdList)\n" + 
 			"    GROUP by\n" + 
-			"        t_grn_gvn.fr_id,\n" + 
 			"        t_grn_gvn.item_id", nativeQuery = true)
 
 	List<GGReportGrpByItemId> getGGReportGrpByItemIdSelFr(@Param("fromDate") String fromDate,
@@ -159,7 +155,6 @@ public interface GGReportGrpByItemIdRepo extends JpaRepository<GGReportGrpByItem
 			"        AND  t_grn_gvn.fr_id=m_franchisee.fr_id     AND t_grn_gvn_header.fr_id IN(:frIdList)    \n" + 
 			"        AND t_grn_gvn.item_id=i.id  and t_grn_gvn.cat_id!=5 \n" + 
 			"    GROUP by\n" + 
-			"        t_grn_gvn.fr_id,\n" + 
 			"        t_grn_gvn.item_id\n" + 
 			"        \n" + 
 			"        UNION ALL\n" + 
@@ -188,8 +183,7 @@ public interface GGReportGrpByItemIdRepo extends JpaRepository<GGReportGrpByItem
 			"        AND t_grn_gvn_header.grn_gvn_header_id=t_grn_gvn.grn_gvn_header_id          \n" + 
 			"        AND  t_grn_gvn.fr_id=m_franchisee.fr_id    AND t_grn_gvn_header.fr_id IN(:frIdList)     \n" + 
 			"        AND t_grn_gvn.item_id=s.sp_id  and t_grn_gvn.cat_id=5 \n" + 
-			"    GROUP by\n" + 
-			"        t_grn_gvn.fr_id,\n" + 
+			"    GROUP by\n" +    
 			"        t_grn_gvn.item_id", nativeQuery = true)
 
 	List<GGReportGrpByItemId> getGGReportGrpByItemId(@Param("fromDate") String fromDate, @Param("toDate") String toDate,
@@ -220,7 +214,6 @@ public interface GGReportGrpByItemIdRepo extends JpaRepository<GGReportGrpByItem
 			"        AND  t_grn_gvn.fr_id=m_franchisee.fr_id      \n" + 
 			"        AND t_grn_gvn.item_id=i.id  and t_grn_gvn.cat_id!=5 \n" + 
 			"    GROUP by\n" + 
-			"        t_grn_gvn.fr_id,\n" + 
 			"        t_grn_gvn.item_id\n" + 
 			"        \n" + 
 			"        UNION ALL\n" + 
@@ -250,7 +243,6 @@ public interface GGReportGrpByItemIdRepo extends JpaRepository<GGReportGrpByItem
 			"        AND  t_grn_gvn.fr_id=m_franchisee.fr_id      \n" + 
 			"        AND t_grn_gvn.item_id=s.sp_id  and t_grn_gvn.cat_id=5 \n" + 
 			"    GROUP by\n" + 
-			"        t_grn_gvn.fr_id,\n" + 
 			"        t_grn_gvn.item_id", nativeQuery = true)
 
 	List<GGReportGrpByItemId> getGGReportGrpByFrIdSelFrAllFr(@Param("fromDate") String fromDate,
