@@ -1,6 +1,7 @@
 package com.ats.webapi.controller;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ats.webapi.commons.Common;
 import com.ats.webapi.model.GetBillDetails;
 import com.ats.webapi.model.SellBillDetailList;
+import com.ats.webapi.model.bill.Company;
 import com.ats.webapi.model.bill.FrBillHeaderForPrint;
 import com.ats.webapi.model.bill.GetBillDetailPrint;
 import com.ats.webapi.repository.BillDetailForPrintRepo;
+import com.ats.webapi.repository.CompanyRepository;
 import com.ats.webapi.repository.GetBillHeaderForPrintRepo;
 
 @RestController
@@ -26,7 +29,9 @@ public class PrintFrBillController {
 
 	@Autowired
 	BillDetailForPrintRepo billDetailForPrintRepo;
-
+	@Autowired
+	CompanyRepository companyRepository;
+	
 	@RequestMapping(value = { "/getBillHeaderForPrint" }, method = RequestMethod.POST)
 	public @ResponseBody List<FrBillHeaderForPrint> getBillHeaderForPrint(@RequestParam("fromDate") String fromDate,
 			@RequestParam("toDate") String toDate) {
@@ -89,6 +94,14 @@ public class PrintFrBillController {
 		try {
 			
 			billHeaderPrintList = billHeaderForPrintRepo.getFrBillHeaderForPrintSelectedBill(billNoList);
+			for(int i=0;i<billHeaderPrintList.size();i++) {
+				String pattern = "yyyy-MM-dd";
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+				String date = simpleDateFormat.format(billHeaderPrintList.get(i).getBillDate());
+				Company company=companyRepository.findByBillDate(date);
+				billHeaderPrintList.get(i).setCompany(company);
+			}
 
 		} catch (Exception e) {
 			System.out.println(" Exce in bill Header List for Print " + e.getMessage());

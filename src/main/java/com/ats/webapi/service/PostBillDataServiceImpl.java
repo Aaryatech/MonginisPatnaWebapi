@@ -1,5 +1,6 @@
 package com.ats.webapi.service;
 
+import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.ats.webapi.model.FrItemStockConfigureList;
 import com.ats.webapi.model.PostBillDetail;
 import com.ats.webapi.model.PostBillHeader;
+import com.ats.webapi.model.bill.Company;
+import com.ats.webapi.repository.CompanyRepository;
 import com.ats.webapi.repository.FrItemStockConfigureRepository;
 import com.ats.webapi.repository.OrderRepository;
 import com.ats.webapi.repository.PostBillDetailRepository;
@@ -62,7 +65,8 @@ public class PostBillDataServiceImpl implements PostBillDataService {
 	 * 
 	 * return billDetail; }
 	 */
-
+	@Autowired
+	CompanyRepository companyRepository;
 	@Override
 	public List<PostBillHeader> saveBillHeader(List<PostBillHeader> postBillHeader) {
 		
@@ -70,9 +74,23 @@ public class PostBillDataServiceImpl implements PostBillDataService {
 		
 		PostBillHeader postBillHeaders = new PostBillHeader();
 		for (int i = 0; i < postBillHeader.size(); i++) {
+			String invoiceNo = null;
+			int settingValue=0;
+			Company company=new Company();
+			try {
+			String pattern = "yyyy-MM-dd";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+			String date = simpleDateFormat.format(postBillHeader.get(i).getBillDate());
+		
+			 company=companyRepository.findByBillDate(date);
 			
-			
-			int settingValue=frItemStockConfRepo.findBySettingKey("PB");
+			invoiceNo=company.getExVar1();
+			settingValue=Integer.parseInt(company.getExVar2());
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+			//String invoiceNo=frItemStockConfRepo.findBySettingKey("PB"); commented on 30 march for PB value getting from company table and update
 			
 			System.out.println("Setting Value Received " + settingValue);
 			int year = Year.now().getValue();
@@ -81,25 +99,33 @@ public class PostBillDataServiceImpl implements PostBillDataService {
 
 			int length = String.valueOf(settingValue).length();
 
-			String invoiceNo = null;
+			
 
 			if (length == 1)
-
-				invoiceNo = strYear + "-" + "0000" + settingValue;
+			{
+				invoiceNo =invoiceNo+"-0000"+settingValue;
+			}
+			else
 			if (length == 2)
+			{
 
-				invoiceNo = strYear + "-" + "000" + settingValue;
-
+				invoiceNo =invoiceNo+"-000"+settingValue;
+			}else
 			if (length == 3)
-
-				invoiceNo = strYear + "-" + "00" + settingValue;
-
+			{
+				invoiceNo =invoiceNo+"-00"+settingValue; 
+			}else
 			if (length == 4)
+			{
+				invoiceNo =invoiceNo+"-0"+settingValue;
+			}
+			else
+			{
 
-				invoiceNo = strYear + "-" + "0" + settingValue;
+				invoiceNo =invoiceNo+"-"+settingValue;
+			}
 
-			System.out.println("*** settingValue= " + settingValue);
-			
+			System.out.println(invoiceNo+"*** settingValue= " + settingValue);
 			
 			postBillHeader.get(i).setInvoiceNo(invoiceNo);
 			
@@ -110,8 +136,9 @@ public class PostBillDataServiceImpl implements PostBillDataService {
 				
 				settingValue=settingValue+1;
 				
-				int result = updateSeetingForPBRepo.updateSeetingForPurBill(settingValue, "PB");
-				
+				//int result = updateSeetingForPBRepo.updateSeetingForPurBill(settingValue, "PB");
+				int result =companyRepository.updatePBStatus(company.getCompId(), settingValue);
+
 				System.err.println("PB setting value updated "+ result);
 				
 			}

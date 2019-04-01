@@ -101,10 +101,10 @@ public class GetCustomerBill {
 	private float sgstRs;
 
 	@Transient
-	private int intBillAmt;
+	private float intBillAmt;
 
 	@Transient
-	private int intDiscAmt;
+	private float intDiscAmt;
 
 
 	@PostLoad
@@ -342,22 +342,22 @@ public class GetCustomerBill {
 	}
 
 
-	public int getIntBillAmt() {
+	public float getIntBillAmt() {
 		return intBillAmt;
 	}
 
 
-	public void setIntBillAmt(int intBillAmt) {
+	public void setIntBillAmt(float intBillAmt) {
 		this.intBillAmt = intBillAmt;
 	}
 
 
-	public int getIntDiscAmt() {
+	public float getIntDiscAmt() {
 		return intDiscAmt;
 	}
 
 
-	public void setIntDiscAmt(int intDiscAmt) {
+	public void setIntDiscAmt(float intDiscAmt) {
 		this.intDiscAmt = intDiscAmt;
 	}
 

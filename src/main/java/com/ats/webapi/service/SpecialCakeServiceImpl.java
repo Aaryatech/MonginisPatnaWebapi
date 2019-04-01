@@ -137,16 +137,20 @@ public class SpecialCakeServiceImpl implements SpecialCakeService{
 	@Override
 	public SpCakeSupplement saveSpCakeSup(SpCakeSupplement spCakeSupplement) {
 
-		SpCakeSupplement spCakeSupplementRes=spCakeSupRepository.saveAndFlush(spCakeSupplement);
+		SpCakeSupplement spCakeSupplementRes=null;
+		List<SpCakeSupplement> spCakeSuppList=spCakeSupRepository.findBySpId(spCakeSupplement.getSpId());
+		if(spCakeSuppList.size()==0 || spCakeSupplement.getId()!=0) {
+		 spCakeSupplementRes=spCakeSupRepository.saveAndFlush(spCakeSupplement);
+		}
 		return spCakeSupplementRes;
 	}
 
 	@Override
 	public Info deleteSpCakeSup(List<Integer> id) {
 
-		int isDel=spCakeSupRepository.deleteSpCakeSup(id);
+		Long isDel=spCakeSupRepository.deleteBySpIdIn(id);
 		Info info=new Info();
-		if(isDel==1)
+		if(isDel>0)
 		{
 			info.setError(false);
 			info.setMessage("SpCakeSupplement Deleted Successfully.");

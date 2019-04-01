@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -61,7 +62,17 @@ public class FrBillHeaderForPrint implements Serializable {
 	@Column(name="is_same_state")
 	private String isSameState;
 	
-	
+	@Transient
+	Company company;
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
 
 	public int getBillNo() {
 		return billNo;
@@ -189,7 +200,7 @@ public class FrBillHeaderForPrint implements Serializable {
 				+ ", invoiceNo=" + invoiceNo + ", billDate=" + billDate + ", frId=" + frId + ", frCode=" + frCode
 				+ ", grandTotal=" + grandTotal + ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax + ", status="
 				+ status + ", DelStatus=" + DelStatus + ", remark=" + remark + ", frAddress=" + frAddress
-				+ ", isSameState=" + isSameState + "]";
+				+ ", isSameState=" + isSameState + ", company=" + company + "]";
 	}
 
 	

@@ -18,7 +18,7 @@ public interface ItemSupRepository extends JpaRepository<ItemSup, Integer>{
 
 	@Modifying
 	@Transactional
-	@Query("Update ItemSup  SET del_status=1 WHERE item_id IN(:itemId)")
+	@Query("Delete from ItemSup  WHERE item_id IN(:itemId)")
 	int deleteItemSup(@Param("itemId")List<String> itemId);
 	
 
@@ -26,6 +26,9 @@ public interface ItemSupRepository extends JpaRepository<ItemSup, Integer>{
 	@Modifying
 	@Query("UPDATE ItemSup i SET i.itemHsncd=:itemHsncd  WHERE i.itemId=:id")
 	int updateItemHsnAndPerInSup(@Param("id")Integer id,@Param("itemHsncd") String itemHsncd);
+
+
+	List<ItemSup> findByItemId(int itemId);
 
 
 }

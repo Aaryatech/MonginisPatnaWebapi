@@ -18,10 +18,15 @@ public interface SpCakeSupRepository extends JpaRepository<SpCakeSupplement, Int
 
 	SpCakeSupplement saveAndFlush(SpCakeSupplement spCakeSupplement);
 
-	@Modifying
+	/*@Modifying
 	@Transactional
 	@Query("Update SpCakeSupplement  SET del_status=1 WHERE sp_id IN(:id)")
-	int deleteSpCakeSup(@Param("id") List<Integer> id);
+	int deleteSpCakeSup(@Param("id") List<Integer> id);*/
+
+	List<SpCakeSupplement> findBySpId(int spId);
+
+	@Transactional
+	Long deleteBySpIdIn(List<Integer> id);
 
 
 

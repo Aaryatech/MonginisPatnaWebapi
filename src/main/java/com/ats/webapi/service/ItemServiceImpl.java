@@ -126,7 +126,10 @@ public class ItemServiceImpl implements ItemService{
 	@Override
 	public ItemSup saveItemSup(ItemSup itemSup) {
 
-		ItemSup itemSupRes=itemSupRepository.saveAndFlush(itemSup);
+		List<ItemSup> suppList=itemSupRepository.findByItemId(itemSup.getItemId());
+		ItemSup itemSupRes=null;
+		if(suppList.size()==0 || itemSup.getId()!=0) {
+		 itemSupRes=itemSupRepository.saveAndFlush(itemSup);
 		
 		 try {
 			    List<String> frTokens=franchiseSupRepository.findTokens();
@@ -139,6 +142,7 @@ public class ItemServiceImpl implements ItemService{
 	         {
 		       e2.printStackTrace();
 	         }
+		}
 		return itemSupRes;
 	}
 

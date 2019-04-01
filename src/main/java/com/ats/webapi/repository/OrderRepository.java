@@ -13,7 +13,7 @@ import com.ats.webapi.model.Orders;
 
 public interface OrderRepository extends JpaRepository<Orders, Long> {
 
-	@Query(value = "SELECT * FROM t_order WHERE t_order.fr_id=:frId AND t_order.is_edit=0 AND t_order.item_id =:items AND t_order.production_date=:date AND t_order.menu_id=:menuId", nativeQuery = true)
+	@Query(value = "SELECT * FROM t_order WHERE t_order.fr_id=:frId AND t_order.is_edit=0 AND t_order.item_id =:items AND t_order.production_date=:date AND t_order.menu_id=:menuId and t_order.is_bill_generated IN(0,1)", nativeQuery = true)
 	Orders findPreviousOrder(@Param("items") String items, @Param("frId") int frId, @Param("date") Date date,
 			@Param("menuId") int menuId);
 
