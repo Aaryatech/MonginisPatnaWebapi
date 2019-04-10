@@ -86,18 +86,17 @@ public class PostBillDataServiceImpl implements PostBillDataService {
 			 company=companyRepository.findByBillDate(date);
 			
 			invoiceNo=company.getExVar1();
-			settingValue=Integer.parseInt(company.getExVar2());
+			//settingValue=Integer.parseInt(company.getExVar2());
 			}catch (Exception e) {
 				// TODO: handle exception
 			}
-			//String invoiceNo=frItemStockConfRepo.findBySettingKey("PB"); commented on 30 march for PB value getting from company table and update
+		    settingValue=frItemStockConfRepo.findBySettingKey("PB");
 			
 			System.out.println("Setting Value Received " + settingValue);
-			int year = Year.now().getValue();
-			String strYear = String.valueOf(year);
-			strYear = strYear.substring(2);
+	
 
 			int length = String.valueOf(settingValue).length();
+			
 
 			
 
@@ -136,8 +135,7 @@ public class PostBillDataServiceImpl implements PostBillDataService {
 				
 				settingValue=settingValue+1;
 				
-				//int result = updateSeetingForPBRepo.updateSeetingForPurBill(settingValue, "PB");
-				int result =companyRepository.updatePBStatus(company.getCompId(), settingValue);
+				int result = updateSeetingForPBRepo.updateSeetingForPurBill(settingValue, "PB");
 
 				System.err.println("PB setting value updated "+ result);
 				
