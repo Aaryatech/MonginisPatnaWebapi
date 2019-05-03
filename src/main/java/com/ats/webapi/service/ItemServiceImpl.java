@@ -288,6 +288,13 @@ public class ItemServiceImpl implements ItemService{
 		return items;
 	}
 
+	@Override
+	public List<Item> getOtherItemsForFr(int frId, int catId) {
+		// TODO Auto-generated method stub
+		 List<Item> items=itemRepository.getOtherItemsForFr(catId);
+			return items;
+	}
+
 	
 
 }

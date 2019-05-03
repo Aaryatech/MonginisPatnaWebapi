@@ -633,10 +633,10 @@ public class FrStockApiController {
 					getCurrentStockDetails.setStockHeaderId(postFrItemStockDetail.getOpeningStockHeaderId());
 					getCurrentStockDetails.setStockDetailId(postFrItemStockDetail.getOpeningStockDetailId());
 					getCurrentStockDetails.setRegOpeningStock(postFrItemStockDetail.getRegOpeningStock());
-					getCurrentStockDetails.setSpOpeningStock(postFrItemStockDetail.getSpOpeningStock());
+					getCurrentStockDetails.setSpOpeningStock(itemsList.get(i).getItemRate1());
 					getCurrentStockDetails.setRegTotalGrnGvn(totalRegGrnGvn);
 					getCurrentStockDetails.setRegTotalPurchase(regSpPurchase.getReg());
-					getCurrentStockDetails.setSpTotalPurchase(regSpPurchase.getSp());
+					getCurrentStockDetails.setSpTotalPurchase(itemsList.get(i).getItemMrp1());
 					getCurrentStockDetails.setRegTotalSell(totalRegSell.getReg());
 					getCurrentStockDetails.setSpTotalSell(totalRegSell.getSp());
 					getCurrentStockDetails.setId(postFrItemStockDetail.getItemId());
@@ -668,10 +668,10 @@ public class FrStockApiController {
 					getCurrentStockDetails.setStockHeaderId(0);
 					getCurrentStockDetails.setStockDetailId(0);
 					getCurrentStockDetails.setRegOpeningStock(0);
-					getCurrentStockDetails.setSpOpeningStock(0);
+					getCurrentStockDetails.setSpOpeningStock(itemsList.get(i).getItemRate1());
 					getCurrentStockDetails.setRegTotalGrnGvn(totalRegGrnGvn);
 					getCurrentStockDetails.setRegTotalPurchase(regSpPurchase.getReg());
-					getCurrentStockDetails.setSpTotalPurchase(regSpPurchase.getSp());
+					getCurrentStockDetails.setSpTotalPurchase(itemsList.get(i).getItemMrp1());
 					getCurrentStockDetails.setRegTotalSell(totalRegSell.getReg());
 					getCurrentStockDetails.setSpTotalSell(totalRegSell.getSp());
 					getCurrentStockDetails.setId(itemsList.get(i).getId());

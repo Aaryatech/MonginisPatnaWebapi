@@ -71,6 +71,9 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	public List<Item> findByItemGrp1InAndDelStatusOrderByItemGrp2AscItemNameAsc(List<String> catIdList, int i);
 
+	@Query(value="SELECT m_item.* FROM m_item WHERE m_item.item_grp1=:catId and m_item.item_is_used=1 and m_item.del_status=0",nativeQuery=true)
+	public List<Item> getOtherItemsForFr(@Param("catId") int catId);//@Param("frId") int frId,
+
 
 	
 } 

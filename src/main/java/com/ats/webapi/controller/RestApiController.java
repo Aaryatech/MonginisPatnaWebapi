@@ -4277,5 +4277,22 @@ System.err.println("meu Id rece " +menuId);
 		System.out.println("Res  :" + regSpCakeOrder.toString());
 		return regSpCakeOrder;
 	}
+	// Get Items By Item->FR Id and Delete Status 0
+	@RequestMapping(value = "/getOtherItemsForFr", method = RequestMethod.POST)
+	public @ResponseBody ItemResponse getOtherItemsForFr(@RequestParam int frId,@RequestParam int catId) {
 
+		ItemResponse itemResponse = new ItemResponse();
+		ErrorMessage errorMessage = new ErrorMessage();
+		List<Item> items = itemService.getOtherItemsForFr(frId, catId);
+		if (items != null) {
+			itemResponse.setItemList(items);
+			errorMessage.setError(false);
+			errorMessage.setMessage("Success");
+		} else {
+			errorMessage.setError(true);
+			errorMessage.setMessage("No Items Found");
+		}
+		return itemResponse;
+
+	}
 }

@@ -30,13 +30,13 @@ public class GetCurrentStockDetails {
 	private int regOpeningStock;
 
 	@Column(name = "sp_opening_stock")
-	private int spOpeningStock;
+	private double spOpeningStock;  //  ItemRate1
 	
 	@Column(name = "reg_total_purchase")
 	private int regTotalPurchase;
 	
 	@Column(name = "sp_total_purchase")
-	private int spTotalPurchase;
+	private double spTotalPurchase;   //  MRP 1
 	
 	
 	@Column(name = "reg_total_grn_gvn")
@@ -69,7 +69,6 @@ public class GetCurrentStockDetails {
 	@PostLoad
 	private void onLoad() {
 	    this.currentRegStock = (regOpeningStock + regTotalPurchase) - (regTotalGrnGvn + regTotalSell );
-	    this.currentSpStock = (spOpeningStock + spTotalPurchase) - spTotalSell ;
 	
 	}
 
@@ -122,14 +121,14 @@ public class GetCurrentStockDetails {
 
 
 
-	public int getSpOpeningStock() {
+	public double getSpOpeningStock() {
 		return spOpeningStock;
 	}
 
 
 
 
-	public void setSpOpeningStock(int spOpeningStock) {
+	public void setSpOpeningStock(double spOpeningStock) {
 		this.spOpeningStock = spOpeningStock;
 	}
 
@@ -150,14 +149,14 @@ public class GetCurrentStockDetails {
 
 
 
-	public int getSpTotalPurchase() {
+	public double getSpTotalPurchase() {
 		return spTotalPurchase;
 	}
 
 
 
 
-	public void setSpTotalPurchase(int spTotalPurchase) {
+	public void setSpTotalPurchase(double spTotalPurchase) {
 		this.spTotalPurchase = spTotalPurchase;
 	}
 
