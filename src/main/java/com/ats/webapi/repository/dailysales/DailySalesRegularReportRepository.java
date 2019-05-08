@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.ats.webapi.model.dailysales.DailySalesRegular;
 
 
+@Repository
 public interface DailySalesRegularReportRepository extends JpaRepository<DailySalesRegular, Integer> {
 
 	@Query(value=" select cat_id,coalesce((SELECT COALESCE(SUM(t_bill_detail.bill_qty),0) FROM t_bill_detail \n" + 

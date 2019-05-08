@@ -5,6 +5,18 @@ import java.util.List;
 public class DailySalesReportDao {
 	
 	List<DailySalesRegular> dailySalesRegularList;
+	
+	List<SpDailySales> spDailySalesList;
+	
+	
+
+	public List<SpDailySales> getSpDailySalesList() {
+		return spDailySalesList;
+	}
+
+	public void setSpDailySalesList(List<SpDailySales> spDailySalesList) {
+		this.spDailySalesList = spDailySalesList;
+	}
 
 	public List<DailySalesRegular> getDailySalesRegularList() {
 		return dailySalesRegularList;

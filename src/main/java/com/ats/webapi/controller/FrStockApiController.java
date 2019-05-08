@@ -264,7 +264,7 @@ public class FrStockApiController {
 			@RequestParam("itemIdList") List<Integer> itemIdList, @RequestParam("catId") int catId,
 			@RequestParam("frStockType") int frStockType) {
 
-		System.out.println("inside rest getCurrentStock : I/p : itemIdList: " + itemIdList.toString());
+		System.out.println("inside rest getCurrentStock : I/p : itemIdList: " + itemIdList.toString()+"fromDate"+strFromDate+"strToDate"+strToDate+"catId"+catId);
 		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 		List<GetCurrentStockDetails> stockDetailsList = new ArrayList<GetCurrentStockDetails>();
 
@@ -376,10 +376,10 @@ public class FrStockApiController {
 						getCurrentStockDetails.setStockHeaderId(0);
 						getCurrentStockDetails.setStockDetailId(0);
 						getCurrentStockDetails.setRegOpeningStock(regOpFromDate);
-						getCurrentStockDetails.setSpOpeningStock(spOpFromDate);
+						getCurrentStockDetails.setSpOpeningStock(itemsList.get(i).getItemRate1());
 						getCurrentStockDetails.setRegTotalGrnGvn(totalLastRegGrnGvn);
 						getCurrentStockDetails.setRegTotalPurchase(totalLastRegPurchase.getReg());
-						getCurrentStockDetails.setSpTotalPurchase(totalLastRegPurchase.getSp());
+						getCurrentStockDetails.setSpTotalPurchase(itemsList.get(i).getItemMrp1());
 						getCurrentStockDetails.setRegTotalSell(totalLastRegSell.getReg());
 						getCurrentStockDetails.setSpTotalSell(totalLastRegSell.getSp());
 						getCurrentStockDetails.setId(itemsList.get(i).getId());
@@ -412,10 +412,10 @@ public class FrStockApiController {
 						getCurrentStockDetails.setStockHeaderId(0);
 						getCurrentStockDetails.setStockDetailId(0);
 						getCurrentStockDetails.setRegOpeningStock(regOpFromDate);
-						getCurrentStockDetails.setSpOpeningStock(spOpFromDate);
+						getCurrentStockDetails.setSpOpeningStock(itemsList.get(i).getItemRate1());
 						getCurrentStockDetails.setRegTotalGrnGvn(totalLastRegGrnGvn);
 						getCurrentStockDetails.setRegTotalPurchase(totalLastRegPurchase.getReg());
-						getCurrentStockDetails.setSpTotalPurchase(totalLastRegPurchase.getSp());
+						getCurrentStockDetails.setSpTotalPurchase(itemsList.get(i).getItemMrp1());
 						getCurrentStockDetails.setRegTotalSell(totalLastRegSell.getReg());
 						getCurrentStockDetails.setSpTotalSell(totalLastRegSell.getSp());
 						getCurrentStockDetails.setId(itemsList.get(i).getId());
