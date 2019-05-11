@@ -15,6 +15,7 @@ public interface RepFrSellServise {
 	List<GetRepFrDatewiseSell> getDatewiseSellReport(String fromDate, String toDate,  List<String> frId);
 	List<GetRepMonthwiseSell> getMonthwiseSellReport(String fromDate, String toDate,  List<String> frId);
 	List<GetRepItemwiseSell> getItemwiseSellReport(String fromDate, String toDate,  List<String> frId, List<String> catId);
+	List<GetRepItemwiseSell> getItemwiseSellReportForCat5(String fromDate, String toDate,  List<String> frId);
 	List<GetRepItemwiseSell> getDateItemwiseSellReport(String fromDate, String toDate, List<String> frId,
 			List<String> catId);
 	List<GetRepTaxSell> getTaxSellReport(String fromDate, String toDate, List<String> frId);
