@@ -1654,6 +1654,20 @@ public class RestApiController {
 
 		return spHistoryExBill;
 	}
+	@RequestMapping(value = { "/getSpCkOrderForExBillPrint" }, method = RequestMethod.POST)
+	@ResponseBody
+	public SpCkOrderHis getSpCkOrderForExBill(@RequestParam("spOrderNo") int spOrderNo) {
+		
+		SpCkOrderHis spCakeOrder=null;
+		try {
+				 spCakeOrder = spCakeOrderHisRepository.findByOrderNoForExBillPrint(spOrderNo);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return spCakeOrder;
+	}
 
 	// Search Special Cake Order History
 	@RequestMapping("/orderHistory")
