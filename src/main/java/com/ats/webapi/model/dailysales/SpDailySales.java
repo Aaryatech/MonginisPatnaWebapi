@@ -4,17 +4,17 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class SpDailySales { 
-	
+public class SpDailySales {
+
 	@Id
 	private int id;
-	
+
 	private float qty;
-	
+
 	private float rate;
-	
+
 	private float mrp;
-	
+
 	private float advance;
 
 	public int getId() {
@@ -62,5 +62,5 @@ public class SpDailySales {
 		return "SpDailySales [id=" + id + ", qty=" + qty + ", rate=" + rate + ", mrp=" + mrp + ", advance=" + advance
 				+ "]";
 	}
-	
+
 }

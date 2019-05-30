@@ -9,44 +9,44 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class DailySalesRegular implements Serializable{
+public class DailySalesRegular implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="cat_id")
+	@Column(name = "cat_id")
 	private int catId;
-	
-	@Column(name="bill_qty")
+
+	@Column(name = "bill_qty")
 	private float billQty;
-	
-	@Column(name="bill_qty_rate")
+
+	@Column(name = "bill_qty_rate")
 	private float billQtyRate;
-	
-	@Column(name="bill_qty_mrp")
+
+	@Column(name = "bill_qty_mrp")
 	private float billQtyMrp;
-	
-	@Column(name="grn_gvn_qty")
+
+	@Column(name = "grn_gvn_qty")
 	private float grnGvnQty;
-	
-	@Column(name="grn_gvn_amt")
+
+	@Column(name = "grn_gvn_amt")
 	private float grnGvnAmt;
-	
-	@Column(name="sell_qty")
+
+	@Column(name = "sell_qty")
 	private float sellQty;
-	
-	@Column(name="sell_qty_rate")
+
+	@Column(name = "sell_qty_rate")
 	private float sellQtyRate;
-	
-	@Column(name="sell_qty_mrp")
+
+	@Column(name = "sell_qty_mrp")
 	private float sellQtyMrp;
-	
-	@Column(name="reg_opening_stock")
+
+	@Column(name = "reg_opening_stock")
 	private float regOpeningStock;
-	
-	@Column(name="reg_opening_stock_rate")
+
+	@Column(name = "reg_opening_stock_rate")
 	private float regOpeningStockRate;
-	
-	@Column(name="reg_opening_stock_mrp")
+
+	@Column(name = "reg_opening_stock_mrp")
 	private float regOpeningStockMrp;
 
 	public int getCatId() {
@@ -153,6 +153,5 @@ public class DailySalesRegular implements Serializable{
 				+ regOpeningStock + ", regOpeningStockRate=" + regOpeningStockRate + ", regOpeningStockMrp="
 				+ regOpeningStockMrp + "]";
 	}
-	
-	
+
 }

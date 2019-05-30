@@ -3,14 +3,13 @@ package com.ats.webapi.model.dailysales;
 import java.util.List;
 
 public class DailySalesReportDao {
-	
+
 	List<DailySalesRegular> dailySalesRegularList;
-	
+
 	List<SpDailySales> spDailySalesList;
-	
-	
 
 	public List<SpDailySales> getSpDailySalesList() {
+
 		return spDailySalesList;
 	}
 
@@ -30,7 +29,5 @@ public class DailySalesReportDao {
 	public String toString() {
 		return "DailySalesReportDao [dailySalesRegularList=" + dailySalesRegularList + "]";
 	}
-	
-	
 
 }
