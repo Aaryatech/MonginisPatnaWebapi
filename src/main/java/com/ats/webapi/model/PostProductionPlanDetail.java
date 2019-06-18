@@ -15,140 +15,148 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Table(name = "t_production_plan_detail")
 public class PostProductionPlanDetail {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "production_detail_id")
+	private int productionDetailId;
 
-		@Id
-		@GeneratedValue(strategy = GenerationType.AUTO)
-		@Column(name="production_detail_id")
-		private int productionDetailId;
-		
-		@Column(name="production_header_id")
-		private int productionHeaderId;
+	@Column(name = "production_header_id")
+	private int productionHeaderId;
 
-		@Column(name="plan_qty")
-		private int planQty;
-		
-		@Column(name="order_qty")
-		private int orderQty;
-		
-		@Column(name="opening_qty")
-		private int openingQty;
-		
-		@Column(name="rejected_qty")
-		private int rejectedQty;
-		
-		@Column(name="production_qty")
-		private int productionQty;
-		 
-		@Column(name="item_id")
-		private int itemId;
+	@Column(name = "plan_qty")
+	private int planQty;
 
-		@Column(name="production_batch")
-		private String productionBatch;
-		
-		@Column(name="production_date")
-		private Date productionDate;
-		
-		@Column(name="remaining_qty")
-		private int int4;
-		
-		
-		
-		public int getInt4() {
-			return int4;
-		}
+	@Column(name = "order_qty")
+	private int orderQty;
 
-		public void setInt4(int int4) {
-			this.int4 = int4;
-		}
+	@Column(name = "opening_qty")
+	private int openingQty;
 
-		public String getProductionBatch() {
-			return productionBatch;
-		}
-		
-		//@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
-		public void setProductionBatch(String productionBatch) {
-			this.productionBatch = productionBatch;
-		}
-		@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
-		public Date getProductionDate() {
-			return productionDate;
-		}
+	@Column(name = "rejected_qty")
+	private int rejectedQty;
 
-		public void setProductionDate(Date productionDate) {
-			this.productionDate = productionDate;
-		}
+	@Column(name = "production_qty")
+	private int productionQty;
 
-		public int getOrderQty() {
-			return orderQty;
-		}
+	@Column(name = "item_id")
+	private int itemId;
 
-		public void setOrderQty(int orderQty) {
-			this.orderQty = orderQty;
-		}
+	@Column(name = "production_batch")
+	private String productionBatch;
 
-		public int getOpeningQty() {
-			return openingQty;
-		}
+	@Column(name = "production_date")
+	private Date productionDate;
 
-		public void setOpeningQty(int openingQty) {
-			this.openingQty = openingQty;
-		}
+	@Column(name = "remaining_qty")
+	private int int4;
 
-		public int getRejectedQty() {
-			return rejectedQty;
-		}
+	private int int5; // neha
 
-		public void setRejectedQty(int rejectedQty) {
-			this.rejectedQty = rejectedQty;
-		}
+	public int getInt5() {
+		return int5;
+	}
 
-		public int getProductionQty() {
-			return productionQty;
-		}
+	public void setInt5(int int5) {
+		this.int5 = int5;
+	}
 
-		public void setProductionQty(int productionQty) {
-			this.productionQty = productionQty;
-		}
+	public int getInt4() {
+		return int4;
+	}
 
-		public int getProductionDetailId() {
-			return productionDetailId;
-		}
+	public void setInt4(int int4) {
+		this.int4 = int4;
+	}
 
-		public void setProductionDetailId(int productionDetailId) {
-			this.productionDetailId = productionDetailId;
-		}
+	public String getProductionBatch() {
+		return productionBatch;
+	}
 
-		public int getProductionHeaderId() {
-			return productionHeaderId;
-		}
+	// @JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public void setProductionBatch(String productionBatch) {
+		this.productionBatch = productionBatch;
+	}
 
-		public void setProductionHeaderId(int productionHeaderId) {
-			this.productionHeaderId = productionHeaderId;
-		}
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public Date getProductionDate() {
+		return productionDate;
+	}
 
-		public int getPlanQty() {
-			return planQty;
-		}
+	public void setProductionDate(Date productionDate) {
+		this.productionDate = productionDate;
+	}
 
-		public void setPlanQty(int planQty) {
-			this.planQty = planQty;
-		}
+	public int getOrderQty() {
+		return orderQty;
+	}
 
-		public int getItemId() {
-			return itemId;
-		}
+	public void setOrderQty(int orderQty) {
+		this.orderQty = orderQty;
+	}
 
-		public void setItemId(int itemId) {
-			this.itemId = itemId;
-		}
+	public int getOpeningQty() {
+		return openingQty;
+	}
 
-		@Override
-		public String toString() {
-			return "PostProductionPlanDetail [productionDetailId=" + productionDetailId + ", productionHeaderId="
-					+ productionHeaderId + ", planQty=" + planQty + ", orderQty=" + orderQty + ", openingQty="
-					+ openingQty + ", rejectedQty=" + rejectedQty + ", productionQty=" + productionQty + ", itemId="
-					+ itemId + ", productionBatch=" + productionBatch + ", productionDate=" + productionDate + ", int4="
-					+ int4 + "]";
-		}
+	public void setOpeningQty(int openingQty) {
+		this.openingQty = openingQty;
+	}
+
+	public int getRejectedQty() {
+		return rejectedQty;
+	}
+
+	public void setRejectedQty(int rejectedQty) {
+		this.rejectedQty = rejectedQty;
+	}
+
+	public int getProductionQty() {
+		return productionQty;
+	}
+
+	public void setProductionQty(int productionQty) {
+		this.productionQty = productionQty;
+	}
+
+	public int getProductionDetailId() {
+		return productionDetailId;
+	}
+
+	public void setProductionDetailId(int productionDetailId) {
+		this.productionDetailId = productionDetailId;
+	}
+
+	public int getProductionHeaderId() {
+		return productionHeaderId;
+	}
+
+	public void setProductionHeaderId(int productionHeaderId) {
+		this.productionHeaderId = productionHeaderId;
+	}
+
+	public int getPlanQty() {
+		return planQty;
+	}
+
+	public void setPlanQty(int planQty) {
+		this.planQty = planQty;
+	}
+
+	public int getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
+	}
+
+	@Override
+	public String toString() {
+		return "PostProductionPlanDetail [productionDetailId=" + productionDetailId + ", productionHeaderId="
+				+ productionHeaderId + ", planQty=" + planQty + ", orderQty=" + orderQty + ", openingQty=" + openingQty
+				+ ", rejectedQty=" + rejectedQty + ", productionQty=" + productionQty + ", itemId=" + itemId
+				+ ", productionBatch=" + productionBatch + ", productionDate=" + productionDate + ", int4=" + int4
+				+ ", int5=" + int5 + "]";
+	}
 
 }

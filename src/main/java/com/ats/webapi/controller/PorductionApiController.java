@@ -429,10 +429,11 @@ public class PorductionApiController {
 			String parsedDate = formatter.format(initDate);
 			postProdPlanHeader = postProdPlanHeaderRepository.findByProductionDateAndCatId(parsedDate, catId);
 			if (postProdPlanHeader != null) {
-				System.err.println("postProdPlanHeader.getProductionHeaderId()"+postProdPlanHeader.getProductionHeaderId());
+				System.err.println(
+						"postProdPlanHeader.getProductionHeaderId()" + postProdPlanHeader.getProductionHeaderId());
 				List<PostProductionPlanDetail> postProductionPlanDetail = postProdPlanDetailRepository
 						.findByProductionHeaderId(postProdPlanHeader.getProductionHeaderId());
-				System.err.println("postProductionPlanDetail"+postProductionPlanDetail.toString());
+				System.err.println("postProductionPlanDetail" + postProductionPlanDetail.toString());
 				postProdPlanHeader.setPostProductionPlanDetail(postProductionPlanDetail);
 			}
 		} catch (Exception e) {
@@ -444,18 +445,18 @@ public class PorductionApiController {
 
 	@RequestMapping(value = { "/getQtyforVariance" }, method = RequestMethod.POST)
 	public @ResponseBody VarianceList getQtyforVariance(@RequestParam("Date") String Date,
-			@RequestParam("groupType") String groupType,@RequestParam("menus") List<String> menus, @RequestParam("frId") List<String> frId,
-			@RequestParam("all") int all) {
+			@RequestParam("groupType") String groupType, @RequestParam("menus") List<String> menus,
+			@RequestParam("frId") List<String> frId, @RequestParam("all") int all) {
 		VarianceList varianceList = new VarianceList();
 		List<Variance> Varianceorderlist = new ArrayList<Variance>();
 		try {
 			if (all == 1) {
-				System.err.println(menus+"menus");
-				Varianceorderlist = varianceRepository.variancelistAllFr(Date,menus, groupType);
+				System.err.println(menus + "menus");
+				Varianceorderlist = varianceRepository.variancelistAllFr(Date, menus, groupType);
 				varianceList.setVarianceorderlist(Varianceorderlist);
 				System.out.println(Varianceorderlist.toString());
 			} else {
-				Varianceorderlist = varianceRepository.variancelistSelectedFr(Date,menus, groupType, frId);
+				Varianceorderlist = varianceRepository.variancelistSelectedFr(Date, menus, groupType, frId);
 				varianceList.setVarianceorderlist(Varianceorderlist);
 				System.out.println(Varianceorderlist.size());
 			}
@@ -476,5 +477,50 @@ public class PorductionApiController {
 		Info info = productionService.updateBillStatus(updateOrderStatus);
 
 		return info;
+	}
+
+	@RequestMapping(value = { "/postProductionPlanForRejRet" }, method = RequestMethod.POST)
+
+	public @ResponseBody Info postProductionPlanForRejRet(@RequestBody PostProdPlanHeader postProdPlanHeader)
+			throws ParseException, JsonParseException, JsonMappingException, IOException {
+
+		System.out.println("postProductionHeaderBean:" + postProdPlanHeader.toString());
+		PostProdPlanHeader jsonBillHeader = new PostProdPlanHeader();
+		if (!postProdPlanHeader.getPostProductionPlanDetail().isEmpty()) {
+			jsonBillHeader = postProdPlanHeaderRepository.save(postProdPlanHeader);
+
+			for (int i = 0; i < postProdPlanHeader.getPostProductionPlanDetail().size(); i++) {
+
+				postProdPlanHeader.getPostProductionPlanDetail().get(i)
+						.setProductionHeaderId(jsonBillHeader.getProductionHeaderId());
+
+			}
+
+			// System.out.println(postProdPlanHeader.getPostProductionPlanDetail().toString());
+
+			List<PostProductionPlanDetail> detailList = postProdPlanDetailRepository
+					.save(postProdPlanHeader.getPostProductionPlanDetail());
+			jsonBillHeader.setPostProductionPlanDetail(detailList);
+
+		}
+
+		Info info = new Info();
+
+		if (jsonBillHeader != null) {
+
+			info.setError(false);
+			info.setMessage("post Fr Stock header inserted  Successfully");
+
+		}
+
+		else {
+
+			info.setError(true);
+			info.setMessage("Error in post Fr Stock header insertion : RestApi");
+
+		}
+
+		return info;
+
 	}
 }
