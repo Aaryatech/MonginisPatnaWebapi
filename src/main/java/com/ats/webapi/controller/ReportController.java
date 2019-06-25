@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.model.CustList;
 import com.ats.webapi.model.HSNWiseReport;
+import com.ats.webapi.model.ItemReport;
+import com.ats.webapi.model.ItemReportDetail;
 import com.ats.webapi.repository.CustListRepo;
 import com.ats.webapi.repository.HSNWiseReportRepo;
+import com.ats.webapi.repository.ItemReportDetailRepo;
+import com.ats.webapi.repository.ItemReportRepo;
 
 @RestController
 public class ReportController {
@@ -23,6 +27,58 @@ public class ReportController {
 
 	@Autowired
 	CustListRepo custListRepo;
+
+	@Autowired
+	ItemReportRepo itemReportRepo;
+
+	@Autowired
+	ItemReportDetailRepo itemReportDetailRepo;
+
+	@RequestMapping(value = { "/getItemDetailReport" }, method = RequestMethod.POST)
+	public @ResponseBody List<ItemReportDetail> getItemDetailReport(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate, @RequestParam("itemId") int itemId, @RequestParam("frId") int frId) {
+
+		List<ItemReportDetail> saleList = new ArrayList<>();
+		try {
+			if (frId == -1) {
+
+				saleList = itemReportDetailRepo.getItemReport(fromDate, toDate, itemId);
+			} else {
+
+				saleList = itemReportDetailRepo.getItemReportByItemId(fromDate, toDate, itemId, frId);
+				System.out.println("saleListsaleListsaleList" + saleList.toString());
+			}
+		
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return saleList;
+	}
+
+	@RequestMapping(value = { "/getItemReport" }, method = RequestMethod.POST)
+	public @ResponseBody List<ItemReport> getItemReport(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate, @RequestParam("frId") int frId) {
+
+		List<ItemReport> saleList = new ArrayList<>();
+		try {
+
+			if (frId == -1) {
+
+				saleList = itemReportRepo.getItemReport(fromDate, toDate);
+			} else {
+
+				saleList = itemReportRepo.getItemReportByFrId(fromDate, toDate, frId);
+				System.out.println(saleList.toString());
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return saleList;
+	}
 
 	@RequestMapping(value = { "/getHsnReport" }, method = RequestMethod.POST)
 	public @ResponseBody List<HSNWiseReport> getHsnReport(@RequestParam("fromDate") String fromDate,
