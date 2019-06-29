@@ -14,6 +14,11 @@ import com.ats.webapi.model.CustList;
 import com.ats.webapi.model.HSNWiseReport;
 import com.ats.webapi.model.ItemReport;
 import com.ats.webapi.model.ItemReportDetail;
+import com.ats.webapi.report.model.CrNoteRegItem;
+import com.ats.webapi.report.model.CrNoteRegSp;
+import com.ats.webapi.report.model.CrNoteRegisterList;
+import com.ats.webapi.report.repo.CrNoteRegItemRepo;
+import com.ats.webapi.report.repo.CrNoteRegSpRepo;
 import com.ats.webapi.repository.CustListRepo;
 import com.ats.webapi.repository.HSNWiseReportRepo;
 import com.ats.webapi.repository.ItemReportDetailRepo;
@@ -34,6 +39,11 @@ public class ReportController {
 	@Autowired
 	ItemReportDetailRepo itemReportDetailRepo;
 
+	@Autowired
+	CrNoteRegSpRepo getCrNoteRegSpRepo;
+	@Autowired
+	CrNoteRegItemRepo getCrNoteRegItemRepo;
+
 	@RequestMapping(value = { "/getItemDetailReport" }, method = RequestMethod.POST)
 	public @ResponseBody List<ItemReportDetail> getItemDetailReport(@RequestParam("fromDate") String fromDate,
 			@RequestParam("toDate") String toDate, @RequestParam("itemId") int itemId, @RequestParam("frId") int frId) {
@@ -48,7 +58,6 @@ public class ReportController {
 				saleList = itemReportDetailRepo.getItemReportByItemId(fromDate, toDate, itemId, frId);
 				System.out.println("saleListsaleListsaleList" + saleList.toString());
 			}
-		
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -110,6 +119,27 @@ public class ReportController {
 			e.printStackTrace();
 		}
 		return OpStockUpdateList;
+	}
+
+	@RequestMapping(value = { "/getCrNoteRegisterDone" }, method = RequestMethod.POST)
+	public @ResponseBody CrNoteRegisterList getCrNoteRegisterDone(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate) {
+
+		CrNoteRegisterList crNoteList = new CrNoteRegisterList();
+
+		List<CrNoteRegItem> crNoteRegItemList;
+		List<CrNoteRegSp> crNoteRegSpList = new ArrayList<>();
+
+		crNoteRegItemList = getCrNoteRegItemRepo.getCrNoteRegItemDone(fromDate, toDate);
+		crNoteList.setCrNoteRegItemList(crNoteRegItemList);
+
+		crNoteRegSpList = getCrNoteRegSpRepo.getCrNoteRegSpDone(fromDate, toDate);
+		crNoteList.setCrNoteRegSpList(crNoteRegSpList);
+
+		System.err.println("size Item  crNoteList " + crNoteList.getCrNoteRegItemList().size());
+		System.err.println("size Sp  crNoteList " + crNoteList.getCrNoteRegSpList());
+
+		return crNoteList;
 	}
 
 }
