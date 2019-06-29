@@ -133,7 +133,7 @@ public class ReportController {
 		crNoteRegItemList = getCrNoteRegItemRepo.getCrNoteRegItemDone(fromDate, toDate);
 		crNoteList.setCrNoteRegItemList(crNoteRegItemList);
 
-		crNoteRegSpList = getCrNoteRegSpRepo.getCrNoteRegSpDone(fromDate, toDate);
+		//crNoteRegSpList = getCrNoteRegSpRepo.getCrNoteRegSpDone(fromDate, toDate);
 		crNoteList.setCrNoteRegSpList(crNoteRegSpList);
 
 		System.err.println("size Item  crNoteList " + crNoteList.getCrNoteRegItemList().size());
