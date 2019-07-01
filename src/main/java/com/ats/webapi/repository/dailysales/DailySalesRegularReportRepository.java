@@ -59,13 +59,13 @@ public interface DailySalesRegularReportRepository extends JpaRepository<DailySa
 			"    FROM\n" + 
 			"        t_grn_gvn \n" + 
 			"    WHERE\n" + 
-			"        t_grn_gvn.fr_id=1 and t_grn_gvn.cat_id=m_category.cat_id\n" + 
+			"        t_grn_gvn.fr_id=:frId  and t_grn_gvn.cat_id=m_category.cat_id\n" + 
 			"        AND t_grn_gvn.grn_gvn_date=:date),0) as grn_gvn_qty,\n" + 
 			"coalesce((SELECT  COALESCE(SUM(t_grn_gvn.grn_gvn_amt),0) \n" + 
 			"    FROM\n" + 
 			"        t_grn_gvn \n" + 
 			"    WHERE\n" + 
-			"        t_grn_gvn.fr_id=1 and t_grn_gvn.cat_id=m_category.cat_id\n" + 
+			"        t_grn_gvn.fr_id=:frId and t_grn_gvn.cat_id=m_category.cat_id\n" + 
 			"        AND t_grn_gvn.grn_gvn_date=:date),0) as grn_gvn_amt,\n" + 
 			"\n" + 
 			"coalesce((SELECT  COALESCE(SUM(t_sell_bill_detail.qty),0)\n" + 
@@ -79,8 +79,8 @@ public interface DailySalesRegularReportRepository extends JpaRepository<DailySa
 			"            FROM\n" + 
 			"                t_sell_bill_header \n" + 
 			"            WHERE\n" + 
-			"                t_sell_bill_header.fr_id=:frId\n" + 
-			"                AND t_sell_bill_header.bill_date=:date\n" + 
+			"                t_sell_bill_header.fr_id=:frId" + 
+			"                AND t_sell_bill_header.bill_date=:date" + 
 			"        )\n" + 
 			"),0) as sell_qty,\n" + 
 			"coalesce((SELECT  COALESCE(SUM(t_sell_bill_detail.qty*m_item.item_rate1),0)\n" + 
@@ -94,8 +94,8 @@ public interface DailySalesRegularReportRepository extends JpaRepository<DailySa
 			"            FROM\n" + 
 			"                t_sell_bill_header \n" + 
 			"            WHERE\n" + 
-			"                t_sell_bill_header.fr_id=:frId\n" + 
-			"                AND t_sell_bill_header.bill_date=:date\n" + 
+			"                t_sell_bill_header.fr_id=:frId" + 
+			"                AND t_sell_bill_header.bill_date=:date" + 
 			"        )\n" + 
 			"),0) as sell_qty_rate,\n" + 
 			"coalesce((SELECT  COALESCE(SUM(t_sell_bill_detail.qty*m_item.item_mrp1),0)\n" + 
@@ -109,8 +109,8 @@ public interface DailySalesRegularReportRepository extends JpaRepository<DailySa
 			"            FROM\n" + 
 			"                t_sell_bill_header \n" + 
 			"            WHERE\n" + 
-			"                t_sell_bill_header.fr_id=:frId\n" + 
-			"                AND t_sell_bill_header.bill_date=:date\n" + 
+			"                t_sell_bill_header.fr_id=:frId" + 
+			"                AND t_sell_bill_header.bill_date=:date" + 
 			"        )\n" + 
 			"),0) as sell_qty_mrp,\n" + 
 			"coalesce((\n" + 
@@ -182,8 +182,8 @@ public interface DailySalesRegularReportRepository extends JpaRepository<DailySa
 			"            FROM\n" + 
 			"                t_other_bill_header \n" + 
 			"            WHERE\n" + 
-			"                t_other_bill_header.fr_id=:frId \n" + 
-			"                AND t_other_bill_header.bill_date=:date\n" + 
+			"                t_other_bill_header.fr_id=:frId" + 
+			"                AND t_other_bill_header.bill_date=:date" + 
 			"        )),0) as bill_qty,\n" + 
 			"       coalesce((SELECT COALESCE(SUM(t_other_bill_detail.bill_qty*m_item.item_rate1),0) FROM t_other_bill_detail,m_item\n" + 
 			"    WHERE\n" + 
@@ -194,8 +194,8 @@ public interface DailySalesRegularReportRepository extends JpaRepository<DailySa
 			"            FROM\n" + 
 			"                t_other_bill_header \n" + 
 			"            WHERE\n" + 
-			"                t_other_bill_header.fr_id=:frId\n" + 
-			"                AND t_other_bill_header.bill_date=:date\n" + 
+			"                t_other_bill_header.fr_id=:frId" + 
+			"                AND t_other_bill_header.bill_date=:date" + 
 			"        )),0) as bill_qty_rate,\n" + 
 			" coalesce((SELECT COALESCE(SUM(t_other_bill_detail.bill_qty*m_item.item_mrp1),0) FROM t_other_bill_detail,m_item\n" + 
 			"    WHERE\n" + 
@@ -206,8 +206,8 @@ public interface DailySalesRegularReportRepository extends JpaRepository<DailySa
 			"            FROM\n" + 
 			"                t_other_bill_header \n" + 
 			"            WHERE\n" + 
-			"                t_other_bill_header.fr_id=:frId \n" + 
-			"                AND t_other_bill_header.bill_date=:date\n" + 
+			"                t_other_bill_header.fr_id=:frId" + 
+			"                AND t_other_bill_header.bill_date=:date" + 
 			"        )),0) as bill_qty_mrp,\n" + 
 			"0 as grn_gvn_qty,\n" + 
 			"0 as grn_gvn_amt,\n" + 
@@ -223,8 +223,8 @@ public interface DailySalesRegularReportRepository extends JpaRepository<DailySa
 			"            FROM\n" + 
 			"                t_sell_bill_header \n" + 
 			"            WHERE\n" + 
-			"                t_sell_bill_header.fr_id=:frId\n" + 
-			"                AND t_sell_bill_header.bill_date=:date\n" + 
+			"                t_sell_bill_header.fr_id=:frId" + 
+			"                AND t_sell_bill_header.bill_date=:date" + 
 			"        )\n" + 
 			"),0) as sell_qty,\n" + 
 			"coalesce((SELECT  COALESCE(SUM(t_sell_bill_detail.qty*m_item.item_rate1),0)\n" + 
