@@ -304,15 +304,22 @@ public class SalesReportController {
 	@RequestMapping(value = { "/getSalesReportRoyaltyFr" }, method = RequestMethod.POST)
 	public @ResponseBody List<SalesReportRoyaltyFr> getSalesReportRoyaltyFr(@RequestParam("frIdList") List<String> frIdList,@RequestParam("fromDate")
 	String fromDate,
-			@RequestParam("toDate") String toDate) {
+			@RequestParam("toDate") String toDate,@RequestParam("type") int type) {
 
 		List<SalesReportRoyaltyFr> salesReportRoyaltyFrList = null;
 		try {
 			fromDate = Common.convertToYMD(fromDate);
 			toDate = Common.convertToYMD(toDate);
 			System.out.println("Input received "+fromDate+""+toDate+""+frIdList);
+			if (type == 1) {
 			salesReportRoyaltyFrList = salesReportRoyaltyFrRepo.getSaleReportRoyaltyFr(frIdList, fromDate, toDate);
 			System.out.println("sale sReportRoyalty Fr List"+salesReportRoyaltyFrList.toString());
+			}
+			else
+			{
+				salesReportRoyaltyFrList = salesReportRoyaltyFrRepo.getSaleReportRoyaltyFrCrn(frIdList, fromDate, toDate);
+				System.out.println("sale sReportRoyalty Fr List"+salesReportRoyaltyFrList.toString());
+			}
 
 		} catch (Exception e) {
 			System.out.println(" Exce in sales Report Royalty Fr  " + e.getMessage());
@@ -325,7 +332,7 @@ public class SalesReportController {
 		@RequestMapping(value = { "/getSalesReportRoyaltyFrAllFr" }, method = RequestMethod.POST)
 		public @ResponseBody List<SalesReportRoyaltyFr> getSalesReportRoyaltyFrAllFr(@RequestParam("fromDate")
 		String fromDate,
-				@RequestParam("toDate") String toDate) {
+				@RequestParam("toDate") String toDate, @RequestParam("type") int type) {
 
 			System.err.println("in method getSalesReportRoyaltyFrAllFr salesReportController");
 			List<SalesReportRoyaltyFr> salesReportRoyaltyFrList = null;
@@ -333,8 +340,14 @@ public class SalesReportController {
 				fromDate = Common.convertToYMD(fromDate);
 				toDate = Common.convertToYMD(toDate);
 				System.out.println("Input received "+fromDate+""+toDate);
+				if (type == 1) {
 				salesReportRoyaltyFrList = salesReportRoyaltyFrRepo.getSaleReportRoyaltyFrAllFrSel(fromDate, toDate);
 				System.out.println("sale getSalesReportRoyaltyFrAllFr Fr List"+salesReportRoyaltyFrList.toString());
+				}else {
+					salesReportRoyaltyFrList = salesReportRoyaltyFrRepo.getSaleReportRoyaltyFrAllFrSelCrn(fromDate, toDate);
+					System.out.println("sale getSalesReportRoyaltyFrAllFr Fr List"+salesReportRoyaltyFrList.toString());
+				
+				}
 
 			} catch (Exception e) {
 				System.out.println(" Exce in sales Report Royalty Fr all fr sel /getSalesReportRoyaltyFrAllFr " + e.getMessage());
