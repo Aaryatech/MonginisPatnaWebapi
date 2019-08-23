@@ -205,10 +205,11 @@ public class PostBillDataServiceImpl implements PostBillDataService {
 		
 		List<PostBillHeader> postBillHeaders = new ArrayList<PostBillHeader>();
 		for (int i = 0; i < postBillHeader.size(); i++) {
+			int billNo = postBillHeader.get(i).getBillNo();
 
+			postBillHeader.get(i).setBillDateTime(postBillHeaderRepository.getBillDateTime(billNo));
 			postBillHeaders = postBillHeaderRepository.save(postBillHeader);
 
-			int billNo = postBillHeader.get(i).getBillNo();
 
 			List<PostBillDetail> postBillDetailList = postBillHeader.get(i).getPostBillDetailsList();
 

@@ -14,6 +14,9 @@ public interface PostBillHeaderRepository extends JpaRepository<PostBillHeader, 
 
 	PostBillHeader save(PostBillHeader postBillHeader);
 
+	@Query(value="Select bill_date_time from t_bill_header  where bill_no=:billNo",nativeQuery=true)
+	String getBillDateTime(@Param("billNo")int billNo);
+
 	// sum(CASE WHEN payment_mode = 1 THEN payable_amt ELSE 0 END) as cash,
 
 	
