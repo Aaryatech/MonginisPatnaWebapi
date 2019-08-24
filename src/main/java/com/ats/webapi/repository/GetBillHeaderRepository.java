@@ -12,7 +12,7 @@ public interface GetBillHeaderRepository extends JpaRepository<GetBillHeader, In
 	
 	
 	@Query(value=" SELECT t_bill_header.bill_no ,t_bill_header.invoice_no, t_bill_header.bill_date "
-			+ ",t_bill_header.fr_id,t_bill_header.fr_code,"
+			+ ",t_bill_header.fr_id,t_bill_header.fr_code,t_bill_header.bill_date_time,"
 			+ " t_bill_header.tax_applicable,t_bill_header.grand_total,t_bill_header.taxable_amt, "
 			+ " t_bill_header.total_tax,t_bill_header.status,t_bill_header.remark,t_bill_header.time,t_bill_header.del_status, "
 			+ " m_franchisee.fr_name FROM t_bill_header,m_franchisee WHERE t_bill_header.fr_id IN (:frId) "
@@ -24,7 +24,7 @@ public interface GetBillHeaderRepository extends JpaRepository<GetBillHeader, In
 
 	
 	@Query(value=" SELECT t_bill_header.bill_no ,t_bill_header.invoice_no, t_bill_header.bill_date "
-			+ ",t_bill_header.fr_id,t_bill_header.fr_code,"
+			+ ",t_bill_header.fr_id,t_bill_header.fr_code,t_bill_header.bill_date_time,"
 			+ " t_bill_header.tax_applicable,t_bill_header.grand_total,t_bill_header.taxable_amt, "
 			+ " t_bill_header.total_tax,t_bill_header.status,t_bill_header.remark,t_bill_header.time,t_bill_header.del_status, "
 			+ " m_franchisee.fr_name FROM t_bill_header,m_franchisee WHERE "

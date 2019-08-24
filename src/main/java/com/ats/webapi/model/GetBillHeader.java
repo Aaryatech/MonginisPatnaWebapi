@@ -60,6 +60,17 @@ public class GetBillHeader implements Serializable {
 	
 	@Column(name="remark")
 	private String remark;
+	 
+	private String billDateTime;
+	    
+
+	public String getBillDateTime() {
+		return billDateTime;
+	}
+
+	public void setBillDateTime(String billDateTime) {
+		this.billDateTime = billDateTime;
+	}
 
 	public int getBillNo() {
 		return billNo;
@@ -183,8 +194,11 @@ public class GetBillHeader implements Serializable {
 		return "GetBillHeader [billNo=" + billNo + ", frName=" + frName + ", time=" + time + ", taxApplicable="
 				+ taxApplicable + ", invoiceNo=" + invoiceNo + ", billDate=" + billDate + ", frId=" + frId + ", frCode="
 				+ frCode + ", grandTotal=" + grandTotal + ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax
-				+ ", status=" + status + ", DelStatus=" + DelStatus + ", remark=" + remark + "]";
+				+ ", status=" + status + ", DelStatus=" + DelStatus + ", remark=" + remark + ", billDateTime="
+				+ billDateTime + "]";
 	}
+
+	
 	
 
 }
