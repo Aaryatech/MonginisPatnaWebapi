@@ -14,7 +14,7 @@ public interface CrNoteRegItemRepo extends JpaRepository<CrNoteRegItem, Integer>
  
 
 	@Query(value = "   SELECT\n" + 
-			"        t_credit_note_header.crn_id,\n" + 
+			"        t_credit_note_header.crn_no as crn_id,\n" + 
 			"        t_credit_note_header.crn_date,\n" + 
 			"        \n" + 
 			"        t_credit_note_details.crnd_id ,\n" + 
@@ -45,7 +45,7 @@ public interface CrNoteRegItemRepo extends JpaRepository<CrNoteRegItem, Integer>
 			"        (t_credit_note_details.cgst_per+t_credit_note_details.sgst_per),\n" + 
 			"        t_credit_note_details.crn_id  \n" + 
 			"    order by\n" + 
-			"        t_credit_note_header.crn_no", nativeQuery = true)
+			"        t_credit_note_header.crn_id ", nativeQuery = true)
 
 	List<CrNoteRegItem> getCrNoteRegItemDone(@Param("fromDate") String fromDate, @Param("toDate") String toDate);
 
