@@ -68,6 +68,12 @@ public class MenuServiceImpl implements MenuService{
 		return allMenus;
 	}
 	
+	public AllMenus findMenuByMenuId(int menuId) {
+
+		AllMenus allMenus=mainMenuConfigurationRepository.findByMenuIdAndDelStatus(menuId, 0);
+		return allMenus;
+	}
+	
 
 	public AllMenuJsonResponse findAllMenu() {
 		 List<AllMenus> menus=new ArrayList<AllMenus>();

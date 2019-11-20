@@ -38,6 +38,7 @@ import com.ats.webapi.repository.FranchiseeRepository;
 import com.ats.webapi.repository.GetBillDetailsRepository;
 import com.ats.webapi.repository.GetRegSpCakeOrdersRepository;
 import com.ats.webapi.repository.GetReorderByStockTypeRepository;
+import com.ats.webapi.repository.GetSubCatRepo;
 import com.ats.webapi.repository.ItemRepository;
 import com.ats.webapi.repository.ItemResponseRepository;
 import com.ats.webapi.repository.ItemStockRepository;
@@ -1881,9 +1882,9 @@ public class RestApiController {
 	@RequestMapping(value = { "/configureFranchisee" }, method = RequestMethod.POST)
 	@ResponseBody
 	public String configureFranchisee(@RequestParam("frId") int frId, @RequestParam("menuId") int menuId,
-			@RequestParam("catId") int catId, @RequestParam("settingType") int settingType,
-			@RequestParam("fromTime") String fromTime, @RequestParam("toTime") String toTime,
-			@RequestParam("day") String day, @RequestParam("date") String date,
+			@RequestParam("catId") int catId, @RequestParam("subCat") int subCat, 
+			@RequestParam("settingType") int settingType, @RequestParam("fromTime") String fromTime, 
+			@RequestParam("toTime") String toTime, @RequestParam("day") String day, @RequestParam("date") String date,
 			@RequestParam("itemShow") String itemShow) throws ParseException {
 
 		/*
@@ -1909,7 +1910,7 @@ public class RestApiController {
 		configureFr.setDate(date);
 		configureFr.setItemShow(itemShow);
 		configureFr.setCatId(catId);
-		configureFr.setSubCatId(11);
+		configureFr.setSubCatId(subCat);
 
 		String jsonResult = connfigureService.configureFranchisee(configureFr);
 
@@ -4309,4 +4310,55 @@ System.err.println("meu Id rece " +menuId);
 		return itemResponse;
 
 	}
+	
+	//Mahendra 
+	@Autowired GetSubCatRepo subCatRepo;
+	
+	@RequestMapping(value = "/getAllSubCatByMenuId", method = RequestMethod.POST)
+	public @ResponseBody List<GetSubCat>  getAllSubCatByMenuId(@RequestParam int menuId) {
+		List<GetSubCat> subCatList = new ArrayList<GetSubCat>();
+		try {
+			subCatList= subCatRepo.getSubCatByMenuId(menuId);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return subCatList;		
+		
+	}
+	
+	@RequestMapping(value = "/getSubCatById", method = RequestMethod.POST)
+	public @ResponseBody GetSubCat getSubCatById(@RequestParam int subCatId) {
+		GetSubCat subCat = new GetSubCat();
+		try {
+			subCat= subCatRepo.findBySubCatId(subCatId);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return subCat;		
+		
+	}
+	
+	@RequestMapping(value = "/itemsBySubCatId", method = RequestMethod.POST)
+	public @ResponseBody List<Item>  itemsBySubCatId(@RequestParam String subCatId) {
+		List<Item> itemList = new ArrayList<Item>();
+		try {
+			
+			 itemList= itemRepository.findByItemGrp2(subCatId);
+			 
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return itemList;		
+		
+	}
+	
+	@RequestMapping("/getMenuByMenuId")
+	public @ResponseBody AllMenus getMenuByMenuId(@RequestParam int menuId) {
+
+		AllMenus allMenus = menuService.findMenuByMenuId(menuId);
+		return allMenus;
+	}
+	
 }

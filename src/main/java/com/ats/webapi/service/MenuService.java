@@ -11,5 +11,7 @@ public interface MenuService {
 	public AllMenuJsonResponse findAllMenu();
 	public AllMenuJsonResponse findMenuByCat(int catId);
 	public AllMenus findMenu(int menuId);
+	public AllMenus findMenuByMenuId(int menuId);
+	
 
 }

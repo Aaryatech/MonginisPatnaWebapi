@@ -75,6 +75,9 @@ public class TallyItem implements Serializable{
 	@Column(name="item_code")
 	private String itemCode;
 	
+	@Column(name="item_shelf_life")
+	private int itemShelfLife;
+	
 	@PostLoad
 	public void onLoad() {
 		if(this.subSubGroup.equalsIgnoreCase("1"))
@@ -268,13 +271,24 @@ public class TallyItem implements Serializable{
 	}
 
 
+	public int getItemShelfLife() {
+		return itemShelfLife;
+	}
+
+
+	public void setItemShelfLife(int itemShelfLife) {
+		this.itemShelfLife = itemShelfLife;
+	}
+
+
 	@Override
 	public String toString() {
 		return "TallyItem [id=" + id + ", itemName=" + itemName + ", itemGroup=" + itemGroup + ", subGroup=" + subGroup
 				+ ", subSubGroup=" + subSubGroup + ", hsnCode=" + hsnCode + ", uom=" + uom + ", sgstPer=" + sgstPer
 				+ ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", cessPer=" + cessPer + ", delStatus=" + delStatus
 				+ ", itemRate1=" + itemRate1 + ", itemRate2=" + itemRate2 + ", itemRate3=" + itemRate3 + ", itemMrp1="
-				+ itemMrp1 + ", itemMrp2=" + itemMrp2 + ", itemMrp3=" + itemMrp3 + ", itemCode=" + itemCode + "]";
+				+ itemMrp1 + ", itemMrp2=" + itemMrp2 + ", itemMrp3=" + itemMrp3 + ", itemCode=" + itemCode
+				+ ", itemShelfLife=" + itemShelfLife + "]";
 	}
 
 }
