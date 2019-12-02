@@ -10,6 +10,7 @@ import javax.persistence.Transient;
 public class HSNWiseReport {
 
 	@Id
+	private String id;
 	private String itemHsncd;
 
 	private float itemTax1;

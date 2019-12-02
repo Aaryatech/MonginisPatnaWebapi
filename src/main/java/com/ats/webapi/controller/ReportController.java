@@ -105,6 +105,19 @@ public class ReportController {
 
 		return saleList;
 	}
+	
+	@RequestMapping(value = { "/getHsnBillReport" }, method = RequestMethod.POST)
+	public @ResponseBody List<HSNWiseReport> getHsnBillReport(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate) {
+		List<HSNWiseReport> saleList = new ArrayList<>();
+		try {
+
+			saleList = hSNWiseReportRepo.getReport(fromDate, toDate);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return saleList;
+	}
 
 	@RequestMapping(value = { "/getCutslListFroFranchasee" }, method = RequestMethod.POST)
 	public @ResponseBody List<CustList> getCutslListFroFranchasee(@RequestParam("frId") int frId) {
