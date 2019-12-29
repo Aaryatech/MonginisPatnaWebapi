@@ -32,6 +32,8 @@ import com.ats.webapi.model.logistics.Variant;
 import com.ats.webapi.model.logistics.VehicalMaster;
 import com.ats.webapi.model.logistics.VehicalType;
 import com.ats.webapi.model.logistics.VehicleDcoument;
+import com.ats.webapi.model.report.RouteTargetReport;
+import com.ats.webapi.report.repo.RouteTargetReportRepo;
 import com.ats.webapi.repository.logistics.AlertAmcRecordRepository;
 import com.ats.webapi.repository.logistics.AlertMachineServicingRepository;
 import com.ats.webapi.repository.logistics.AlertVeihcleServicingRepository;
@@ -111,6 +113,9 @@ public class LogisticsApiController {
 	
 	@Autowired
 	TrayManagementReportRepository trayManagementReportRepository;
+	
+	@Autowired
+	RouteTargetReportRepo routeTargetRepo;
 	
 	
 	@RequestMapping(value = { "/postDriverMaster" }, method = RequestMethod.POST)
@@ -1600,5 +1605,24 @@ public class LogisticsApiController {
 		} 
 		
 		return getTrayManagementReport; 
+	}
+	
+	@RequestMapping(value = { "/getRouteTargetReport" }, method = RequestMethod.GET)
+	public @ResponseBody List<RouteTargetReport> getRouteTargetReport()
+	{ 
+		
+		List<RouteTargetReport> list = new ArrayList<RouteTargetReport>();
+		try {
+			  
+			list = routeTargetRepo.getRouteTargeTReportList();
+			System.out.println(list.toString());
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+        
+		
+		return list;
+
 	}
 }
