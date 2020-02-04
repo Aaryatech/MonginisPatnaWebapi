@@ -45,13 +45,25 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 	@Transactional
 	@Modifying
-	@Query("UPDATE User SET password=:password,usertype=:usertype,deptId=:deptId WHERE id=:userId")
-	int updateUser(@Param("userId") Long id, @Param("password") String password, @Param("usertype") int usertype,
-			@Param("deptId") int deptId);
+	@Query("UPDATE User SET password=:password,usertype=:usertype,deptId=:deptId, "
+			+ "email =:email, contact=:contact  WHERE id=:userId")
+	int updateUser(@Param("userId") int id, @Param("password") String password, @Param("usertype") int usertype,
+			@Param("deptId") int deptId, @Param("email") String email, @Param("contact") String contact);
 	
 	@Transactional
 	@Modifying
 	@Query("UPDATE User SET delStatus=:delStatus WHERE id=:userId")
-	int delteUser(@Param("userId") Long id, @Param("delStatus") int delStatus);
+	int delteUser(@Param("userId") int id, @Param("delStatus") int delStatus);
+
+	User findByEmail(String email);
+
+	User findByContact(String contact);
+
+	User findByIdAndDelStatus(int userId, int i);
+
+	@Transactional
+	@Modifying
+	@Query("UPDATE User SET usr_pwd=:newPass WHERE usr_id=:userId")
+	int changePassword(@Param("userId") int userId, @Param("newPass") String newPass);
 
 }

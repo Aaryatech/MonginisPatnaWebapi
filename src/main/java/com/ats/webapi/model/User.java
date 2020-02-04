@@ -18,7 +18,7 @@ public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="usr_id")
-	private Long id;
+	private int id;
     @Column(name="usr_name",unique=true)
 	private String username;
     @Column(name="usr_pwd")
@@ -27,6 +27,10 @@ public class User implements Serializable{
     private int usertype;
 	@Column(name="del_status")
     private int delStatus;
+	@Column(name="email")
+    private String email;
+	@Column(name="contact")
+    private String contact;
 	
 	@Column(name="dept_id")
     private int deptId;
@@ -51,11 +55,11 @@ public class User implements Serializable{
   		this.usertype = usertype;
   	}
   	
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
    
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getUsername() {
@@ -87,11 +91,27 @@ public class User implements Serializable{
 		this.roleId = roleId;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", usertype=" + usertype
-				+ ", delStatus=" + delStatus + ", deptId=" + deptId + ", roleId=" + roleId + "]";
+				+ ", delStatus=" + delStatus + ", email=" + email + ", contact=" + contact + ", deptId=" + deptId
+				+ ", roleId=" + roleId + "]";
 	}
-
-	 
+ 
 }

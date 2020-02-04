@@ -52,5 +52,8 @@ public interface FranchiseSupRepository extends JpaRepository<FranchiseSup, Inte
 	@Query(value="Update m_franchise_sup SET pass1=:adminPwd WHERE fr_id=:frId and del_status=0",nativeQuery=true)
 	public Integer updateFrPwd(@Param("frId")int frId,@Param("adminPwd")String adminPwd);
 
-	
+	@Modifying
+	@Transactional
+	@Query(value="Update m_franchise_sup SET pass1=:newPass WHERE fr_id=:frId and del_status=0",nativeQuery=true)
+	int updateOPSFrPwd(@Param("frId")int frId,@Param("newPass") String newPass);
 }

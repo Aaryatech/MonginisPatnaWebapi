@@ -42,5 +42,9 @@ public interface FranchiseeService {
 	public Info updateFranchiseSupUsrPwd(int frId, String pass2, String pass3);
 
 	public FranchiseSup getFrSupByFrId(int frId);
+
+	public Franchisee findByFrId(int userId);
+
+	public Franchisee getFranchiseeByFrCode(String frCode);
 	
 }

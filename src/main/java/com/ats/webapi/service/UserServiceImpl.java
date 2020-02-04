@@ -182,6 +182,42 @@ public class UserServiceImpl implements UserService {
 	 
 		return getUserTypeRepository.getType();
 	}
+	/********************************************************************************/
+	@Override
+	public User checkUniqueEmail(String email) {
+		// TODO Auto-generated method stub
+		return userRepository.findByEmail(email);
+	}
+
+	@Override
+	public User checkUniqueContact(String contact) {
+		// TODO Auto-generated method stub
+		return userRepository.findByContact(contact);
+	}
+
+	@Override
+	public User getUserData(String username) {
+		// TODO Auto-generated method stub
+		return  userRepository.findByUsernameAndDelStatus(username, 0);
+	}
+
+	@Override
+	public User findByIdAndDelStatus(int userId, int j) {
+		// TODO Auto-generated method stub
+		return  userRepository.findByIdAndDelStatus(userId, 0);
+	}
+
+	@Override
+	public User checkUniqueUser(String uname) {
+		// TODO Auto-generated method stub
+		return userRepository.findByUsername(uname);
+	}
+
+	@Override
+	public User findByUserId(int userId) {
+		// TODO Auto-generated method stub
+		return userRepository.findById(userId);
+	}
 	
 	
 }

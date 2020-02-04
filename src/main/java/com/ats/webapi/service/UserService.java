@@ -19,4 +19,16 @@ public interface UserService {
 	public List<Department> getAllDept();
 
 	public List<GetUserType> getAllUserType();
+
+	public User checkUniqueEmail(String email);
+
+	public User checkUniqueContact(String contact);
+
+	public User getUserData(String username);
+
+	public User findByIdAndDelStatus(int userId, int i);
+
+	public User checkUniqueUser(String uname);
+
+	public User findByUserId(int userId);
 }

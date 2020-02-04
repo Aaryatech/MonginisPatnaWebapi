@@ -396,5 +396,20 @@ public class FranchiseeServiceImpl implements FranchiseeService {
 		FranchiseSup franchiseSup=franchiseSupRepository.findFranchiseSupByFrId(frId);
 		return franchiseSup;
 	}
+
+
+	@Override
+	public Franchisee getFranchiseeByFrCode(String frCode) {
+		// TODO Auto-generated method stub
+		Franchisee fr = new Franchisee(); 
+		 fr = franchiseeRepository.findByfrCodeAndDelStatus(frCode,0);
+		return fr;
+	}
+
+	@Override
+	public Franchisee findByFrId(int frId) {
+		Franchisee fr = new Franchisee(); 
+		return fr = franchiseeRepository.findOne(frId);
+	}
 	
 }

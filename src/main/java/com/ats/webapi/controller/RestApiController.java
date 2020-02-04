@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.commons.Common;
+import com.ats.webapi.commons.EmailUtility;
 import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.*;
 import com.ats.webapi.model.grngvn.GetGrnGvnForCreditNoteList;
@@ -1733,7 +1735,7 @@ public class RestApiController {
 
 			if (user.getDelStatus() == 0) {
 				result = updateUserRepo.updateUser(user.getId(), user.getPassword(), user.getUsertype(),
-						user.getDeptId());
+						user.getDeptId(), user.getEmail(), user.getContact());
 			} else {
 				result = updateUserRepo.delteUser(user.getId(), user.getDelStatus());
 			}
@@ -4359,6 +4361,274 @@ System.err.println("meu Id rece " +menuId);
 
 		AllMenus allMenus = menuService.findMenuByMenuId(menuId);
 		return allMenus;
+	}
+	
+	/*********************************************************************/
+	@RequestMapping(value = { "/getUserInfoByEmail" }, method = RequestMethod.POST)
+	public @ResponseBody User getUserInfoByEmail(@RequestParam String email) {
+
+		User res = new User();
+		res = userService.checkUniqueEmail(email);
+		return res;
+	}
+	
+	@RequestMapping(value = { "/getUserInfoByContact" }, method = RequestMethod.POST)
+	public @ResponseBody User getUserInfoByContact(@RequestParam String contact) {
+
+		User res = new User();
+		res = userService.checkUniqueContact(contact);
+		return res;
+	}
+	
+	
+	@RequestMapping(value = { "/getUserInfoByUser" }, method = RequestMethod.POST)
+	public @ResponseBody User getUserInfoByUser(@RequestParam String uname) {
+
+		User res = new User();
+		res = userService.checkUniqueUser(uname);
+		return res;
+	}
+	
+	static String senderEmail = "atsinfosoft@gmail.com";
+	static String senderPassword ="atsinfosoft@123";
+	static String mailsubject = "";
+	String otp1 = null;
+	@RequestMapping(value = { "/getUserInfoByUsername" }, method = RequestMethod.POST)
+	public @ResponseBody User getUserInfoByUsername(@RequestParam String username) {
+
+		OTPVerification.setConNumber(null);
+		OTPVerification.setEmailId(null);
+		OTPVerification.setOtp(null);
+		OTPVerification.setPass(null);
+		Info info = new Info();
+		
+		User res = new User();
+		res = userService.getUserData(username);
+		System.err.println("Resss-------"+res);
+		
+		if(res!= null) {
+			OTPVerification.setUserId(res.getId());
+			
+			String emailId = res.getEmail();
+			String conNumber = res.getContact();
+			
+			char[] otp = Common.OTP(6);
+			otp1 = String.valueOf(otp);
+			System.err.println("User otp is" + otp1);
+			
+			Info inf = EmailUtility.sendOtp(otp1, conNumber, "MONGII OTP Verification ");
+			
+			 mailsubject = " OTP  Verification ";
+			 String text = "\n OTP for change your Password: ";
+			Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword,emailId, mailsubject,
+					text, otp1);
+
+		
+			OTPVerification.setConNumber(conNumber);
+			OTPVerification.setEmailId(emailId);
+			OTPVerification.setOtp(otp1);
+			OTPVerification.setPass(res.getPassword());
+		}else {
+			System.err.println("In Else ");
+
+			info.setError(true);
+			info.setMessage("not Matched");
+			System.err.println(" not Matched ");
+		}
+		return res;
+	}
+	
+	@RequestMapping(value = { "/VerifyOTP" }, method = RequestMethod.POST)
+	public @ResponseBody User VerifyOTP(@RequestParam String otp) {
+		Info info = new Info();
+		
+		Object object=new Object();
+		HashMap<Integer, User>  hashMap=new HashMap<>();
+		
+		User user=new User();
+		
+		try {
+		//	System.err.println("OTP Found------------------"+OTPVerification.getOtp()+" "+OTPVerification.getUserId());
+			if (otp.equals(OTPVerification.getOtp()) == true) {
+				info.setError(false);
+				info.setMessage("success");
+
+				String mobile = OTPVerification.getConNumber();
+				String email = OTPVerification.getEmailId();
+				String pass = Common.getAlphaNumericString(7);
+				// System.out.println("pass");
+				//int res = staffrepo.chagePass(pass, OTPVerification.getUserId());
+				
+				user=userService.findByIdAndDelStatus(OTPVerification.getUserId(),0);
+				hashMap.put(1, user);
+
+			} else {
+				info.setError(true);
+				info.setMessage("failed");
+			}
+			
+		} catch (Exception e) {
+
+			System.err.println("Exce in getAllInstitutes Institute " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMessage("excep");
+		}
+
+		return user;
+
+	}
+	
+	@RequestMapping(value = { "/updateToNewPassword" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateToNewPassword(@RequestParam int userId, @RequestParam String newPass) {
+
+		Info res = new Info();
+		
+		int a = updateUserRepo.changePassword(userId, newPass);
+		if (a > 0) {
+
+			mailsubject = " New Credentials ";
+			String text = "\n Your new username and password are : \n";
+
+			User usr = new User();
+			usr = userService.findByUserId(userId);
+			if (usr != null) {
+				String emailId = usr.getEmail();
+				String password = "\n Username : " + usr.getUsername() + " \n Password : " + usr.getPassword();
+
+				Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text, password);
+			}
+			res.setError(false);
+			res.setMessage("success");
+		}else {
+			res.setError(true);
+			res.setMessage("fail");
+		}
+	
+		return res;
+	}
+	
+	/******************************************************************************/
+	//OPS
+	@RequestMapping(value = { "/getFranchiseeByFrCode" }, method = RequestMethod.POST)
+	@ResponseBody
+	public Franchisee getFranchiseeByFrCode(@RequestParam("frCode") String frCode) {
+	
+		OTPVerification.setConNumber(null);
+		OTPVerification.setEmailId(null);
+		OTPVerification.setOtp(null);
+		OTPVerification.setPass(null);
+		Info info = new Info();
+		
+		Franchisee franchisee = franchiseeService.getFranchiseeByFrCode(frCode);
+		System.out.println("JsonString" + franchisee);
+		if(franchisee!= null) {
+			OTPVerification.setUserId(franchisee.getFrId());
+			
+			String emailId = franchisee.getFrEmail();
+			String conNumber = franchisee.getFrMob();
+			
+			char[] otp = Common.OTP(6);
+			otp1 = String.valueOf(otp);
+			System.err.println("User otp is" + otp1);
+			
+			Info inf = EmailUtility.sendOtp(otp1, conNumber, "MONGII OTP Verification ");
+			
+			 mailsubject = " OTP  Verification ";
+			 String text = "\n OTP for change your Password: ";
+			
+			Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword,emailId, mailsubject,
+					text, otp1);
+
+		
+			OTPVerification.setConNumber(conNumber);
+			OTPVerification.setEmailId(emailId);
+			OTPVerification.setOtp(otp1);
+			OTPVerification.setPass(franchisee.getFrPassword());
+		}else {
+			System.err.println("In Else ");
+
+			info.setError(true);
+			info.setMessage("not Matched");
+			System.err.println(" not Matched ");
+		}
+
+		return franchisee;
+
+	}
+	
+	@RequestMapping(value = { "/verifyOPSOTP" }, method = RequestMethod.POST)
+	public @ResponseBody Franchisee VerifyOPSOTP(@RequestParam String otp) {
+		Info info = new Info();
+		
+		Object object=new Object();
+		HashMap<Integer, Franchisee>  hashMap=new HashMap<>();
+		
+		Franchisee franchisee=new Franchisee();
+		
+		try {
+			//System.err.println("OTP Found------------------"+OTPVerification.getOtp()+" "+OTPVerification.getUserId()+" "+otp);
+			if (otp.equals(OTPVerification.getOtp()) == true) {
+				info.setError(false);
+				info.setMessage("success");
+
+				String mobile = OTPVerification.getConNumber();
+				String email = OTPVerification.getEmailId();
+				String pass = Common.getAlphaNumericString(7);
+				// System.out.println("pass");
+				//int res = staffrepo.chagePass(pass, OTPVerification.getUserId());
+				
+				franchisee=franchiseeService.findByFrId(OTPVerification.getUserId());
+				hashMap.put(1, franchisee);
+
+			} else {
+				info.setError(true);
+				info.setMessage("failed");
+			}
+			
+		} catch (Exception e) {
+
+			System.err.println("Exce in VerifyOPSOTP Institute " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMessage("excep");
+		}
+		return franchisee;
+	}
+	
+	@RequestMapping(value = { "/updateToNewOPSPassword" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateToNewOPSPassword(@RequestParam int frId, @RequestParam String newPass) {
+
+		Info res = new Info();
+		
+		int a = franchiseeRepository.changeOPSPassword(frId, newPass);
+		if(a>0) {
+			int b = franchiseSupRepository.updateOPSFrPwd(frId, newPass);
+			if(b>0) {
+				
+			Franchisee franchisee=franchiseeService.findByFrId(OTPVerification.getUserId());
+				if(franchisee!=null) {
+					mailsubject = " New Credentials ";
+					String text = "\n Your new username and password are : \n";					
+					
+					String password = "\n Username : " + franchisee.getFrCode() + " \n Password : " + franchisee.getFrPassword();
+					String emailId = franchisee.getFrEmail();
+
+					Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text, password);
+				}
+			res.setError(false);
+			res.setMessage("success");
+			}
+			else {
+				res.setError(true);
+				res.setMessage("fail");
+			}
+		}else {
+			res.setError(true);
+			res.setMessage("fail");
+		}
+	
+		return res;
 	}
 	
 }

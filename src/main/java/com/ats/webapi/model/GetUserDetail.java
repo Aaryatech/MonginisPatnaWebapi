@@ -23,6 +23,10 @@ public class GetUserDetail {
     private int usertype;
 	@Column(name="del_status")
     private int delStatus;
+	@Column(name="email")
+    private String email;
+	@Column(name="contact")
+    private String contact;
 	
 	@Column(name="dept_id")
     private int deptId;
@@ -143,11 +147,33 @@ public class GetUserDetail {
 	}
 
 
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	public String getContact() {
+		return contact;
+	}
+
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+
 	@Override
 	public String toString() {
 		return "GetUserDetail [id=" + id + ", username=" + username + ", password=" + password + ", usertype="
-				+ usertype + ", delStatus=" + delStatus + ", deptId=" + deptId + ", roleId=" + roleId + ", deptName="
-				+ deptName + ", roleName=" + roleName + ", typeName=" + typeName + "]";
+				+ usertype + ", delStatus=" + delStatus + ", email=" + email + ", contact=" + contact + ", deptId="
+				+ deptId + ", roleId=" + roleId + ", deptName=" + deptName + ", roleName=" + roleName + ", typeName="
+				+ typeName + "]";
 	}
+
 
 }
