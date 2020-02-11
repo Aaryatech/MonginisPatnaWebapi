@@ -169,7 +169,7 @@ public class PostBillDataServiceImpl implements PostBillDataService {
 				int res=0;
 				if (billDetail.getCatId() != 5) { 
 					
-					if(billDetail.getMenuId()!= 42) {//item
+					if(billDetail.getMenuId()!= 42 && billDetail.getMenuId()!= 80 && billDetail.getMenuId()!= 30 && billDetail.getMenuId()!= 29) {//item
 						
 					 res = orderRepository.updateBillStatus(billDetail.getOrderId(), 2);
 					
