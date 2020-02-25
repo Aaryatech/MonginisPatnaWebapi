@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -37,7 +39,9 @@ import com.ats.webapi.repository.FlavourRepository;
 import com.ats.webapi.repository.FranchiseForDispatchRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.FranchiseeRepository;
+import com.ats.webapi.repository.GenerateBillRepository;
 import com.ats.webapi.repository.GetBillDetailsRepository;
+import com.ats.webapi.repository.GetBillHeaderRepository;
 import com.ats.webapi.repository.GetRegSpCakeOrdersRepository;
 import com.ats.webapi.repository.GetReorderByStockTypeRepository;
 import com.ats.webapi.repository.GetSubCatRepo;
@@ -46,6 +50,8 @@ import com.ats.webapi.repository.ItemResponseRepository;
 import com.ats.webapi.repository.ItemStockRepository;
 import com.ats.webapi.repository.MessageRepository;
 import com.ats.webapi.repository.OrderLogRespository;
+import com.ats.webapi.repository.PostFrOpStockDetailRepository;
+import com.ats.webapi.repository.PostFrOpStockHeaderRepository;
 import com.ats.webapi.repository.RouteRepository;
 import com.ats.webapi.repository.SpCakeOrderHisRepository;
 import com.ats.webapi.repository.SpCakeOrderUpdateRepository;
@@ -151,7 +157,8 @@ public class RestApiController {
 	SpCakeOrderUpdateRepository spCakeOrderUpdateRepository;
 	@Autowired
 	ItemStockRepository itemStockRepository;
-
+	@Autowired
+	GetBillHeaderRepository getBillHeaderRepository;
 	@Autowired
 	SpCakeOrderHisRepository spCakeOrderHisRepository;
 	@Autowired
@@ -375,7 +382,42 @@ public class RestApiController {
 
 	@Autowired
 	SpecialCakeRepository specialcakeRepository;
+	
+	@Autowired
+	PostFrOpStockDetailRepository postFrOpStockDetailRepository;
+	
+	@Autowired
+	PostFrOpStockHeaderRepository postFrOpStockHeaderRepository;
+	
+	
+	@Autowired
+	GenerateBillRepository generateBillRepository;
 
+	@RequestMapping(value = { "/placeManualOrderNew" }, method = RequestMethod.POST)
+	public @ResponseBody List<GenerateBill> placeManualOrderNew(@RequestBody List<Orders> orderJson)
+			throws ParseException, JsonParseException, JsonMappingException, IOException {
+		List<GenerateBill> billList = null;
+		List<Orders> jsonResult;
+		OrderLog log = new OrderLog();
+		log.setFrId(orderJson.get(0).getFrId());
+		log.setJson(orderJson.toString());
+		logRespository.save(log);
+
+		jsonResult = orderService.placeManualOrder(orderJson);
+		ArrayList<Integer> list = new ArrayList<Integer>();
+
+		if (!jsonResult.isEmpty()) {
+			for (int i = 0; i < jsonResult.size(); i++) {
+				list.add(jsonResult.get(i).getOrderId());
+			}
+
+			billList = generateBillRepository.getBillOfOrder(list);
+		}
+
+		return billList;
+	}
+
+	
 	@RequestMapping(value = { "/changeAdminUserPass" }, method = RequestMethod.POST)
 	public @ResponseBody Info changeAdminUserPass(@RequestBody User user) {
 
@@ -1915,14 +1957,57 @@ public class RestApiController {
 		configureFr.setSubCatId(subCat);
 
 		String jsonResult = connfigureService.configureFranchisee(configureFr);
+		try {
+		
 
+				List<PostFrItemStockHeader> prevStockHeader = postFrOpStockHeaderRepository
+						.findByFrIdAndIsMonthClosedAndCatId(frId, 0,
+								configureFr.getCatId());
+				// --------------------------------------------------------------------------------------------
+				List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
+				List<Integer> ids = Stream.of(configureFr.getItemShow().split(",")).map(Integer::parseInt)
+						.collect(Collectors.toList());
+				System.err.println("16 ids --" + ids.toString());
+				List<Item> itemsList = itemService.findAllItemsByItemId(ids);
+				System.err.println("17 itemsList --" + itemsList.toString());
+				for (int k = 0; k < itemsList.size(); k++) {
+
+					PostFrItemStockDetail prevFrItemStockDetail = postFrOpStockDetailRepository
+							.findByItemIdAndOpeningStockHeaderId(itemsList.get(k).getId(),
+									prevStockHeader.get(0).getOpeningStockHeaderId());
+					System.err.println("18 prevFrItemStockDetail --" + prevFrItemStockDetail);
+					if (prevFrItemStockDetail == null) {
+						PostFrItemStockDetail postFrItemStockDetail = new PostFrItemStockDetail();
+						postFrItemStockDetail
+								.setOpeningStockHeaderId(prevStockHeader.get(0).getOpeningStockHeaderId());// first
+																											// stock
+																											// header
+																											// (month
+																											// closed
+																											// 0
+																											// status))
+						postFrItemStockDetail.setOpeningStockDetailId(0);
+						postFrItemStockDetail.setRegOpeningStock(0);
+						postFrItemStockDetail.setItemId(itemsList.get(k).getId());
+						postFrItemStockDetail.setRemark("");
+						postFrItemStockDetailList.add(postFrItemStockDetail);
+						System.err.println("19 postFrItemStockDetail --" + postFrItemStockDetail.toString());
+					}
+				}
+				postFrOpStockDetailRepository.save(postFrItemStockDetailList);
+				System.err.println("20 postFrItemStockDetailList --" + postFrItemStockDetailList.toString());
+				
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return jsonResult;
 	}
 
 	@RequestMapping(value = "/updateFrConfMenuTime")
 	public @ResponseBody Info updateFrConf(@RequestParam("frIdList") List<Integer> frIdList,
 			@RequestParam("menuId") int menuId, @RequestParam("fromTime") String fromTime,
-			@RequestParam("toTime") String toTime) {
+			@RequestParam("toTime") String toTime,@RequestParam("settingType") int settingType,@RequestParam("date") String date,
+			@RequestParam("day") String day) {
 		Info info = new Info();
 		int result = 0;
 		System.err.println("from time received " + fromTime + "to time  " + toTime);
@@ -1930,10 +2015,10 @@ public class RestApiController {
 		try {
 			if (frIdList.contains(0)) {
 				System.err.println("fr id is zero");
-				result = connfigureService.updateFrConfForAllFr(menuId, fromTime, toTime);
+				result = connfigureService.updateFrConfForAllFr(menuId, fromTime, toTime,date,day,settingType);
 			} else {
 				System.err.println("fr Id is not zero");
-				result = connfigureService.updateFrConfForSelectedFr(frIdList, menuId, fromTime, toTime);
+				result = connfigureService.updateFrConfForSelectedFr(frIdList, menuId, fromTime, toTime,date,day,settingType);
 			}
 
 			if (result > 0) {
@@ -3965,18 +4050,7 @@ System.err.println("meu Id rece " +menuId);
 		ConfigureFranchisee configureFranchisee = connfigureService.findFranchiseeById(settingId);
 		Info info = new Info();
 		try {
-			// SimpleDateFormat inSDF = new SimpleDateFormat("dd-MM-yyyy");
-			// SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-mm-dd");
-
-			// System.out.println("DATE" + date);
-			// java.sql.Date bDate, dDate;
-			// String pDate = "";
-
-			// java.util.Date tempDate = inSDF.parse(date);
-
-			// dDate = new java.sql.Date(tempDate.getTime());
-
-			// System.out.println("DATE after conversion" + dDate);
+			
 			configureFranchisee.setDate(date);
 			configureFranchisee.setDay(day);
 
@@ -3987,6 +4061,42 @@ System.err.println("meu Id rece " +menuId);
 			configureFranchisee.setToTime(toTime);
 
 			String jsonResult = connfigureService.configureFranchisee(configureFranchisee);
+			try {
+					List<PostFrItemStockHeader> prevStockHeader = postFrOpStockHeaderRepository
+							.findByFrIdAndIsMonthClosedAndCatId(configureFranchisee.getFrId(), 0,
+									configureFranchisee.getCatId());
+					// --------------------------------------------------------------------------------------------
+					List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
+					List<Integer> ids = Stream.of(configureFranchisee.getItemShow().split(",")).map(Integer::parseInt)
+							.collect(Collectors.toList());
+					System.err.println("16 ids --" + ids.toString());
+					List<Item> itemsList = itemService.findAllItemsByItemId(ids);
+					System.err.println("17 itemsList --" + itemsList.toString());
+					for (int k = 0; k < itemsList.size(); k++) {
+
+						PostFrItemStockDetail prevFrItemStockDetail = postFrOpStockDetailRepository
+								.findByItemIdAndOpeningStockHeaderId(itemsList.get(k).getId(),
+										prevStockHeader.get(0).getOpeningStockHeaderId());
+						System.err.println("18 prevFrItemStockDetail --" + prevFrItemStockDetail);
+						if (prevFrItemStockDetail == null) {
+							PostFrItemStockDetail postFrItemStockDetail = new PostFrItemStockDetail();
+							postFrItemStockDetail
+									.setOpeningStockHeaderId(prevStockHeader.get(0).getOpeningStockHeaderId());
+							postFrItemStockDetail.setOpeningStockDetailId(0);
+							postFrItemStockDetail.setRegOpeningStock(0);
+							postFrItemStockDetail.setItemId(itemsList.get(k).getId());
+							postFrItemStockDetail.setRemark("");
+							postFrItemStockDetailList.add(postFrItemStockDetail);
+							System.err.println("19 postFrItemStockDetail --" + postFrItemStockDetail.toString());
+						}
+					}
+					postFrOpStockDetailRepository.save(postFrItemStockDetailList);
+					System.err.println("20 postFrItemStockDetailList --" + postFrItemStockDetailList.toString());
+					// ---------------------------------------------------------------------------------------
+				//}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 			if (jsonResult == null) {
 				info.setError(true);
 				info.setMessage("fr confi update failure");
@@ -4036,7 +4146,20 @@ System.err.println("meu Id rece " +menuId);
 
 		return orderDumpList;
 	}
+	@RequestMapping(value = "/getBillHeaderByBillNo", method = RequestMethod.POST)
+	public @ResponseBody GetBillHeader getBillHeaderByBillNo(@RequestParam("billNo") int billNo) {
+		GetBillHeader getBillHeader = null;
+		try {
+			 
+			getBillHeader = getBillHeaderRepository.getBillHeaderByBillNo(billNo);
+		} catch (Exception e) {
+			 
+			e.printStackTrace();
+		}
 
+		return getBillHeader;
+
+	}
 	// Ganesh 24-10-2017
 
 	@RequestMapping(value = "/updateOrderQty", method = RequestMethod.POST)

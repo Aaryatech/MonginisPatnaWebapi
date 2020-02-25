@@ -70,10 +70,10 @@ ConfigureFranchisee configureFranchisee=configureFrRepository.findOne(setting_id
 	}
 
 	@Override
-	public int updateFrConfForSelectedFr(List<Integer> frIdList, int menuId,String fromTime,String toTime) {
+	public int updateFrConfForSelectedFr(List<Integer> frIdList, int menuId,String fromTime,String toTime,String date, String day,int settingType) {
 		int response = 0;
 		try {
-			response=configureFrRepository.updateFrConfSelFr(frIdList, menuId, fromTime, toTime);
+			response=configureFrRepository.updateFrConfSelFr(frIdList, menuId, fromTime, toTime,date,day,settingType);
 			
 		}catch (Exception e) {
 			System.err.println("Ex in Conf Fr Service Impl Selected Fr "+e.getMessage());
@@ -83,10 +83,10 @@ ConfigureFranchisee configureFranchisee=configureFrRepository.findOne(setting_id
 	}
 
 	@Override
-	public int updateFrConfForAllFr(int menuId,String fromTime,String toTime) {
+	public int updateFrConfForAllFr(int menuId,String fromTime,String toTime,String date, String day,int settingType) {
 		int response = 0;
 		try {
-			response=configureFrRepository.updateFrConfAllFr(menuId, fromTime, toTime);
+			response=configureFrRepository.updateFrConfAllFr(menuId, fromTime, toTime,date,day,settingType);
 		}catch (Exception e) {
 			System.err.println("Ex in Conf Fr Service Impl All fr"+e.getMessage());
 			e.printStackTrace();

@@ -187,4 +187,20 @@ public class OrderServiceImpl implements OrderService {
 
 		return returnList;
 	}
+
+	@Override
+	public List<Orders> placeManualOrder(List<Orders> list) {
+    List<Orders> returnList = new ArrayList();
+		
+		for (Orders o : list) {
+			try {
+			Orders newOrder = orderRepository.save(o);
+			returnList.add(newOrder);
+
+			} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		return returnList;
+	}
 }

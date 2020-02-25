@@ -53,16 +53,16 @@ public class GetCurrentStockDetails {
 	private int stockHeaderId;
 	
 	
-	@Transient
+	//@Transient
 	private int currentRegStock;
 	
-	@Transient
+	//@Transient
 	private int currentSpStock;
 	
-	@Transient
+	//@Transient
 	private int reOrderQty;
 	
-	@Transient
+	//@Transient
 	private int id;
 	
 	

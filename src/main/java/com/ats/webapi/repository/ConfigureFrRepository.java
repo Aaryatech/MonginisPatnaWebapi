@@ -23,16 +23,16 @@ public interface ConfigureFrRepository extends JpaRepository<ConfigureFranchisee
 	// 23 march
 	@Transactional
 	@Modifying
-	@Query(" UPDATE ConfigureFranchisee  SET fromTime=:fromTime, toTime=:toTime "
+	@Query(" UPDATE ConfigureFranchisee  SET fromTime=:fromTime, toTime=:toTime,date=:date,day=:day,settingType=:settingType "
 			+ " WHERE frId IN(:frIdList) AND menuId =:menuId")
 	int updateFrConfSelFr(@Param("frIdList") List<Integer> frIdList, @Param("menuId") int menuId,
-			@Param("fromTime") String fromTime, @Param("toTime") String toTime);
+			@Param("fromTime") String fromTime, @Param("toTime") String toTime,@Param("date") String date,@Param("day") String day,@Param("settingType") int settingType);
 
 	@Transactional
 	@Modifying
-	@Query(" UPDATE ConfigureFranchisee  SET fromTime=:fromTime, toTime=:toTime WHERE  menuId =:menuId")
+	@Query(" UPDATE ConfigureFranchisee  SET fromTime=:fromTime, toTime=:toTime,date=:date,day=:day,settingType=:settingType WHERE  menuId =:menuId")
 	int updateFrConfAllFr(@Param("menuId") int menuId, @Param("fromTime") String fromTime,
-			@Param("toTime") String toTime);
+			@Param("toTime") String toTime,@Param("date") String date,@Param("day") String day,@Param("settingType") int settingType);
 
 	
 	 ConfigureFranchisee findByFrIdAndMenuIdAndDelStatus(int frId, int menuId, int i);

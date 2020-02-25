@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ats.webapi.model.FrStockBetweenMonth;
+import com.ats.webapi.model.GetCurrentStockDetails;
 import com.ats.webapi.model.PostFrItemStockDetail;
 public interface PostFrOpStockDetailRepository extends JpaRepository<PostFrItemStockDetail, Integer> {
 	
@@ -34,6 +35,9 @@ public interface PostFrOpStockDetailRepository extends JpaRepository<PostFrItemS
 	PostFrItemStockDetail getCurrentOpeningStock(@Param("frId") int frId,@Param("itemId") int itemId ,@Param("catId") int catId);
 
 	PostFrItemStockDetail findByOpeningStockHeaderIdAndItemId(int openingStockHeaderId, int parseInt);
+
+	PostFrItemStockDetail findByItemIdAndOpeningStockHeaderId(int id, int openingStockHeaderId);
+	
 
 	
 	

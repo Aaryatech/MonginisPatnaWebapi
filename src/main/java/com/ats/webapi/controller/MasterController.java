@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
@@ -836,6 +838,49 @@ public class MasterController {
 					
 					return info;
 				}
-		           
-				
+				@RequestMapping(value = "/updateConfiguredItemsRemove", method = RequestMethod.POST)
+				public @ResponseBody Info updateConfiguredItemsTemp(@RequestParam List<String> frIdList, @RequestParam int menuId,
+						@RequestParam String itemIdList, @RequestParam int catId) {
+					Info info = new Info();
+					List<Integer> inputArray = Stream.of(itemIdList.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+
+					try {
+						for (String frId : frIdList) {
+
+							ConfigureFranchisee configureFr = configureFrRepository.findByFrIdAndMenuIdAndDelStatus(Integer.parseInt(frId), menuId, 0);
+
+							if (configureFr != null) {
+								String itemShow = configureFr.getItemShow();
+								List<Integer> intArray = null;
+								try {
+									intArray = Stream.of(itemShow.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+
+								for (int i = 0; i < inputArray.size(); i++) {
+								
+									for (int j = 0; j < intArray.size(); j++) {
+										if (intArray.get(j).equals(inputArray.get(i))) {
+											intArray.remove(j);
+											break;
+										}
+									}
+								}
+								System.err.println("intArray after " + intArray.toString());
+								System.err.println("commas seperated  itemShow ="
+										+ intArray.stream().map(String::valueOf).collect(Collectors.joining(",")));
+								itemShow = intArray.stream().map(String::valueOf).collect(Collectors.joining(","));
+								configureFr.setItemShow(itemShow);
+
+								ConfigureFranchisee configureFranchiseeReport = configureFrRepository.save(configureFr);
+								info.setError(false);
+							}
+						} // fr Id for Loop;
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}   
+					return info;
+				}
 }

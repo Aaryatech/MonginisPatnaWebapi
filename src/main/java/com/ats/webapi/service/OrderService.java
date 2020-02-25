@@ -18,5 +18,6 @@ public interface OrderService {
 	int updateBillStatus(@Param("orderId") int orderId,@Param("status") int status);// from OrderRepository
 	
 	List<Orders> placePustDumpOrder(List<Orders> list);
+	List<Orders> placeManualOrder(List<Orders> orderJson);
 
 }

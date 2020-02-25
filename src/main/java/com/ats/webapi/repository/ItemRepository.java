@@ -19,7 +19,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	public Item findOne(int id);
 
-	public List<Item> findByItemGrp1AndDelStatusOrderByItemGrp2Asc(String itemGrp1, int i);
+	public List<Item> findByItemGrp1AndDelStatusOrderByItemNameAscItemGrp2Asc(String itemGrp1, int i);
 
 	@Query(value = "select * from m_item where m_item.id IN (:itemList) AND m_item.del_status=0", nativeQuery = true)
 	public List<Item> findByDelStatusAndItemIdIn(@Param("itemList") List<Integer> itemList);
@@ -41,7 +41,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Query(value = "select m_item.* from m_item where m_item.del_status=0 And m_item.item_grp1=:itemGrp1 And m_item.id not in(select m_item_sup.item_id from m_item_sup where m_item_sup.del_status=0) order by m_item.item_name ", nativeQuery = true)
 	public List<Item> findByItemGrp1(@Param("itemGrp1") String itemGrp1);
 
-	@Query(value = "select * from m_item where m_item.id IN (:itemList) Order By item_grp2", nativeQuery = true)
+	@Query(value = "select * from m_item where m_item.id IN (:itemList) Order By item_name ASC,item_grp2", nativeQuery = true)
 	public List<Item> findAllItems(@Param("itemList") List<Integer> itemList);
 
 	/*
