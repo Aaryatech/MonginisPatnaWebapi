@@ -30,7 +30,7 @@ public interface FrStockBetweenMonthRepository extends JpaRepository<GetCurrentS
 			"(SELECT t_bill_detail.item_id, COALESCE(SUM(CASE WHEN grn_type != 3 THEN bill_qty ELSE 0 END),0) as reg , COALESCE(SUM(CASE WHEN grn_type = 3 THEN bill_qty ELSE 0 END),0) as sp  FROM t_bill_detail,t_bill_header WHERE t_bill_header.bill_no=t_bill_detail.bill_no  and t_bill_header.fr_id=:frId   AND t_bill_header.status=2  AND t_bill_header.bill_date BETWEEN :fromDate AND :toDate group by t_bill_detail.item_id) c on a.id=c.item_id\r\n" + 
 			"\r\n" + 
 			"LEFT JOIN \r\n" + 
-			"(SELECT  t_grn_gvn.item_id,SUM(t_grn_gvn.grn_gvn_qty) as grn_grn_qty FROM t_grn_gvn WHERE t_grn_gvn.fr_id=:frId  AND t_grn_gvn.grn_gvn_date  BETWEEN :fromDate AND :toDate group by  t_grn_gvn.item_id) d on a.id=d.item_id\r\n" + 
+			"(SELECT  t_grn_gvn.item_id,COALESCE(SUM(t_grn_gvn.grn_gvn_qty),0) as grn_grn_qty FROM t_grn_gvn WHERE t_grn_gvn.fr_id=:frId  AND t_grn_gvn.grn_gvn_date  BETWEEN :fromDate AND :toDate group by  t_grn_gvn.item_id) d on a.id=d.item_id\r\n" + 
 			"LEFT JOIN \r\n" + 
 			"(SELECT t_sell_bill_detail.item_id,COALESCE(SUM(CASE WHEN bill_stock_type = 1 THEN qty ELSE 0 END),0) as reg , COALESCE(SUM(CASE WHEN bill_stock_type = 2 THEN qty ELSE 0 END),0) as sp FROM t_sell_bill_detail WHERE \r\n" + 
 			"			t_sell_bill_detail.sell_bill_no IN (SELECT t_sell_bill_header.sell_bill_no FROM t_sell_bill_header WHERE t_sell_bill_header.fr_id=:frId  AND t_sell_bill_header.bill_date BETWEEN :fromDate AND :toDate ) group by t_sell_bill_detail.item_id) e on a.id=e.item_id\r\n" + 
@@ -51,7 +51,7 @@ public interface FrStockBetweenMonthRepository extends JpaRepository<GetCurrentS
 			"(SELECT t_bill_detail.item_id, COALESCE(SUM(CASE WHEN grn_type != 3 THEN bill_qty ELSE 0 END),0) as reg , COALESCE(SUM(CASE WHEN grn_type = 3 THEN bill_qty ELSE 0 END),0) as sp  FROM t_bill_detail,t_bill_header WHERE t_bill_header.bill_no=t_bill_detail.bill_no  and t_bill_header.fr_id=:frId   AND t_bill_header.status=2  AND t_bill_header.bill_date BETWEEN :fromDate AND :toDate group by t_bill_detail.item_id) c on a.id=c.item_id\r\n" + 
 			"\r\n" + 
 			"LEFT JOIN \r\n" + 
-			"(SELECT  t_grn_gvn.item_id,SUM(t_grn_gvn.grn_gvn_qty) as grn_grn_qty FROM t_grn_gvn WHERE t_grn_gvn.fr_id=:frId  AND t_grn_gvn.grn_gvn_date  BETWEEN :fromDate AND :toDate group by  t_grn_gvn.item_id) d on a.id=d.item_id\r\n" + 
+			"(SELECT  t_grn_gvn.item_id,COALESCE(SUM(t_grn_gvn.grn_gvn_qty),0) as grn_grn_qty FROM t_grn_gvn WHERE t_grn_gvn.fr_id=:frId  AND t_grn_gvn.grn_gvn_date  BETWEEN :fromDate AND :toDate group by  t_grn_gvn.item_id) d on a.id=d.item_id\r\n" + 
 			"LEFT JOIN \r\n" + 
 			"(SELECT t_sell_bill_detail.item_id,COALESCE(SUM(CASE WHEN bill_stock_type = 1 THEN qty ELSE 0 END),0) as reg , COALESCE(SUM(CASE WHEN bill_stock_type = 2 THEN qty ELSE 0 END),0) as sp FROM t_sell_bill_detail WHERE \r\n" + 
 			"			t_sell_bill_detail.sell_bill_no IN (SELECT t_sell_bill_header.sell_bill_no FROM t_sell_bill_header WHERE t_sell_bill_header.fr_id=:frId  AND t_sell_bill_header.bill_date BETWEEN :fromDate AND :toDate ) group by t_sell_bill_detail.item_id) e on a.id=e.item_id\r\n" + 

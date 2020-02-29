@@ -4160,6 +4160,32 @@ System.err.println("meu Id rece " +menuId);
 		return getBillHeader;
 
 	}
+	@RequestMapping(value = "/getGrnItemsByExpiryDate", method = RequestMethod.POST)
+	public @ResponseBody List<GetBillDetails> getGrnItemsByExpiryDate(@RequestParam("frId") int frId,@RequestParam("expiryDate") String expiryDate) {
+		List<GetBillDetails>  getBillDetailsrList = null;
+		try {
+			 
+			getBillDetailsrList = getBillDetailsRepository.getGrnItemsByExpiryDate(frId,expiryDate);
+		} catch (Exception e) {
+			 
+			e.printStackTrace();
+		}
+
+		return getBillDetailsrList;
+	}
+	@RequestMapping(value = "/getGrnItemsByIds", method = RequestMethod.POST)
+	public @ResponseBody List<GetBillDetails> getGrnItemsByIds(@RequestParam("frId") int frId,@RequestParam("ids") List<Integer> idList) {
+		List<GetBillDetails>  getBillDetailsrList = null;
+		try {
+			 
+			getBillDetailsrList = getBillDetailsRepository.getGrnItemsByIds(frId,idList);
+		} catch (Exception e) {
+			 
+			e.printStackTrace();
+		}
+
+		return getBillDetailsrList;
+	}
 	// Ganesh 24-10-2017
 
 	@RequestMapping(value = "/updateOrderQty", method = RequestMethod.POST)

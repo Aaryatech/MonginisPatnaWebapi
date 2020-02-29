@@ -10,16 +10,16 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "m_fr_opening_stock_detail")
+//@Table(name = "m_fr_opening_stock_detail")
 
 public class GetCurrentStockDetails {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	
+	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "opening_stock_detail_id")
 	private int stockDetailId;
 	
-
+	@Id
 	@Column(name = "item_id")
 	private String itemId;
 
