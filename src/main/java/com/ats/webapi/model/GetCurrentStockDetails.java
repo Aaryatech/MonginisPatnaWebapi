@@ -11,7 +11,6 @@ import javax.persistence.Transient;
 
 @Entity
 //@Table(name = "m_fr_opening_stock_detail")
-
 public class GetCurrentStockDetails {
 	
 	
@@ -19,7 +18,7 @@ public class GetCurrentStockDetails {
 	@Column(name = "opening_stock_detail_id")
 	private int stockDetailId;
 	
-	@Id
+	
 	@Column(name = "item_id")
 	private String itemId;
 
@@ -63,6 +62,7 @@ public class GetCurrentStockDetails {
 	private int reOrderQty;
 	
 	//@Transient
+	@Id
 	private int id;
 	
 	
