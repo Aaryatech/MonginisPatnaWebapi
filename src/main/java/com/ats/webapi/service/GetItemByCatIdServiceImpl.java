@@ -28,7 +28,24 @@ public class GetItemByCatIdServiceImpl implements GetItemByCatIdService {
 		
 		return itemList;
 	}
-	
+	@Override
+	public GetItemByCatIdList getItemBySubCatId(int subCatId) {
+
+		GetItemByCatIdList itemList = new GetItemByCatIdList();
+
+		List<GetItemByCatId> itemByCatId =null;
+		if(subCatId==4)
+		{
+			itemByCatId=getItemByCatIdRepository.getSpByCategoryBySubCatId();
+
+		}else {				
+			itemByCatId=getItemByCatIdRepository.getItemByCategoryBySubCatId(subCatId);
+		}
+
+		itemList.setGetItemByCatId(itemByCatId);
+
+		return itemList;
+	}
 	
 
 }

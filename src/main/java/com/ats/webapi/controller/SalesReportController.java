@@ -1,5 +1,8 @@
 package com.ats.webapi.controller;
 
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,10 @@ import com.ats.webapi.model.report.frpurchase.SalesReportBillwiseAllFr;
 import com.ats.webapi.model.report.frpurchase.SalesReportItemwise;
 import com.ats.webapi.model.report.frpurchase.SalesReportRoyalty;
 import com.ats.webapi.model.report.frpurchase.SalesReportRoyaltyFr;
+import com.ats.webapi.model.salesvaluereport.SalesReturnItemDaoList;
+import com.ats.webapi.model.salesvaluereport.SalesReturnValueDao;
+import com.ats.webapi.model.salesvaluereport.SalesReturnValueDaoList;
+import com.ats.webapi.model.salesvaluereport.SalesReturnValueItemDao;
 import com.ats.webapi.model.taxreport.Tax1Report;
 import com.ats.webapi.model.taxreport.Tax2Report;
 import com.ats.webapi.repository.frpurchasereport.SaleReportBillwiseAllFrRepo;
@@ -22,6 +29,8 @@ import com.ats.webapi.repository.frpurchasereport.SaleReportBillwiseRepo;
 import com.ats.webapi.repository.frpurchasereport.SaleReportItemwiseRepo;
 import com.ats.webapi.repository.frpurchasereport.SalesReportRoyaltyFrRepo;
 import com.ats.webapi.repository.frpurchasereport.SalesReportRoyaltyRepo;
+import com.ats.webapi.repository.salesreturnreport.SalesReturnValueDaoRepository;
+import com.ats.webapi.repository.salesreturnreport.SalesReturnValueItemDaoRepo;
 import com.ats.webapi.repository.taxreport.Tax1ReportRepository;
 import com.ats.webapi.repository.taxreport.Tax2ReportRepository;
 
@@ -48,6 +57,12 @@ public class SalesReportController {
 	
 	@Autowired
 	Tax2ReportRepository tax2ReportRepository;
+	
+	@Autowired
+	SalesReturnValueItemDaoRepo salesReturnValueItemDaoRepo;
+	
+	@Autowired
+	SalesReturnValueDaoRepository salesReturnValueDaoRepository;
 	
 	
 	@RequestMapping(value = { "/getTax1Report" }, method = RequestMethod.POST)
@@ -532,4 +547,89 @@ System.err.println("New cat ID List" +catIdList );
 			}
 			return salesReportRoyaltyList;
 		}
+		
+		
+		
+		
+		@RequestMapping(value = { "/getSalesReturnValueItemReport" }, method = RequestMethod.POST)
+		public @ResponseBody List<SalesReturnItemDaoList> getSalesReturnValueItemReport(
+				@RequestParam("fromYear") int fromYear, @RequestParam("toYear") int toYear,
+				@RequestParam("subCatId") List<Integer> subCatId) throws ParseException {
+
+			List<SalesReturnItemDaoList> repList = new ArrayList<>();
+			List<String> months = new ArrayList<String>();
+			months.add(fromYear + "-04");
+			months.add(fromYear + "-05");
+			months.add(fromYear + "-06");
+			months.add(fromYear + "-07");
+			months.add(fromYear + "-08");
+			months.add(fromYear + "-09");
+			months.add(fromYear + "-10");
+			months.add(fromYear + "-11");
+			months.add(fromYear + "-12");
+			months.add(toYear + "-01");
+			months.add(toYear + "-02");
+			months.add(toYear + "-03");
+
+			for (int i = 0; i < months.size(); i++) {
+				SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM");
+				// output format: yyyy-MM-dd
+				SimpleDateFormat formatter = new SimpleDateFormat("MMM-yyyy");
+				String month = formatter.format(parser.parse(months.get(i)));
+				SalesReturnItemDaoList salesReturnItemDaoList = new SalesReturnItemDaoList();
+				salesReturnItemDaoList.setMonth(month);
+				List<SalesReturnValueItemDao> salesReturnValueDao = null;
+				if (subCatId.contains(4)) {// 4 is sp sub cAt
+					salesReturnValueDao = salesReturnValueItemDaoRepo.getSalesReturnValueSpReport1(months.get(i));
+				} else {
+					salesReturnValueDao = salesReturnValueItemDaoRepo.getSalesReturnValueItemReport1(months.get(i),
+							subCatId);
+				}
+
+				salesReturnItemDaoList.setSalesReturnValueItemDao(salesReturnValueDao);
+				repList.add(salesReturnItemDaoList);
+				System.out.println(months.toString());
+			}
+
+			System.out.println("repListrepListrepListrepListrepListrepList" + repList.toString());
+			return repList;
+
+		}
+		
+		
+		@RequestMapping(value = { "/getSalesReturnValueReport" }, method = RequestMethod.POST)
+		public @ResponseBody List<SalesReturnValueDaoList> getSalesReturnValueReport(@RequestParam("fromYear") int fromYear,
+				@RequestParam("toYear") int toYear) throws ParseException {
+
+			List<SalesReturnValueDaoList> repList = new ArrayList<>();
+			List<String> months = new ArrayList<String>();
+			months.add(fromYear + "-04");
+			months.add(fromYear + "-05");
+			months.add(fromYear + "-06");
+			months.add(fromYear + "-07");
+			months.add(fromYear + "-08");
+			months.add(fromYear + "-09");
+			months.add(fromYear + "-10");
+			months.add(fromYear + "-11");
+			months.add(fromYear + "-12");
+			months.add(toYear + "-01");
+			months.add(toYear + "-02");
+			months.add(toYear + "-03");
+
+			for (int i = 0; i < months.size(); i++) {
+				SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM");
+				// output format: yyyy-MM-dd
+				SimpleDateFormat formatter = new SimpleDateFormat("MMM-yyyy");
+				String month = formatter.format(parser.parse(months.get(i)));
+				SalesReturnValueDaoList salesReturnValueReportList = new SalesReturnValueDaoList();
+				salesReturnValueReportList.setMonth(month);
+				List<SalesReturnValueDao> salesReturnValueDao = salesReturnValueDaoRepository
+						.getSalesReturnValueReport(months.get(i));
+				salesReturnValueReportList.setSalesReturnQtyValueList(salesReturnValueDao);
+				repList.add(salesReturnValueReportList);
+			}
+			return repList;
+
+		}
+		
 }

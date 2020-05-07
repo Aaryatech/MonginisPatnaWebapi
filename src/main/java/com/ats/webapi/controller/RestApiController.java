@@ -795,6 +795,15 @@ public class RestApiController {
 		return getItemByCatIdList;
 
 	}
+	
+	@RequestMapping(value = "/getItemBySubCatId", method = RequestMethod.POST)
+	public @ResponseBody GetItemByCatIdList getItemByCategoryIdAndSubCatId(@RequestParam("subCatId") int subCatId) {
+
+		GetItemByCatIdList getItemByCatIdList = getItemByCatIdService.getItemBySubCatId(subCatId);
+
+		return getItemByCatIdList;
+
+	}
 
 	@RequestMapping(value = "/getMCategory", method = RequestMethod.GET)
 	public @ResponseBody GetMCategoryList getMCategory() {
@@ -4779,5 +4788,21 @@ System.err.println("meu Id rece " +menuId);
 	
 		return res;
 	}
+	
+	
+	@RequestMapping(value = "/getSubCatListByCatIdInForDisp", method = RequestMethod.POST)
+	public @ResponseBody List<SubCategory> getSubCatListByCatIdInForDisp(@RequestParam("catId") List<String> catId,
+			@RequestParam("isAllCatSelected") boolean isAllCatSelected) {
+		List<SubCategory> subCategoryList = null;
+		if (isAllCatSelected == false) {
+			subCategoryList = subCategoryService.getSubCatListByCatIdInForDisp(catId);
+		} else {
+			SubCatergoryList subCategoryListRes = subCategoryService.findAllSubCategories();
+			subCategoryList = subCategoryListRes.getSubCategory();
+		}
+		return subCategoryList;
+
+	}
+	
 	
 }

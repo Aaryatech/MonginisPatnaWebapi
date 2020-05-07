@@ -15,12 +15,16 @@ public class SalesReportRoyalty implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="id")
-	private int id;
+	@Column(name="uid")
+	private String uid;
 	
+	private int id;
 	
 	@Column(name="cat_id")
 	private int catId;
+	
+	@Column(name="sub_cat_id")
+	private int subCatId;
 	
 	@Column(name="item_name")
 	private String item_name;
@@ -34,6 +38,20 @@ public class SalesReportRoyalty implements Serializable {
 	float tGrnTaxableAmt;
 	float tGvnQty;
 	float tGvnTaxableAmt;
+	
+	
+	public String getUid() {
+		return uid;
+	}
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+	public int getSubCatId() {
+		return subCatId;
+	}
+	public void setSubCatId(int subCatId) {
+		this.subCatId = subCatId;
+	}
 	public int getId() {
 		return id;
 	}
@@ -96,12 +114,11 @@ public class SalesReportRoyalty implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "SalesReportRoyalty [id=" + id + ", catId=" + catId + ", item_name=" + item_name + ", cat_name="
-				+ cat_name + ", tBillQty=" + tBillQty + ", tBillTaxableAmt=" + tBillTaxableAmt + ", tGrnQty=" + tGrnQty
-				+ ", tGrnTaxableAmt=" + tGrnTaxableAmt + ", tGvnQty=" + tGvnQty + ", tGvnTaxableAmt=" + tGvnTaxableAmt
-				+ "]";
+		return "SalesReportRoyalty [uid=" + uid + ", id=" + id + ", catId=" + catId + ", subCatId=" + subCatId
+				+ ", item_name=" + item_name + ", cat_name=" + cat_name + ", tBillQty=" + tBillQty
+				+ ", tBillTaxableAmt=" + tBillTaxableAmt + ", tGrnQty=" + tGrnQty + ", tGrnTaxableAmt=" + tGrnTaxableAmt
+				+ ", tGvnQty=" + tGvnQty + ", tGvnTaxableAmt=" + tGvnTaxableAmt + "]";
 	}
-	
 
 }
 
