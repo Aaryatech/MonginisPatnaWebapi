@@ -14,10 +14,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class SalesReportDateMonth {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "crn_id")
-	private int crnId;
 	private String crnNo;
+	
+	private int crnId;
+	
 	private Date crnDate;
 	private int frId;
 	String month;
