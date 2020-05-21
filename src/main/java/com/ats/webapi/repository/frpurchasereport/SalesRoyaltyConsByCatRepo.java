@@ -44,7 +44,7 @@ public interface SalesRoyaltyConsByCatRepo extends JpaRepository<SalesRoyaltyCon
 			"        m_item i,\r\n" + 
 			"        m_category c\r\n" + 
 			"    WHERE\r\n" + 
-			"        i.del_status = 0 AND i.item_grp1 IN(:catIdList) AND i.item_grp1 = c.cat_id AND i.item_grp1 != 5\r\n" + 
+			"        i.item_grp1 IN(:catIdList) AND i.item_grp1 = c.cat_id AND i.item_grp1 != 5\r\n" + 
 			"    ORDER BY\r\n" + 
 			"        i.item_grp1,\r\n" + 
 			"        i.item_grp2,\r\n" + 
@@ -158,7 +158,7 @@ public interface SalesRoyaltyConsByCatRepo extends JpaRepository<SalesRoyaltyCon
 			"        m_item i,\r\n" + 
 			"        m_category c\r\n" + 
 			"    WHERE\r\n" + 
-			"        i.del_status = 0 AND i.item_grp1 IN(:catIdList) AND i.item_grp1 = c.cat_id AND i.item_grp1 != 5\r\n" + 
+			"        i.item_grp1 IN(:catIdList) AND i.item_grp1 = c.cat_id AND i.item_grp1 != 5\r\n" + 
 			"    ORDER BY\r\n" + 
 			"        i.item_grp1,\r\n" + 
 			"        i.item_grp2,\r\n" + 
@@ -270,8 +270,6 @@ public interface SalesRoyaltyConsByCatRepo extends JpaRepository<SalesRoyaltyCon
 			"        21 AS sub_cat_id\r\n" + 
 			"    FROM\r\n" + 
 			"        m_sp_cake i\r\n" + 
-			"    WHERE\r\n" + 
-			"        i.del_status = 0 \r\n" + 
 			"    ORDER BY\r\n" + 
 			"        i.sp_name\r\n" + 
 			") i\r\n" + 
