@@ -25,7 +25,7 @@ public interface SalesReportRepo extends JpaRepository<SalesReport, Integer> {
 			+ "            t_credit_note_header.crn_date BETWEEN :fromDate AND :toDate "
 			+ "            AND t_credit_note_header.is_grn=0 "
 			+ "            AND m_franchisee.fr_id=t_credit_note_header.fr_id), 0) AS  gvn_value FROM "
-			+ "        m_franchisee  ORDER BY  m_franchisee.fr_name ", nativeQuery = true)
+			+ "        m_franchisee  ORDER BY  m_franchisee.fr_code ", nativeQuery = true)
 
 	List<SalesReport> getSalesReportAllFr(@Param("fromDate") String fromDate, @Param("toDate") String toDate);
 
@@ -44,7 +44,7 @@ public interface SalesReportRepo extends JpaRepository<SalesReport, Integer> {
 			+ "  t_credit_note_header.crn_date BETWEEN :fromDate AND :toDate "
 			+ "  AND t_credit_note_header.is_grn=0 "
 			+ " AND m_franchisee.fr_id=t_credit_note_header.fr_id), 0) AS  gvn_value FROM "
-			+ " m_franchisee WHERE m_franchisee.fr_id IN (:frIdList)   ORDER BY  m_franchisee.fr_name ", nativeQuery = true)
+			+ " m_franchisee WHERE m_franchisee.fr_id IN (:frIdList)   ORDER BY  m_franchisee.fr_code ", nativeQuery = true)
 
 	List<SalesReport> getSalesReportSpecFr(@Param("fromDate") String fromDate, @Param("toDate") String toDate,
 			 @Param("frIdList") List<String> frIdList);

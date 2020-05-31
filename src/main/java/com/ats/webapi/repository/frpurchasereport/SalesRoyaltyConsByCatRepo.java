@@ -72,9 +72,9 @@ public interface SalesRoyaltyConsByCatRepo extends JpaRepository<SalesRoyaltyCon
 			"LEFT JOIN(\r\n" + 
 			"    SELECT \r\n" + 
 			"    d.item_id,\r\n" + 
-			"    SUM(d.grn_gvn_qty) as grn_qty,\r\n" + 
-			"    SUM(d.taxable_amt) as grn_taxable_amt,\r\n" + 
-			"    SUM(d.grn_gvn_amt) as grn_grand_total\r\n" + 
+			"    SUM(d.apr_qty_acc) as grn_qty,\r\n" + 
+			"    SUM(d.apr_taxable_amt) as grn_taxable_amt,\r\n" + 
+			"    SUM(d.apr_grand_total) as grn_grand_total\r\n" + 
 			"    FROM\r\n" + 
 			"        t_grn_gvn d,\r\n" + 
 			"        t_grn_gvn_header h\r\n" + 
@@ -84,9 +84,9 @@ public interface SalesRoyaltyConsByCatRepo extends JpaRepository<SalesRoyaltyCon
 			"LEFT JOIN(\r\n" + 
 			"    SELECT \r\n" + 
 			"    d.item_id,\r\n" + 
-			"    SUM(d.grn_gvn_qty) as gvn_qty,\r\n" + 
-			"    SUM(d.taxable_amt) as gvn_taxable_amt,\r\n" + 
-			"    SUM(d.grn_gvn_amt) as gvn_grand_total\r\n" + 
+			"    SUM(d.apr_qty_acc) as gvn_qty,\r\n" + 
+			"    SUM(d.apr_taxable_amt) as gvn_taxable_amt,\r\n" + 
+			"    SUM(d.apr_grand_total) as gvn_grand_total\r\n" + 
 			"    FROM\r\n" + 
 			"        t_grn_gvn d,\r\n" + 
 			"        t_grn_gvn_header h\r\n" + 
@@ -186,9 +186,9 @@ public interface SalesRoyaltyConsByCatRepo extends JpaRepository<SalesRoyaltyCon
 			"LEFT JOIN(\r\n" + 
 			"    SELECT \r\n" + 
 			"    d.item_id,\r\n" + 
-			"    SUM(d.grn_gvn_qty) as grn_qty,\r\n" + 
-			"    SUM(d.taxable_amt) as grn_taxable_amt,\r\n" + 
-			"    SUM(d.grn_gvn_amt) as grn_grand_total\r\n" + 
+			"    SUM(d.apr_qty_acc) as grn_qty,\r\n" + 
+			"    SUM(d.apr_taxable_amt) as grn_taxable_amt,\r\n" + 
+			"    SUM(d.apr_grand_total) as grn_grand_total\r\n" + 
 			"    FROM\r\n" + 
 			"        t_grn_gvn d,\r\n" + 
 			"        t_grn_gvn_header h\r\n" + 
@@ -198,9 +198,9 @@ public interface SalesRoyaltyConsByCatRepo extends JpaRepository<SalesRoyaltyCon
 			"LEFT JOIN(\r\n" + 
 			"    SELECT \r\n" + 
 			"    d.item_id,\r\n" + 
-			"    SUM(d.grn_gvn_qty) as gvn_qty,\r\n" + 
-			"    SUM(d.taxable_amt) as gvn_taxable_amt,\r\n" + 
-			"    SUM(d.grn_gvn_amt) as gvn_grand_total\r\n" + 
+			"    SUM(d.apr_qty_acc) as gvn_qty,\r\n" + 
+			"    SUM(d.apr_taxable_amt) as gvn_taxable_amt,\r\n" + 
+			"    SUM(d.apr_grand_total) as gvn_grand_total\r\n" + 
 			"    FROM\r\n" + 
 			"        t_grn_gvn d,\r\n" + 
 			"        t_grn_gvn_header h\r\n" + 
@@ -295,9 +295,9 @@ public interface SalesRoyaltyConsByCatRepo extends JpaRepository<SalesRoyaltyCon
 			"LEFT JOIN(\r\n" + 
 			"    SELECT \r\n" + 
 			"    d.item_id,\r\n" + 
-			"    SUM(d.grn_gvn_qty) as grn_qty,\r\n" + 
-			"    SUM(d.taxable_amt) as grn_taxable_amt,\r\n" + 
-			"    SUM(d.grn_gvn_amt) as grn_grand_total\r\n" + 
+			"    SUM(d.apr_qty_acc) as grn_qty,\r\n" + 
+			"    SUM(d.apr_taxable_amt) as grn_taxable_amt,\r\n" + 
+			"    SUM(d.apr_grand_total) as grn_grand_total\r\n" + 
 			"    FROM\r\n" + 
 			"        t_grn_gvn d,\r\n" + 
 			"        t_grn_gvn_header h\r\n" + 
@@ -307,9 +307,9 @@ public interface SalesRoyaltyConsByCatRepo extends JpaRepository<SalesRoyaltyCon
 			"LEFT JOIN(\r\n" + 
 			"    SELECT \r\n" + 
 			"    d.item_id,\r\n" + 
-			"    SUM(d.grn_gvn_qty) as gvn_qty,\r\n" + 
-			"    SUM(d.taxable_amt) as gvn_taxable_amt,\r\n" + 
-			"    SUM(d.grn_gvn_amt) as gvn_grand_total\r\n" + 
+			"    SUM(d.apr_qty_acc) as gvn_qty,\r\n" + 
+			"    SUM(d.apr_taxable_amt) as gvn_taxable_amt,\r\n" + 
+			"    SUM(d.apr_grand_total) as gvn_grand_total\r\n" + 
 			"    FROM\r\n" + 
 			"        t_grn_gvn d,\r\n" + 
 			"        t_grn_gvn_header h\r\n" + 
