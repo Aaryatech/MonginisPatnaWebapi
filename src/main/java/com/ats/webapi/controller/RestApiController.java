@@ -36,6 +36,7 @@ import com.ats.webapi.model.grngvn.TempGrnGvnBeanUp;
 import com.ats.webapi.model.remarks.GetAllRemarksList;
 import com.ats.webapi.repository.ConfigureFrListRepository;
 import com.ats.webapi.repository.FlavourRepository;
+import com.ats.webapi.repository.FrCustomerListRepo;
 import com.ats.webapi.repository.FranchiseForDispatchRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.FranchiseeRepository;
@@ -58,6 +59,7 @@ import com.ats.webapi.repository.SpCakeOrderUpdateRepository;
 import com.ats.webapi.repository.SpCakeOrdersRepository;
 import com.ats.webapi.repository.SpMessageRepository;
 import com.ats.webapi.repository.SpecialCakeRepository;
+import com.ats.webapi.repository.TestFrRepository;
 import com.ats.webapi.repository.UpdatePBTimeRepo;
 import com.ats.webapi.repository.UpdateSeetingForPBRepo;
 import com.ats.webapi.repository.UserRepository;
@@ -130,7 +132,6 @@ import com.ats.webapi.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 @RestController
 public class RestApiController {
@@ -382,16 +383,18 @@ public class RestApiController {
 
 	@Autowired
 	SpecialCakeRepository specialcakeRepository;
-	
+
 	@Autowired
 	PostFrOpStockDetailRepository postFrOpStockDetailRepository;
-	
+
 	@Autowired
 	PostFrOpStockHeaderRepository postFrOpStockHeaderRepository;
-	
-	
+
 	@Autowired
 	GenerateBillRepository generateBillRepository;
+
+	@Autowired
+	FrCustomerListRepo frCustomerListRepo;
 
 	@RequestMapping(value = { "/placeManualOrderNew" }, method = RequestMethod.POST)
 	public @ResponseBody List<GenerateBill> placeManualOrderNew(@RequestBody List<Orders> orderJson)
@@ -417,7 +420,6 @@ public class RestApiController {
 		return billList;
 	}
 
-	
 	@RequestMapping(value = { "/changeAdminUserPass" }, method = RequestMethod.POST)
 	public @ResponseBody Info changeAdminUserPass(@RequestBody User user) {
 
@@ -795,7 +797,7 @@ public class RestApiController {
 		return getItemByCatIdList;
 
 	}
-	
+
 	@RequestMapping(value = "/getItemBySubCatId", method = RequestMethod.POST)
 	public @ResponseBody GetItemByCatIdList getItemByCategoryIdAndSubCatId(@RequestParam("subCatId") int subCatId) {
 
@@ -1329,9 +1331,6 @@ public class RestApiController {
 		return billHeaderList;
 
 	}
-	
-	
-	
 
 	@RequestMapping(value = "/generateBillForAllMenu", method = RequestMethod.POST)
 	public @ResponseBody GenerateBillList generateBillForAllMenu(@RequestParam("frId") List<String> frId,
@@ -1342,14 +1341,11 @@ public class RestApiController {
 		System.out.println("delivery Date after convert " + delDate);
 
 		GenerateBillList billList = generateBillService.generateBillForAllMenu(frId, delDate);
-		System.out.println("data is"+billList.toString());
+		System.out.println("data is" + billList.toString());
 		return billList;
 
 	}
 
-	
-	
-	
 	@RequestMapping(value = "/generateBillForAllFrAllMenu", method = RequestMethod.POST)
 	public @ResponseBody GenerateBillList generateBillForAllFrAllMenu(@RequestParam("delDate") String delDate) {
 
@@ -1358,7 +1354,7 @@ public class RestApiController {
 		System.out.println("delivery Date after convert " + delDate);
 
 		GenerateBillList billList = generateBillService.generateBillForAllFrAllMenu(delDate);
-		System.out.println("data is"+billList.toString());
+		System.out.println("data is" + billList.toString());
 		return billList;
 
 	}
@@ -1372,7 +1368,7 @@ public class RestApiController {
 		System.out.println("delivery Date after convert " + delDate);
 
 		GenerateBillList billList = generateBillService.generateBillServiceForAllFr(menuId, delDate);
-		System.out.println("data is"+billList.toString());
+		System.out.println("data is" + billList.toString());
 		return billList;
 
 	}
@@ -1386,7 +1382,7 @@ public class RestApiController {
 		System.out.println("delivery Date after convert " + delDate);
 
 		GenerateBillList billList = generateBillService.generateBillService(frId, menuId, delDate);
-		System.out.println("data is"+billList.toString());
+		System.out.println("data is" + billList.toString());
 
 		return billList;
 
@@ -1708,13 +1704,14 @@ public class RestApiController {
 
 		return spHistoryExBill;
 	}
+
 	@RequestMapping(value = { "/getSpCkOrderForExBillPrint" }, method = RequestMethod.POST)
 	@ResponseBody
 	public SpCkOrderHis getSpCkOrderForExBill(@RequestParam("spOrderNo") int spOrderNo) {
-		
-		SpCkOrderHis spCakeOrder=null;
+
+		SpCkOrderHis spCakeOrder = null;
 		try {
-				 spCakeOrder = spCakeOrderHisRepository.findByOrderNoForExBillPrint(spOrderNo);
+			spCakeOrder = spCakeOrderHisRepository.findByOrderNoForExBillPrint(spOrderNo);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1935,8 +1932,8 @@ public class RestApiController {
 	@RequestMapping(value = { "/configureFranchisee" }, method = RequestMethod.POST)
 	@ResponseBody
 	public String configureFranchisee(@RequestParam("frId") int frId, @RequestParam("menuId") int menuId,
-			@RequestParam("catId") int catId, @RequestParam("subCat") int subCat, 
-			@RequestParam("settingType") int settingType, @RequestParam("fromTime") String fromTime, 
+			@RequestParam("catId") int catId, @RequestParam("subCat") int subCat,
+			@RequestParam("settingType") int settingType, @RequestParam("fromTime") String fromTime,
 			@RequestParam("toTime") String toTime, @RequestParam("day") String day, @RequestParam("date") String date,
 			@RequestParam("itemShow") String itemShow) throws ParseException {
 
@@ -1967,45 +1964,42 @@ public class RestApiController {
 
 		String jsonResult = connfigureService.configureFranchisee(configureFr);
 		try {
-		
 
-				List<PostFrItemStockHeader> prevStockHeader = postFrOpStockHeaderRepository
-						.findByFrIdAndIsMonthClosedAndCatId(frId, 0,
-								configureFr.getCatId());
-				// --------------------------------------------------------------------------------------------
-				List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
-				List<Integer> ids = Stream.of(configureFr.getItemShow().split(",")).map(Integer::parseInt)
-						.collect(Collectors.toList());
-				System.err.println("16 ids --" + ids.toString());
-				List<Item> itemsList = itemService.findAllItemsByItemId(ids);
-				System.err.println("17 itemsList --" + itemsList.toString());
-				for (int k = 0; k < itemsList.size(); k++) {
+			List<PostFrItemStockHeader> prevStockHeader = postFrOpStockHeaderRepository
+					.findByFrIdAndIsMonthClosedAndCatId(frId, 0, configureFr.getCatId());
+			// --------------------------------------------------------------------------------------------
+			List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
+			List<Integer> ids = Stream.of(configureFr.getItemShow().split(",")).map(Integer::parseInt)
+					.collect(Collectors.toList());
+			System.err.println("16 ids --" + ids.toString());
+			List<Item> itemsList = itemService.findAllItemsByItemId(ids);
+			System.err.println("17 itemsList --" + itemsList.toString());
+			for (int k = 0; k < itemsList.size(); k++) {
 
-					PostFrItemStockDetail prevFrItemStockDetail = postFrOpStockDetailRepository
-							.findByItemIdAndOpeningStockHeaderId(itemsList.get(k).getId(),
-									prevStockHeader.get(0).getOpeningStockHeaderId());
-					System.err.println("18 prevFrItemStockDetail --" + prevFrItemStockDetail);
-					if (prevFrItemStockDetail == null) {
-						PostFrItemStockDetail postFrItemStockDetail = new PostFrItemStockDetail();
-						postFrItemStockDetail
-								.setOpeningStockHeaderId(prevStockHeader.get(0).getOpeningStockHeaderId());// first
-																											// stock
-																											// header
-																											// (month
-																											// closed
-																											// 0
-																											// status))
-						postFrItemStockDetail.setOpeningStockDetailId(0);
-						postFrItemStockDetail.setRegOpeningStock(0);
-						postFrItemStockDetail.setItemId(itemsList.get(k).getId());
-						postFrItemStockDetail.setRemark("");
-						postFrItemStockDetailList.add(postFrItemStockDetail);
-						System.err.println("19 postFrItemStockDetail --" + postFrItemStockDetail.toString());
-					}
+				PostFrItemStockDetail prevFrItemStockDetail = postFrOpStockDetailRepository
+						.findByItemIdAndOpeningStockHeaderId(itemsList.get(k).getId(),
+								prevStockHeader.get(0).getOpeningStockHeaderId());
+				System.err.println("18 prevFrItemStockDetail --" + prevFrItemStockDetail);
+				if (prevFrItemStockDetail == null) {
+					PostFrItemStockDetail postFrItemStockDetail = new PostFrItemStockDetail();
+					postFrItemStockDetail.setOpeningStockHeaderId(prevStockHeader.get(0).getOpeningStockHeaderId());// first
+																													// stock
+																													// header
+																													// (month
+																													// closed
+																													// 0
+																													// status))
+					postFrItemStockDetail.setOpeningStockDetailId(0);
+					postFrItemStockDetail.setRegOpeningStock(0);
+					postFrItemStockDetail.setItemId(itemsList.get(k).getId());
+					postFrItemStockDetail.setRemark("");
+					postFrItemStockDetailList.add(postFrItemStockDetail);
+					System.err.println("19 postFrItemStockDetail --" + postFrItemStockDetail.toString());
 				}
-				postFrOpStockDetailRepository.save(postFrItemStockDetailList);
-				System.err.println("20 postFrItemStockDetailList --" + postFrItemStockDetailList.toString());
-				
+			}
+			postFrOpStockDetailRepository.save(postFrItemStockDetailList);
+			System.err.println("20 postFrItemStockDetailList --" + postFrItemStockDetailList.toString());
+
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -2015,8 +2009,8 @@ public class RestApiController {
 	@RequestMapping(value = "/updateFrConfMenuTime")
 	public @ResponseBody Info updateFrConf(@RequestParam("frIdList") List<Integer> frIdList,
 			@RequestParam("menuId") int menuId, @RequestParam("fromTime") String fromTime,
-			@RequestParam("toTime") String toTime,@RequestParam("settingType") int settingType,@RequestParam("date") String date,
-			@RequestParam("day") String day) {
+			@RequestParam("toTime") String toTime, @RequestParam("settingType") int settingType,
+			@RequestParam("date") String date, @RequestParam("day") String day) {
 		Info info = new Info();
 		int result = 0;
 		System.err.println("from time received " + fromTime + "to time  " + toTime);
@@ -2024,10 +2018,11 @@ public class RestApiController {
 		try {
 			if (frIdList.contains(0)) {
 				System.err.println("fr id is zero");
-				result = connfigureService.updateFrConfForAllFr(menuId, fromTime, toTime,date,day,settingType);
+				result = connfigureService.updateFrConfForAllFr(menuId, fromTime, toTime, date, day, settingType);
 			} else {
 				System.err.println("fr Id is not zero");
-				result = connfigureService.updateFrConfForSelectedFr(frIdList, menuId, fromTime, toTime,date,day,settingType);
+				result = connfigureService.updateFrConfForSelectedFr(frIdList, menuId, fromTime, toTime, date, day,
+						settingType);
 			}
 
 			if (result > 0) {
@@ -3870,11 +3865,13 @@ public class RestApiController {
 		}
 		return eventList;
 	}
+
 //b
 	@RequestMapping(value = { "/getRegSpCkOrderList" }, method = RequestMethod.POST)
 	@ResponseBody
-	public RegSpCkOrderResponse getRegSpCkOrderList(@RequestParam List<Integer> frId, @RequestParam String prodDate,@RequestParam List<Integer> menuId) {
-System.err.println("meu Id rece " +menuId);
+	public RegSpCkOrderResponse getRegSpCkOrderList(@RequestParam List<Integer> frId, @RequestParam String prodDate,
+			@RequestParam List<Integer> menuId) {
+		System.err.println("meu Id rece " + menuId);
 		RegSpCkOrderResponse regSpCakeOrderRes = new RegSpCkOrderResponse();
 
 		try {
@@ -3882,7 +3879,7 @@ System.err.println("meu Id rece " +menuId);
 			String strDate = Common.convertToYMD(prodDate);
 			System.out.println("Converted date " + strDate);
 
-			regSpCakeOrderRes = regularSpCkOrderService.findRegularSpCkOrder(frId, strDate,menuId);
+			regSpCakeOrderRes = regularSpCkOrderService.findRegularSpCkOrder(frId, strDate, menuId);
 
 		} catch (Exception e) {
 			System.out.println("controller ");
@@ -3893,19 +3890,21 @@ System.err.println("meu Id rece " +menuId);
 		return regSpCakeOrderRes;
 
 	}
+
 //a
 	@RequestMapping(value = { "/getAllFrRegSpCakeOrders" }, method = RequestMethod.POST)
 	@ResponseBody
-	public RegSpCkOrderResponse getAllFrRegSpCakeOrders(@RequestParam String prodDate,@RequestParam List<Integer> menuId) {
+	public RegSpCkOrderResponse getAllFrRegSpCakeOrders(@RequestParam String prodDate,
+			@RequestParam List<Integer> menuId) {
 
 		RegSpCkOrderResponse regSpCakeOrderRes = new RegSpCkOrderResponse();
-		System.err.println("meu Id rece " +menuId);
+		System.err.println("meu Id rece " + menuId);
 
 		try {
 			String strDate = Common.convertToYMD(prodDate);
 			System.out.println("Converted date " + strDate);
 
-			regSpCakeOrderRes = regularSpCkOrderService.findRegSpCakeOrderAllFr(strDate,menuId);
+			regSpCakeOrderRes = regularSpCkOrderService.findRegSpCakeOrderAllFr(strDate, menuId);
 
 		} catch (Exception e) {
 
@@ -4059,7 +4058,7 @@ System.err.println("meu Id rece " +menuId);
 		ConfigureFranchisee configureFranchisee = connfigureService.findFranchiseeById(settingId);
 		Info info = new Info();
 		try {
-			
+
 			configureFranchisee.setDate(date);
 			configureFranchisee.setDay(day);
 
@@ -4071,38 +4070,37 @@ System.err.println("meu Id rece " +menuId);
 
 			String jsonResult = connfigureService.configureFranchisee(configureFranchisee);
 			try {
-					List<PostFrItemStockHeader> prevStockHeader = postFrOpStockHeaderRepository
-							.findByFrIdAndIsMonthClosedAndCatId(configureFranchisee.getFrId(), 0,
-									configureFranchisee.getCatId());
-					// --------------------------------------------------------------------------------------------
-					List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
-					List<Integer> ids = Stream.of(configureFranchisee.getItemShow().split(",")).map(Integer::parseInt)
-							.collect(Collectors.toList());
-					System.err.println("16 ids --" + ids.toString());
-					List<Item> itemsList = itemService.findAllItemsByItemId(ids);
-					System.err.println("17 itemsList --" + itemsList.toString());
-					for (int k = 0; k < itemsList.size(); k++) {
+				List<PostFrItemStockHeader> prevStockHeader = postFrOpStockHeaderRepository
+						.findByFrIdAndIsMonthClosedAndCatId(configureFranchisee.getFrId(), 0,
+								configureFranchisee.getCatId());
+				// --------------------------------------------------------------------------------------------
+				List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
+				List<Integer> ids = Stream.of(configureFranchisee.getItemShow().split(",")).map(Integer::parseInt)
+						.collect(Collectors.toList());
+				System.err.println("16 ids --" + ids.toString());
+				List<Item> itemsList = itemService.findAllItemsByItemId(ids);
+				System.err.println("17 itemsList --" + itemsList.toString());
+				for (int k = 0; k < itemsList.size(); k++) {
 
-						PostFrItemStockDetail prevFrItemStockDetail = postFrOpStockDetailRepository
-								.findByItemIdAndOpeningStockHeaderId(itemsList.get(k).getId(),
-										prevStockHeader.get(0).getOpeningStockHeaderId());
-						System.err.println("18 prevFrItemStockDetail --" + prevFrItemStockDetail);
-						if (prevFrItemStockDetail == null) {
-							PostFrItemStockDetail postFrItemStockDetail = new PostFrItemStockDetail();
-							postFrItemStockDetail
-									.setOpeningStockHeaderId(prevStockHeader.get(0).getOpeningStockHeaderId());
-							postFrItemStockDetail.setOpeningStockDetailId(0);
-							postFrItemStockDetail.setRegOpeningStock(0);
-							postFrItemStockDetail.setItemId(itemsList.get(k).getId());
-							postFrItemStockDetail.setRemark("");
-							postFrItemStockDetailList.add(postFrItemStockDetail);
-							System.err.println("19 postFrItemStockDetail --" + postFrItemStockDetail.toString());
-						}
+					PostFrItemStockDetail prevFrItemStockDetail = postFrOpStockDetailRepository
+							.findByItemIdAndOpeningStockHeaderId(itemsList.get(k).getId(),
+									prevStockHeader.get(0).getOpeningStockHeaderId());
+					System.err.println("18 prevFrItemStockDetail --" + prevFrItemStockDetail);
+					if (prevFrItemStockDetail == null) {
+						PostFrItemStockDetail postFrItemStockDetail = new PostFrItemStockDetail();
+						postFrItemStockDetail.setOpeningStockHeaderId(prevStockHeader.get(0).getOpeningStockHeaderId());
+						postFrItemStockDetail.setOpeningStockDetailId(0);
+						postFrItemStockDetail.setRegOpeningStock(0);
+						postFrItemStockDetail.setItemId(itemsList.get(k).getId());
+						postFrItemStockDetail.setRemark("");
+						postFrItemStockDetailList.add(postFrItemStockDetail);
+						System.err.println("19 postFrItemStockDetail --" + postFrItemStockDetail.toString());
 					}
-					postFrOpStockDetailRepository.save(postFrItemStockDetailList);
-					System.err.println("20 postFrItemStockDetailList --" + postFrItemStockDetailList.toString());
-					// ---------------------------------------------------------------------------------------
-				//}
+				}
+				postFrOpStockDetailRepository.save(postFrItemStockDetailList);
+				System.err.println("20 postFrItemStockDetailList --" + postFrItemStockDetailList.toString());
+				// ---------------------------------------------------------------------------------------
+				// }
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -4155,41 +4153,46 @@ System.err.println("meu Id rece " +menuId);
 
 		return orderDumpList;
 	}
+
 	@RequestMapping(value = "/getBillHeaderByBillNo", method = RequestMethod.POST)
 	public @ResponseBody GetBillHeader getBillHeaderByBillNo(@RequestParam("billNo") int billNo) {
 		GetBillHeader getBillHeader = null;
 		try {
-			 
+
 			getBillHeader = getBillHeaderRepository.getBillHeaderByBillNo(billNo);
 		} catch (Exception e) {
-			 
+
 			e.printStackTrace();
 		}
 
 		return getBillHeader;
 
 	}
+
 	@RequestMapping(value = "/getGrnItemsByExpiryDate", method = RequestMethod.POST)
-	public @ResponseBody List<GetBillDetails> getGrnItemsByExpiryDate(@RequestParam("frId") int frId,@RequestParam("expiryDate") String expiryDate) {
-		List<GetBillDetails>  getBillDetailsrList = null;
+	public @ResponseBody List<GetBillDetails> getGrnItemsByExpiryDate(@RequestParam("frId") int frId,
+			@RequestParam("expiryDate") String expiryDate) {
+		List<GetBillDetails> getBillDetailsrList = null;
 		try {
-			 
-			getBillDetailsrList = getBillDetailsRepository.getGrnItemsByExpiryDate(frId,expiryDate);
+
+			getBillDetailsrList = getBillDetailsRepository.getGrnItemsByExpiryDate(frId, expiryDate);
 		} catch (Exception e) {
-			 
+
 			e.printStackTrace();
 		}
 
 		return getBillDetailsrList;
 	}
+
 	@RequestMapping(value = "/getGrnItemsByIds", method = RequestMethod.POST)
-	public @ResponseBody List<GetBillDetails> getGrnItemsByIds(@RequestParam("frId") int frId,@RequestParam("ids") List<Integer> idList) {
-		List<GetBillDetails>  getBillDetailsrList = null;
+	public @ResponseBody List<GetBillDetails> getGrnItemsByIds(@RequestParam("frId") int frId,
+			@RequestParam("ids") List<Integer> idList) {
+		List<GetBillDetails> getBillDetailsrList = null;
 		try {
-			 
-			getBillDetailsrList = getBillDetailsRepository.getGrnItemsByIds(frId,idList);
+
+			getBillDetailsrList = getBillDetailsRepository.getGrnItemsByIds(frId, idList);
 		} catch (Exception e) {
-			 
+
 			e.printStackTrace();
 		}
 
@@ -4452,9 +4455,10 @@ System.err.println("meu Id rece " +menuId);
 		System.out.println("Res  :" + regSpCakeOrder.toString());
 		return regSpCakeOrder;
 	}
+
 	// Get Items By Item->FR Id and Delete Status 0
 	@RequestMapping(value = "/getOtherItemsForFr", method = RequestMethod.POST)
-	public @ResponseBody ItemResponse getOtherItemsForFr(@RequestParam int frId,@RequestParam int catId) {
+	public @ResponseBody ItemResponse getOtherItemsForFr(@RequestParam int frId, @RequestParam int catId) {
 
 		ItemResponse itemResponse = new ItemResponse();
 		ErrorMessage errorMessage = new ErrorMessage();
@@ -4470,57 +4474,58 @@ System.err.println("meu Id rece " +menuId);
 		return itemResponse;
 
 	}
-	
-	//Mahendra 
-	@Autowired GetSubCatRepo subCatRepo;
-	
+
+	// Mahendra
+	@Autowired
+	GetSubCatRepo subCatRepo;
+
 	@RequestMapping(value = "/getAllSubCatByMenuId", method = RequestMethod.POST)
-	public @ResponseBody List<GetSubCat>  getAllSubCatByMenuId(@RequestParam int menuId) {
+	public @ResponseBody List<GetSubCat> getAllSubCatByMenuId(@RequestParam int menuId) {
 		List<GetSubCat> subCatList = new ArrayList<GetSubCat>();
 		try {
-			subCatList= subCatRepo.getSubCatByMenuId(menuId);
-			
-		}catch (Exception e) {
+			subCatList = subCatRepo.getSubCatByMenuId(menuId);
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return subCatList;		
-		
+		return subCatList;
+
 	}
-	
+
 	@RequestMapping(value = "/getSubCatById", method = RequestMethod.POST)
 	public @ResponseBody GetSubCat getSubCatById(@RequestParam int subCatId) {
 		GetSubCat subCat = new GetSubCat();
 		try {
-			subCat= subCatRepo.findBySubCatId(subCatId);
-			
-		}catch (Exception e) {
+			subCat = subCatRepo.findBySubCatId(subCatId);
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return subCat;		
-		
+		return subCat;
+
 	}
-	
+
 	@RequestMapping(value = "/itemsBySubCatId", method = RequestMethod.POST)
-	public @ResponseBody List<Item>  itemsBySubCatId(@RequestParam String subCatId) {
+	public @ResponseBody List<Item> itemsBySubCatId(@RequestParam String subCatId) {
 		List<Item> itemList = new ArrayList<Item>();
 		try {
-			
-			 itemList= itemRepository.findByItemGrp2(subCatId);
-			 
-		}catch (Exception e) {
+
+			itemList = itemRepository.findByItemGrp2(subCatId);
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return itemList;		
-		
+		return itemList;
+
 	}
-	
+
 	@RequestMapping("/getMenuByMenuId")
 	public @ResponseBody AllMenus getMenuByMenuId(@RequestParam int menuId) {
 
 		AllMenus allMenus = menuService.findMenuByMenuId(menuId);
 		return allMenus;
 	}
-	
+
 	/*********************************************************************/
 	@RequestMapping(value = { "/getUserInfoByEmail" }, method = RequestMethod.POST)
 	public @ResponseBody User getUserInfoByEmail(@RequestParam String email) {
@@ -4529,7 +4534,7 @@ System.err.println("meu Id rece " +menuId);
 		res = userService.checkUniqueEmail(email);
 		return res;
 	}
-	
+
 	@RequestMapping(value = { "/getUserInfoByContact" }, method = RequestMethod.POST)
 	public @ResponseBody User getUserInfoByContact(@RequestParam String contact) {
 
@@ -4537,8 +4542,7 @@ System.err.println("meu Id rece " +menuId);
 		res = userService.checkUniqueContact(contact);
 		return res;
 	}
-	
-	
+
 	@RequestMapping(value = { "/getUserInfoByUser" }, method = RequestMethod.POST)
 	public @ResponseBody User getUserInfoByUser(@RequestParam String uname) {
 
@@ -4546,11 +4550,12 @@ System.err.println("meu Id rece " +menuId);
 		res = userService.checkUniqueUser(uname);
 		return res;
 	}
-	
+
 	static String senderEmail = "atsinfosoft@gmail.com";
-	static String senderPassword ="atsinfosoft@123";
+	static String senderPassword = "atsinfosoft@123";
 	static String mailsubject = "";
 	String otp1 = null;
+
 	@RequestMapping(value = { "/getUserInfoByUsername" }, method = RequestMethod.POST)
 	public @ResponseBody User getUserInfoByUsername(@RequestParam String username) {
 
@@ -4559,34 +4564,32 @@ System.err.println("meu Id rece " +menuId);
 		OTPVerification.setOtp(null);
 		OTPVerification.setPass(null);
 		Info info = new Info();
-		
+
 		User res = new User();
 		res = userService.getUserData(username);
-		System.err.println("Resss-------"+res);
-		
-		if(res!= null) {
+		System.err.println("Resss-------" + res);
+
+		if (res != null) {
 			OTPVerification.setUserId(res.getId());
-			
+
 			String emailId = res.getEmail();
 			String conNumber = res.getContact();
-			
+
 			char[] otp = Common.OTP(6);
 			otp1 = String.valueOf(otp);
 			System.err.println("User otp is" + otp1);
-			
-			Info inf = EmailUtility.sendOtp(otp1, conNumber, "MONGII OTP Verification ");
-			
-			 mailsubject = " OTP  Verification ";
-			 String text = "\n OTP for change your Password: ";
-			Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword,emailId, mailsubject,
-					text, otp1);
 
-		
+			Info inf = EmailUtility.sendOtp(otp1, conNumber, "MONGII OTP Verification ");
+
+			mailsubject = " OTP  Verification ";
+			String text = "\n OTP for change your Password: ";
+			Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text, otp1);
+
 			OTPVerification.setConNumber(conNumber);
 			OTPVerification.setEmailId(emailId);
 			OTPVerification.setOtp(otp1);
 			OTPVerification.setPass(res.getPassword());
-		}else {
+		} else {
 			System.err.println("In Else ");
 
 			info.setError(true);
@@ -4595,18 +4598,19 @@ System.err.println("meu Id rece " +menuId);
 		}
 		return res;
 	}
-	
+
 	@RequestMapping(value = { "/VerifyOTP" }, method = RequestMethod.POST)
 	public @ResponseBody User VerifyOTP(@RequestParam String otp) {
 		Info info = new Info();
-		
-		Object object=new Object();
-		HashMap<Integer, User>  hashMap=new HashMap<>();
-		
-		User user=new User();
-		
+
+		Object object = new Object();
+		HashMap<Integer, User> hashMap = new HashMap<>();
+
+		User user = new User();
+
 		try {
-		//	System.err.println("OTP Found------------------"+OTPVerification.getOtp()+" "+OTPVerification.getUserId());
+			// System.err.println("OTP Found------------------"+OTPVerification.getOtp()+"
+			// "+OTPVerification.getUserId());
 			if (otp.equals(OTPVerification.getOtp()) == true) {
 				info.setError(false);
 				info.setMessage("success");
@@ -4615,16 +4619,16 @@ System.err.println("meu Id rece " +menuId);
 				String email = OTPVerification.getEmailId();
 				String pass = Common.getAlphaNumericString(7);
 				// System.out.println("pass");
-				//int res = staffrepo.chagePass(pass, OTPVerification.getUserId());
-				
-				user=userService.findByIdAndDelStatus(OTPVerification.getUserId(),0);
+				// int res = staffrepo.chagePass(pass, OTPVerification.getUserId());
+
+				user = userService.findByIdAndDelStatus(OTPVerification.getUserId(), 0);
 				hashMap.put(1, user);
 
 			} else {
 				info.setError(true);
 				info.setMessage("failed");
 			}
-			
+
 		} catch (Exception e) {
 
 			System.err.println("Exce in getAllInstitutes Institute " + e.getMessage());
@@ -4636,12 +4640,12 @@ System.err.println("meu Id rece " +menuId);
 		return user;
 
 	}
-	
+
 	@RequestMapping(value = { "/updateToNewPassword" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateToNewPassword(@RequestParam int userId, @RequestParam String newPass) {
 
 		Info res = new Info();
-		
+
 		int a = updateUserRepo.changePassword(userId, newPass);
 		if (a > 0) {
 
@@ -4654,56 +4658,55 @@ System.err.println("meu Id rece " +menuId);
 				String emailId = usr.getEmail();
 				String password = "\n Username : " + usr.getUsername() + " \n Password : " + usr.getPassword();
 
-				Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text, password);
+				Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text,
+						password);
 			}
 			res.setError(false);
 			res.setMessage("success");
-		}else {
+		} else {
 			res.setError(true);
 			res.setMessage("fail");
 		}
-	
+
 		return res;
 	}
-	
+
 	/******************************************************************************/
-	//OPS
+	// OPS
 	@RequestMapping(value = { "/getFranchiseeByFrCode" }, method = RequestMethod.POST)
 	@ResponseBody
 	public Franchisee getFranchiseeByFrCode(@RequestParam("frCode") String frCode) {
-	
+
 		OTPVerification.setConNumber(null);
 		OTPVerification.setEmailId(null);
 		OTPVerification.setOtp(null);
 		OTPVerification.setPass(null);
 		Info info = new Info();
-		
+
 		Franchisee franchisee = franchiseeService.getFranchiseeByFrCode(frCode);
 		System.out.println("JsonString" + franchisee);
-		if(franchisee!= null) {
+		if (franchisee != null) {
 			OTPVerification.setUserId(franchisee.getFrId());
-			
+
 			String emailId = franchisee.getFrEmail();
 			String conNumber = franchisee.getFrMob();
-			
+
 			char[] otp = Common.OTP(6);
 			otp1 = String.valueOf(otp);
 			System.err.println("User otp is" + otp1);
-			
-			Info inf = EmailUtility.sendOtp(otp1, conNumber, "MONGII OTP Verification ");
-			
-			 mailsubject = " OTP  Verification ";
-			 String text = "\n OTP for change your Password: ";
-			
-			Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword,emailId, mailsubject,
-					text, otp1);
 
-		
+			Info inf = EmailUtility.sendOtp(otp1, conNumber, "MONGII OTP Verification ");
+
+			mailsubject = " OTP  Verification ";
+			String text = "\n OTP for change your Password: ";
+
+			Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text, otp1);
+
 			OTPVerification.setConNumber(conNumber);
 			OTPVerification.setEmailId(emailId);
 			OTPVerification.setOtp(otp1);
 			OTPVerification.setPass(franchisee.getFrPassword());
-		}else {
+		} else {
 			System.err.println("In Else ");
 
 			info.setError(true);
@@ -4714,18 +4717,19 @@ System.err.println("meu Id rece " +menuId);
 		return franchisee;
 
 	}
-	
+
 	@RequestMapping(value = { "/verifyOPSOTP" }, method = RequestMethod.POST)
 	public @ResponseBody Franchisee VerifyOPSOTP(@RequestParam String otp) {
 		Info info = new Info();
-		
-		Object object=new Object();
-		HashMap<Integer, Franchisee>  hashMap=new HashMap<>();
-		
-		Franchisee franchisee=new Franchisee();
-		
+
+		Object object = new Object();
+		HashMap<Integer, Franchisee> hashMap = new HashMap<>();
+
+		Franchisee franchisee = new Franchisee();
+
 		try {
-			//System.err.println("OTP Found------------------"+OTPVerification.getOtp()+" "+OTPVerification.getUserId()+" "+otp);
+			// System.err.println("OTP Found------------------"+OTPVerification.getOtp()+"
+			// "+OTPVerification.getUserId()+" "+otp);
 			if (otp.equals(OTPVerification.getOtp()) == true) {
 				info.setError(false);
 				info.setMessage("success");
@@ -4734,16 +4738,16 @@ System.err.println("meu Id rece " +menuId);
 				String email = OTPVerification.getEmailId();
 				String pass = Common.getAlphaNumericString(7);
 				// System.out.println("pass");
-				//int res = staffrepo.chagePass(pass, OTPVerification.getUserId());
-				
-				franchisee=franchiseeService.findByFrId(OTPVerification.getUserId());
+				// int res = staffrepo.chagePass(pass, OTPVerification.getUserId());
+
+				franchisee = franchiseeService.findByFrId(OTPVerification.getUserId());
 				hashMap.put(1, franchisee);
 
 			} else {
 				info.setError(true);
 				info.setMessage("failed");
 			}
-			
+
 		} catch (Exception e) {
 
 			System.err.println("Exce in VerifyOPSOTP Institute " + e.getMessage());
@@ -4753,43 +4757,43 @@ System.err.println("meu Id rece " +menuId);
 		}
 		return franchisee;
 	}
-	
+
 	@RequestMapping(value = { "/updateToNewOPSPassword" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateToNewOPSPassword(@RequestParam int frId, @RequestParam String newPass) {
 
 		Info res = new Info();
-		
+
 		int a = franchiseeRepository.changeOPSPassword(frId, newPass);
-		if(a>0) {
+		if (a > 0) {
 			int b = franchiseSupRepository.updateOPSFrPwd(frId, newPass);
-			if(b>0) {
-				
-			Franchisee franchisee=franchiseeService.findByFrId(OTPVerification.getUserId());
-				if(franchisee!=null) {
+			if (b > 0) {
+
+				Franchisee franchisee = franchiseeService.findByFrId(OTPVerification.getUserId());
+				if (franchisee != null) {
 					mailsubject = " New Credentials ";
-					String text = "\n Your new username and password are : \n";					
-					
-					String password = "\n Username : " + franchisee.getFrCode() + " \n Password : " + franchisee.getFrPassword();
+					String text = "\n Your new username and password are : \n";
+
+					String password = "\n Username : " + franchisee.getFrCode() + " \n Password : "
+							+ franchisee.getFrPassword();
 					String emailId = franchisee.getFrEmail();
 
-					Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text, password);
+					Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text,
+							password);
 				}
-			res.setError(false);
-			res.setMessage("success");
-			}
-			else {
+				res.setError(false);
+				res.setMessage("success");
+			} else {
 				res.setError(true);
 				res.setMessage("fail");
 			}
-		}else {
+		} else {
 			res.setError(true);
 			res.setMessage("fail");
 		}
-	
+
 		return res;
 	}
-	
-	
+
 	@RequestMapping(value = "/getSubCatListByCatIdInForDisp", method = RequestMethod.POST)
 	public @ResponseBody List<SubCategory> getSubCatListByCatIdInForDisp(@RequestParam("catId") List<String> catId,
 			@RequestParam("isAllCatSelected") boolean isAllCatSelected) {
@@ -4803,6 +4807,29 @@ System.err.println("meu Id rece " +menuId);
 		return subCategoryList;
 
 	}
-	
-	
+
+	@Autowired
+	TestFrRepository testFrRepository;
+
+	@RequestMapping(value = { "/getFrConfByFrAndMenu" }, method = RequestMethod.POST)
+	public @ResponseBody List<ConfigureFranchisee> getFrConfByFrAndMenu(@RequestParam("frId") int frId,
+			@RequestParam("catId") int catId) {
+		List<ConfigureFranchisee> res = testFrRepository.findByFrAndCat(frId, catId);
+		return res;
+	}
+
+	@RequestMapping(value = { "/getFrCustomerList" }, method = RequestMethod.POST)
+	public @ResponseBody List<FrCustomerList> getFrCustomerList(@RequestParam("frId") int frId) {
+
+		List<FrCustomerList> res = null;
+
+		res = frCustomerListRepo.getAllCustByFr(frId);
+
+		if (res == null) {
+			res = new ArrayList<>();
+		}
+
+		return res;
+	}
+
 }
