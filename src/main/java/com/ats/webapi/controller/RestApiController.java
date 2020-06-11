@@ -907,7 +907,7 @@ public class RestApiController {
 
 			java.util.Date currentDate = null;
 
-			if (currentHour >= 22) {
+			if (currentHour >= 18) {
 
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(cDate);
