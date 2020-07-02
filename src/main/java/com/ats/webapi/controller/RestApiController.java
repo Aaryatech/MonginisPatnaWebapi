@@ -4819,11 +4819,12 @@ public class RestApiController {
 	}
 
 	@RequestMapping(value = { "/getFrCustomerList" }, method = RequestMethod.POST)
-	public @ResponseBody List<FrCustomerList> getFrCustomerList(@RequestParam("frId") int frId) {
+	public @ResponseBody List<FrCustomerList> getFrCustomerList(@RequestParam("frId") int frId, @RequestParam("fromDate") String fromDate,
+			 @RequestParam("toDate") String toDate) {
 
 		List<FrCustomerList> res = null;
-
-		res = frCustomerListRepo.getAllCustByFr(frId);
+		res = frCustomerListRepo.getAllCustByFr(frId, fromDate, toDate);
+//		res = frCustomerListRepo.getAllCustByFr(frId);
 
 		if (res == null) {
 			res = new ArrayList<>();
