@@ -2858,7 +2858,24 @@ public class RestApiController {
 		return items;
 
 	}
+	
+	//Get Item Query for Other Item Bill in Front End 
+	//Sachin 23-07-2020
 
+	@RequestMapping(value = "/getItemsByCatDelStatusAndIsUsed", method = RequestMethod.POST)
+	public @ResponseBody List<Item> getItemsByCatDelStatusAndIsUsed(@RequestParam String itemGrp1) {
+
+		List<Item> items = null;
+		try {
+			items = itemRepository.findByItemGrp1AndDelStatusAndItemIsUsedOrderByItemNameAscItemGrp2Asc(itemGrp1,0,1);
+		} catch (Exception e) {/* findByItemGrp1AndDelStatusOrderByItemGrp2AscItemSortIdAsc */
+			items = new ArrayList<>();
+			e.printStackTrace();
+
+		}
+		return items;
+
+	}
 	// Get Items By Category order by sub cat and sort id
 	@RequestMapping(value = "/getItemsByCatIdAndSortId", method = RequestMethod.POST)
 	public @ResponseBody List<Item> getItemsByCatIdAndSortId(@RequestParam String itemGrp1) {

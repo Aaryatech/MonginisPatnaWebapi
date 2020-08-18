@@ -153,7 +153,7 @@ public class OtherItemStockController {
 			@RequestParam("frId") int frId,@RequestParam("month") int month, @RequestParam("fromDate") String fromDate,
 			@RequestParam("toDate") String toDate,@RequestParam("prevFromDate") String prevFromDate,
 			@RequestParam("prevToDate") String prevToDate){
-		
+		System.err.println("In Side aaaa");
 		List<OtherItemCurStock> othItemCurStockList = new ArrayList<>();
 		
 		List<OtherItemStockBet> betDateList=new ArrayList<>();
@@ -161,7 +161,7 @@ public class OtherItemStockController {
 		try {
 			System.err.println("prevFromDate"+prevFromDate+"prevToDate"+prevToDate+"from date"+fromDate+"to Datte"+toDate);
 			betDateList=getOtherItemStockBetRepo.getOtherItemStockBet(catId, month, frId, fromDate, toDate, prevFromDate, prevToDate);
-			
+			System.err.println("betDateList " +betDateList.toString());
 			if(betDateList.size()>0) {
 				
 				for(int i=0;i<betDateList.size();i++) {
@@ -186,13 +186,13 @@ public class OtherItemStockController {
 				
 			}
 			
-		
+			System.err.println(" othItemCurStockList :"+othItemCurStockList.toString());
+
 		}catch(Exception e){
-			
-			System.out.println(e);
+			System.err.println("In Exce of it");
+			e.printStackTrace();
 		}
 		
-		System.err.println(" othItemCurStockList :"+othItemCurStockList);
 		
 		return othItemCurStockList;
 		
