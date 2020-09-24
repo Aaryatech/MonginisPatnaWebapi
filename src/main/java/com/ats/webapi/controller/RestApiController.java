@@ -405,7 +405,12 @@ public class RestApiController {
 		log.setFrId(orderJson.get(0).getFrId());
 		log.setJson(orderJson.toString());
 		logRespository.save(log);
-
+		for (int i = 0; i < orderJson.size(); i++) 
+		{
+			Orders ord =orderJson.get(i);
+			ord.setIsBillGenerated(2);
+		}
+		
 		jsonResult = orderService.placeManualOrder(orderJson);
 		ArrayList<Integer> list = new ArrayList<Integer>();
 
@@ -4564,7 +4569,18 @@ public class RestApiController {
 	public @ResponseBody User getUserInfoByUser(@RequestParam String uname) {
 
 		User res = new User();
-		res = userService.checkUniqueUser(uname);
+		try {
+			res = userService.checkUniqueUser(uname);
+			System.err.println("res" +res);
+			if(res==null ) {
+				res = new User();	
+			}
+		} catch (Exception e) {
+			res = new User();
+			
+			// TODO: handle exception
+		}
+		
 		return res;
 	}
 
