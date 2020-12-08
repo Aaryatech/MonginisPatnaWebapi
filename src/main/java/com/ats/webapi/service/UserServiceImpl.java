@@ -53,9 +53,10 @@ public class UserServiceImpl implements UserService {
 			
 		
 		}
+		System.err.println("entered" +password +"db pass " +dbPassword);
 		try {
 			if (user == null || username == null||username.equalsIgnoreCase("")) {
-				
+				System.err.println("A" +password +"u " +username);
 				loginResponse=new LoginResponse();
 
 				errorMessage=new ErrorMessage();
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserService {
 				loginResponse.setUser(user);
 				
 			} else if (password == null||password.equalsIgnoreCase("")) {
-				
+				System.err.println("B" +password +"u " +username);
 				loginResponse=new LoginResponse();
 	            errorMessage=new ErrorMessage();
 
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserService {
 				loginResponse.setUser(user);
 
 			} else if (dbUsername.equals(username) && dbPassword.equals(password)) {
-				
+				System.err.println("C" +password +"u " +username);
 				loginResponse=new LoginResponse();
 	            errorMessage=new ErrorMessage();
 
@@ -86,7 +87,7 @@ public class UserServiceImpl implements UserService {
 				loginResponse.setUser(user);
 
 			} else if (dbUsername.equals(username) && dbPassword != password) {
-				
+				System.err.println("D" +password +"u " +username);
 				loginResponse=new LoginResponse();
 	            errorMessage=new ErrorMessage();
 
@@ -107,6 +108,7 @@ public class UserServiceImpl implements UserService {
 			loginResponse.setUser(user);
 
 		}
+		System.err.println("loginResponse" +loginResponse.toString());
 		return loginResponse;
 
 	}
