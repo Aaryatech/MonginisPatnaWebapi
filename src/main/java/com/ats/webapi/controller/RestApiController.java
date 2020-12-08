@@ -1741,7 +1741,7 @@ public class RestApiController {
 	}
 
 	// UserLogin of AdminPanel
-	@RequestMapping(value = { "/login" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/login" }, method = RequestMethod.POST)
 	@ResponseBody
 	public LoginResponse loginUser(@RequestParam("username") String username,
 			@RequestParam("password") String password) {
