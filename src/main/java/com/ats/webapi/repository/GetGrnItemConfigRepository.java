@@ -56,20 +56,59 @@ public interface GetGrnItemConfigRepository extends JpaRepository<GetGrnItemConf
 	
 	
 	
-	@Query(value = "SELECT t_bill_header.bill_no,t_bill_header.bill_no as autoGrnQty,t_bill_header.bill_date,t_bill_header.bill_date_time,t_bill_detail.item_id,"
-			+ " CASE WHEN t_bill_detail.cat_id=5 THEN s.sp_name \n" + 
-			" ELSE  m_item.item_name END AS item_name,\n" + 
-			"			 t_bill_detail.grn_type,t_bill_detail.rate,t_bill_detail.mrp,t_bill_detail.bill_qty,t_bill_detail.bill_detail_no,\n" + 
-			"				t_bill_detail.bill_no,t_bill_detail.sgst_per,t_bill_detail.cgst_per,\n" + 
-			"			 t_bill_detail.igst_per,t_bill_header.fr_id,t_bill_header.invoice_no,\n" + 
-			"			 t_bill_detail.cat_id,t_bill_detail.menu_id \n" + 
-			"			FROM t_bill_header ,t_bill_detail,m_item ,m_sp_cake s\n" + 
-			"				 WHERE t_bill_detail.bill_no=:billNo AND t_bill_header.bill_no=t_bill_detail.bill_no AND t_bill_header.status=2 \n" + 
-			"			AND CASE WHEN t_bill_detail.cat_id=5 THEN t_bill_detail.item_id=s.sp_id ELSE\n" + 
-			" t_bill_detail.item_id=m_item.id END  AND t_bill_detail.is_grngvn_applied=0 group by  t_bill_detail.bill_detail_no" + "", nativeQuery = true)
-	
+	@Query(value = "SELECT data.*,\n" + 
+			"			CASE  WHEN data.cat_id=5 THEN b.sp_name   \n" + 
+			"			            ELSE  a.item_name \n" + 
+			"			        END AS item_name \n" + 
+			"			from (\n" + 
+			"			        select t_bill_header.bill_no,\n" + 
+			"			        t_bill_header.bill_no as autoGrnQty,\n" + 
+			"			        t_bill_header.bill_date,\n" + 
+			"			        t_bill_header.bill_date_time,\n" + 
+			"			        t_bill_detail.item_id, \n" + 
+			"			        t_bill_detail.grn_type,\n" + 
+			"			        t_bill_detail.rate,\n" + 
+			"			        t_bill_detail.mrp,\n" + 
+			"			        t_bill_detail.bill_qty,\n" + 
+			"			        t_bill_detail.bill_detail_no, \n" + 
+			"			        t_bill_detail.sgst_per,\n" + 
+			"			        t_bill_detail.cgst_per,\n" + 
+			"			        t_bill_detail.igst_per,\n" + 
+			"			        t_bill_header.fr_id,\n" + 
+			"			        t_bill_header.invoice_no,\n" + 
+			"			        t_bill_detail.cat_id,\n" + 
+			"			        t_bill_detail.menu_id     \n" + 
+			"			    FROM\n" + 
+			"			        t_bill_header ,\n" + 
+			"			        t_bill_detail    \n" + 
+			"			    WHERE\n" + 
+			"			        t_bill_detail.bill_no=:billNo \n" + 
+			"			        AND t_bill_header.bill_no=t_bill_detail.bill_no \n" + 
+			"			        AND t_bill_header.status=2  \n" + 
+			"			        AND t_bill_detail.is_grngvn_applied=0 \n" + 
+			"			    group by\n" + 
+			"			        t_bill_detail.bill_detail_no) data\n" + 
+			"			    left join (\n" + 
+			"			    select m_item.item_name, m_item.id from m_item \n" + 
+			"			    \n" + 
+			"			    ) a on data.item_id=a.id\n" + 
+			"			    left join (\n" + 
+			"			    select s.sp_name,s.sp_id  from m_sp_cake s \n" + 
+			"			    \n" + 
+			"			    ) b on data.item_id=b.sp_id", nativeQuery = true)
 	public List<GetGrnItemConfig> getGvnItemConfig(@Param("billNo") int billNo);
 	
-	
-	
+//	SELECT t_bill_header.bill_no,t_bill_header.bill_no as autoGrnQty,t_bill_header.bill_date,t_bill_header.bill_date_time,t_bill_detail.item_id,"
+//			+ " CASE WHEN t_bill_detail.cat_id=5 THEN s.sp_name \n" + 
+//			" ELSE  m_item.item_name END AS item_name,\n" + 
+//			"			 t_bill_detail.grn_type,t_bill_detail.rate,t_bill_detail.mrp,t_bill_detail.bill_qty,t_bill_detail.bill_detail_no,\n" + 
+//			"				t_bill_detail.bill_no,t_bill_detail.sgst_per,t_bill_detail.cgst_per,\n" + 
+//			"			 t_bill_detail.igst_per,t_bill_header.fr_id,t_bill_header.invoice_no,\n" + 
+//			"			 t_bill_detail.cat_id,t_bill_detail.menu_id \n" + 
+//			"			FROM t_bill_header ,t_bill_detail,m_item ,m_sp_cake s\n" + 
+//			"				 WHERE t_bill_detail.bill_no=:billNo AND t_bill_header.bill_no=t_bill_detail.bill_no AND t_bill_header.status=2 \n" + 
+//			"			AND CASE WHEN t_bill_detail.cat_id=5 THEN t_bill_detail.item_id=s.sp_id ELSE\n" + 
+//			" t_bill_detail.item_id=m_item.id END  AND t_bill_detail.is_grngvn_applied=0 group by  t_bill_detail.bill_detail_no" + "
+//	public List<GetGrnItemConfig> getGvnItemConfig(@Param("billNo") int billNo);
+//	Changed On 03-04-2021
 }
